@@ -49,7 +49,7 @@ func validateCNPJFormat(doc string) bool {
 	return validateFormat("^\\d{2}\\.?\\d{3}\\.?\\d{3}\\/?\\d{4}\\-?\\d{2}$", doc)
 }
 
-func validateFormat(doc, pattern string) bool {
+func validateFormat(pattern, doc string) bool {
 	matched, err := regexp.MatchString(pattern, doc)
 	if err != nil {
 		return false
