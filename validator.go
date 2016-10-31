@@ -7,18 +7,9 @@ import (
 
 func init() {
 	valid.CustomTypeTagMap.Set("cpf", valid.CustomTypeValidator(func(i interface{}, o interface{}) bool {
-		return validate(i, IsCPF)
+		return IsCPF(convert.ToString(i))
 	}))
 	valid.CustomTypeTagMap.Set("cnpj", valid.CustomTypeValidator(func(i interface{}, o interface{}) bool {
-		return validate(i, IsCNPJ)
+		return IsCNPJ(convert.ToString(i))
 	}))
-}
-
-func validate(doc interface{}, v func(string) bool) bool {
-	switch doc.(type) {
-	case string:
-		return v(convert.ToString(doc))
-	default:
-		return false
-	}
 }
