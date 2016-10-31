@@ -57,3 +57,7 @@ govalidator.ValidateStruct(pessoa) //=> true
 ```
 
 [1]: https://github.com/asaskevich/govalidator
+
+### License
+
+This project code is in the public domain.
