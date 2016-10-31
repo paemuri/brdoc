@@ -53,7 +53,7 @@ pessoa := struct {
   CPF: "111.111.111-11",
   CNPJ: "11.111.111/1111-80",
 }
-govalidator.ValidateStruct(pessoa) //=> true
+r, _ := govalidator.ValidateStruct(pessoa) //=> true
 ```
 
 [1]: https://github.com/asaskevich/govalidator
