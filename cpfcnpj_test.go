@@ -32,15 +32,16 @@ func TestIsCPF(t *T) {
 		assert(t, v, r, false)
 	})
 	t.Run("Valid CPF", func(t *T) {
-		//v := IsCPF("000.000.000-00")
-		//assert(t, true, v)
-
-		//v = IsCPF("111.111.111-11")
-		//assert(t, true, v)
-
-		//v = IsCPF("638.190.204-38")
-		v := "377.045.508-88"
+		v := "000.000.000-00"
 		r := IsCPF(v)
+		assert(t, v, r, true)
+
+		v = "111.111.111-11"
+		r = IsCPF(v)
+		assert(t, v, r, true)
+
+		v = "638.190.204-38"
+		r = IsCPF(v)
 		assert(t, v, r, true)
 	})
 }
