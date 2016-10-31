@@ -6,10 +6,10 @@ import (
 )
 
 func init() {
-	valid.CustomTypeTagMap.Set("cpf", valid.CustomTypeValidator(func(i interface{}, o interface{}) bool {
+	valid.CustomTypeTagMap.Set("cpf", valid.CustomTypeValidator(func(i, o interface{}) bool {
 		return IsCPF(convert.ToString(i))
 	}))
-	valid.CustomTypeTagMap.Set("cnpj", valid.CustomTypeValidator(func(i interface{}, o interface{}) bool {
+	valid.CustomTypeTagMap.Set("cnpj", valid.CustomTypeValidator(func(i, o interface{}) bool {
 		return IsCNPJ(convert.ToString(i))
 	}))
 }
