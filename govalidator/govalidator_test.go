@@ -3,6 +3,7 @@ package brdoc
 import (
 	. "testing"
 
+	"github.com/Nhanderu/brdoc"
 	valid "github.com/asaskevich/govalidator"
 )
 
@@ -23,14 +24,14 @@ func TestIntegrationWithGoValidator(t *T) {
 		} {
 			v := cpfTest{CPF: cpf}
 			r, _ := valid.ValidateStruct(v)
-			assert(t, cpf, r, false)
+			brdoc.Assert(t, cpf, r, false)
 		}
 	})
 	t.Run("Struct with valid CPF", func(t *T) {
 		cpf := "111.222.333-96"
 		v := cpfTest{CPF: cpf}
 		r, _ := valid.ValidateStruct(v)
-		assert(t, cpf, r, true)
+		brdoc.Assert(t, cpf, r, true)
 	})
 	t.Run("Struct with invalid CNPJ", func(t *T) {
 		for _, cnpj := range []string{
@@ -41,13 +42,13 @@ func TestIntegrationWithGoValidator(t *T) {
 		} {
 			v := cnpjTest{CNPJ: cnpj}
 			r, _ := valid.ValidateStruct(v)
-			assert(t, cnpj, r, false)
+			brdoc.Assert(t, cnpj, r, false)
 		}
 	})
 	t.Run("Struct with valid CNPJ", func(t *T) {
 		cnpj := "11.222.333/4444-97"
 		v := cnpjTest{CNPJ: cnpj}
 		r, _ := valid.ValidateStruct(v)
-		assert(t, cnpj, r, true)
+		brdoc.Assert(t, cnpj, r, true)
 	})
 }

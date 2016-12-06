@@ -10,7 +10,7 @@ func TestIsCPF(t *T) {
 			"#$%¨&*(ABCDEF",
 		} {
 			r := IsCPF(v)
-			assert(t, v, r, false)
+			Assert(t, v, r, false)
 		}
 	})
 	t.Run("Common invalid patterns in CPF", func(t *T) {
@@ -27,7 +27,7 @@ func TestIsCPF(t *T) {
 			"999.999.999-99",
 		} {
 			r := IsCPF(v)
-			assert(t, v, r, false)
+			Assert(t, v, r, false)
 		}
 	})
 	t.Run("Invalid digits in CPF", func(t *T) {
@@ -36,7 +36,7 @@ func TestIsCPF(t *T) {
 			"333.222.111-96",
 		} {
 			r := IsCPF(v)
-			assert(t, v, r, false)
+			Assert(t, v, r, false)
 		}
 	})
 	t.Run("Valid CPF", func(t *T) {
@@ -45,7 +45,7 @@ func TestIsCPF(t *T) {
 			"333.222.111-69",
 		} {
 			r := IsCPF(v)
-			assert(t, v, r, true)
+			Assert(t, v, r, true)
 		}
 	})
 }
@@ -58,7 +58,7 @@ func TestIsCNPJ(t *T) {
 			"#$%¨&*(ABCDEF",
 		} {
 			r := IsCNPJ(v)
-			assert(t, v, r, false)
+			Assert(t, v, r, false)
 		}
 	})
 	t.Run("Common invalid patterns in CNPJ", func(t *T) {
@@ -75,13 +75,13 @@ func TestIsCNPJ(t *T) {
 			"99.999.999/9999-99",
 		} {
 			r := IsCNPJ(v)
-			assert(t, v, r, false)
+			Assert(t, v, r, false)
 		}
 	})
 	t.Run("Invalid values in CNPJ", func(t *T) {
 		v := "11.222.333/0000-09"
 		r := IsCNPJ(v)
-		assert(t, v, r, false)
+		Assert(t, v, r, false)
 	})
 	t.Run("Invalid digits in CNPJ", func(t *T) {
 		for _, v := range []string{
@@ -89,7 +89,7 @@ func TestIsCNPJ(t *T) {
 			"44.333.222/1111-09",
 		} {
 			r := IsCNPJ(v)
-			assert(t, v, r, false)
+			Assert(t, v, r, false)
 		}
 	})
 	t.Run("Valid CNPJ", func(t *T) {
@@ -98,7 +98,7 @@ func TestIsCNPJ(t *T) {
 			"44.333.222/1111-90",
 		} {
 			r := IsCNPJ(v)
-			assert(t, v, r, true)
+			Assert(t, v, r, true)
 		}
 	})
 }
