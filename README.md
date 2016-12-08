@@ -12,10 +12,8 @@ BR Doc é um pacote para validação, tanto do formato quanto dos dígitos, de d
 
 Principais funções:
 
-```go
-func IsCPF(doc string) bool
-func IsCNPJ(doc string) bool
-```
+- `func IsCPF(doc string) bool`
+- `func IsCNPJ(doc string) bool`
 
 Exemplo de valores válidos e inválidos:
 
