@@ -1,63 +1,42 @@
 # BR Doc
 
-CPF, CNPJ, CEP and RG for [govalidator][1]!
+CPF, CNPJ, CEP and RG validator for Go, with [govalidator][1] integration!
 
 The description of this package is in brazilian portuguese.
 
 ### Descrição
 
-BR Doc é um pacote para validação, tanto do formato quanto dos dígitos, de documentos brasileiros, como CPF, CNPJ, (e futuramente) CEP e RG. Foi pensado para se usar com o [govalidator][1], mas é possível usar os métodos sem ele.
+BR Doc é um pacote para validação, tanto do formato quanto dos dígitos, de documentos brasileiros, como CPF, CNPJ, (e futuramente) CEP e RG. Este pacote possui apenas as funções individuais de validação. Para utilizar da integração com o [govalidator][1], é necessário importar o pacote `github.com/Nhanderu/brdoc/govalidator`.
 
 ### Uso
 
-Principais métodos:
-
-```go
-brdoc.IsCPF("111.111.111-11")
-brdoc.IsCNPJ("11.111.111/1111-80")
-```
-
-A assinatura de ambos os métodos:
+Principais funções:
 
 ```go
 func IsCPF(doc string) bool
+func IsCNPJ(doc string) bool
 ```
 
 Exemplo de valores válidos e inválidos:
 
 ````go
 // Inválidos por causa da inconsistência do dígito:
-brdoc.IsCPF("111.111.111-00") //=> false
-brdoc.IsCNPJ("11.111.111/1111-99") //=> false
+brdoc.IsCPF("248.438.034-99") //=> false
+brdoc.IsCNPJ("26.637.142/0001-00") //=> false
 
 // Inválidos por causa do formato:
-brdoc.IsCPF("111 111 111 11") //=> false
-brdoc.IsCNPJ("11111111-1111.80") //=> false
+brdoc.IsCPF("248 438 034 80") //=> false
+brdoc.IsCNPJ("26637142-0001.58") //=> false
 
 // Válidos:
-brdoc.IsCPF("111.111.111-11") //=> true
-brdoc.IsCPF("11111111111") //=> true
-brdoc.IsCNPJ("11.111.111/1111-80") //=> true
-brdoc.IsCNPJ("11111111111180") //=> true
-```
-
-Usando o [govalidator][1]:
-
-```go
-pessoa := struct {
-  Nome string ``
-  CPF string `valid:"cpf"`
-  CNPJ string `valid:"cnpj"`
-}{
-  Nome: "Beto Carreiro",
-  CPF: "111.111.111-11",
-  CNPJ: "11.111.111/1111-80",
-}
-r, _ := govalidator.ValidateStruct(pessoa) //=> true
+brdoc.IsCPF("248.438.034-80") //=> true
+brdoc.IsCPF("24843803480") //=> true
+brdoc.IsCNPJ("26.637.142/0001-58") //=> true
+brdoc.IsCNPJ("26637142000158") //=> true
 ```
 
 [1]: https://github.com/asaskevich/govalidator
 
 ### License
 
-This project code is in the public domain.
+This project code is in the public domain. See the `LICENSE` file.
