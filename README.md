@@ -6,7 +6,7 @@ The description of this package is in brazilian portuguese.
 
 ### Descrição
 
-BR Doc é um pacote para validação, tanto do formato quanto dos dígitos, de documentos brasileiros, como CPF, CNPJ, (e futuramente) CEP e RG. Este pacote possui apenas as funções individuais de validação. Para utilizar da integração com o [govalidator][1], é necessário importar o pacote `github.com/Nhanderu/brdoc/govalidator`.
+BR Doc é um pacote para validação, tanto do formato quanto dos dígitos, de documentos brasileiros, como CPF, CNPJ, (e futuramente) CEP e RG. Este pacote possui apenas as funções individuais de validação. Para utilizar da integração com o [govalidator][1], é necessário importar o pacote [BR Doc Govalidator][2].
 
 ### Uso
 
@@ -35,8 +35,10 @@ brdoc.IsCNPJ("26.637.142/0001-58") //=> true
 brdoc.IsCNPJ("26637142000158") //=> true
 ```
 
-[1]: https://github.com/asaskevich/govalidator
-
 ### License
 
-This project code is in the public domain. See the `LICENSE` file.
+This project code is in the public domain. See the [LICENSE file][3].
+
+[1]: https://github.com/asaskevich/govalidator
+[2]: https://github.com/Nhanderu/brdoc/govalidator
+[3]: https://github.com/Nhanderu/brdoc/blob/master/LICENSE

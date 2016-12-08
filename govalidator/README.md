@@ -1,4 +1,4 @@
-# BR Doc
+# BR Doc Govalidator
 
 [govalidator][1] integration for [BR Doc][2]!
 
@@ -23,9 +23,10 @@ pessoa := struct {
 r, _ := govalidator.ValidateStruct(pessoa) //=> true
 ```
 
-[1]: https://github.com/asaskevich/govalidator
-[1]: https://github.com/Nhanderu/brdoc
-
 ### License
 
-This project code is in the public domain. See the `LICENSE` file.
+This project code is in the public domain. See the [LICENSE file][3].
+
+[1]: https://github.com/asaskevich/govalidator
+[2]: https://github.com/Nhanderu/brdoc
+[3]: https://github.com/Nhanderu/brdoc/blob/master/govalidator/LICENSE
