@@ -32,8 +32,8 @@ func TestIsCPF(t *T) {
 	})
 	t.Run("Invalid digits in CPF", func(t *T) {
 		for _, v := range []string{
-			"111.222.333-69",
-			"333.222.111-96",
+			"248.438.034-08",
+			"099.075.865-06",
 		} {
 			r := IsCPF(v)
 			assert(t, v, r, false)
@@ -41,8 +41,8 @@ func TestIsCPF(t *T) {
 	})
 	t.Run("Valid CPF", func(t *T) {
 		for _, v := range []string{
-			"111.222.333-96",
-			"333.222.111-69",
+			"248.438.034-80",
+			"099.075.865-60",
 		} {
 			r := IsCPF(v)
 			assert(t, v, r, true)
@@ -79,14 +79,14 @@ func TestIsCNPJ(t *T) {
 		}
 	})
 	t.Run("Invalid values in CNPJ", func(t *T) {
-		v := "11.222.333/0000-09"
+		v := "26.637.142/0000-58"
 		r := IsCNPJ(v)
 		assert(t, v, r, false)
 	})
 	t.Run("Invalid digits in CNPJ", func(t *T) {
 		for _, v := range []string{
-			"11.222.333/4444-79",
-			"44.333.222/1111-09",
+			"26.637.142/0001-85",
+			"74.221.325/0001-03",
 		} {
 			r := IsCNPJ(v)
 			assert(t, v, r, false)
@@ -94,8 +94,8 @@ func TestIsCNPJ(t *T) {
 	})
 	t.Run("Valid CNPJ", func(t *T) {
 		for _, v := range []string{
-			"11.222.333/4444-97",
-			"44.333.222/1111-90",
+			"26.637.142/0001-58",
+			"74.221.325/0001-30",
 		} {
 			r := IsCNPJ(v)
 			assert(t, v, r, true)
