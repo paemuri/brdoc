@@ -2,7 +2,7 @@
 
 CPF, CNPJ, CEP and RG validator for Go, with [govalidator][1] integration!
 
-The description of this package is in brazilian portuguese.
+Everything in this file, but the [License section](#license), is in brazilian portuguese.
 
 ### Descrição
 

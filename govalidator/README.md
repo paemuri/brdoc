@@ -2,7 +2,7 @@
 
 [govalidator][1] integration for [BR Doc][2]!
 
-The description of this package is in brazilian portuguese.
+Everything in this file, but the [License section](#license), is in brazilian portuguese.
 
 ### Descrição
 
