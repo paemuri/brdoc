@@ -7,10 +7,6 @@
 
 CPF, CNPJ, CEP validator for Go, with [govalidator][1] integration!
 
-- [x] CPF
-- [x] CNPJ
-- [ ] CEP
-
 Everything in this file, but the [License section](#license).
 
 ### Description
@@ -40,6 +36,12 @@ Brdoc.IsCNPJ ("26.637.142 / 0001-58") // => true
 Brdoc.IsCNPJ ("26637142000158") // => true
 ```
 
+### To-do list
+
+- [x] CPF validation
+- [x] CNPJ validation
+- [ ] CEP validation
+- [ ] RG validation
 
 ### License
 
