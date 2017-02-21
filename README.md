@@ -1,6 +1,6 @@
 # BR Doc
 
-![Build Status](https://travis-ci.org/Nhanderu/brdoc.svg?branch=master)](https://travis-ci.org/Nhanderu/brdoc)
+[![Build Status](https://travis-ci.org/Nhanderu/brdoc.svg?branch=master)](https://travis-ci.org/Nhanderu/brdoc)
 [![GoDoc](https://godoc.org/github.com/Nhanderu/brdoc?status.png)](https://godoc.org/github.com/Nhanderu/brdoc)
 [![Go Report Card](https://goreportcard.com/badge/github.com/Nhanderu/brdoc)](https://goreportcard.com/report/github.com/Nhanderu/brdoc)
 [![codecov](https://codecov.io/gh/Nhanderu/brdoc/branch/master/graph/badge.svg)](https://codecov.io/gh/Nhanderu/brdoc)
