@@ -1,9 +1,9 @@
 # BR Doc
 
-[![Build Status](https://travis-ci.org/Nhanderu/brdoc.svg?branch=master)](https://travis-ci.org/Nhanderu/brdoc)
-[![GoDoc](https://godoc.org/github.com/Nhanderu/brdoc?status.png)](https://godoc.org/github.com/Nhanderu/brdoc)
-[![Go Report Card](https://goreportcard.com/badge/github.com/Nhanderu/brdoc)](https://goreportcard.com/report/github.com/Nhanderu/brdoc)
-[![codecov](https://codecov.io/gh/Nhanderu/brdoc/branch/master/graph/badge.svg)](https://codecov.io/gh/Nhanderu/brdoc)
+[![Build Status](https://travis-ci.org/Nhanderu/brdoc.svg?branch=master)][tag1]
+[![GoDoc](https://godoc.org/github.com/Nhanderu/brdoc?status.png)][tag2]
+[![Go Report Card](https://goreportcard.com/badge/github.com/Nhanderu/brdoc)][tag3]
+[![codecov](https://codecov.io/gh/Nhanderu/brdoc/branch/master/graph/badge.svg)][tag4]
 
 CPF, CNPJ, CEP validator for Go, with [govalidator][1] integration!
 
@@ -50,3 +50,8 @@ This project code is in the public domain. See the [LICENSE file][3].
 [1]: https://github.com/asaskevich/govalidator
 [2]: https://github.com/Nhanderu/brdoc/govalidator
 [3]: https://github.com/Nhanderu/brdoc/blob/master/LICENSE
+
+[tag1]: https://travis-ci.org/Nhanderu/brdoc
+[tag2]: (https://godoc.org/github.com/Nhanderu/brdoc)
+[tag3]: (https://goreportcard.com/report/github.com/Nhanderu/brdoc)
+[tag4]: (https://codecov.io/gh/Nhanderu/brdoc)
