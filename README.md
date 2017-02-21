@@ -24,18 +24,18 @@ Exemplo de valores válidos e inválidos:
 
 ```go
 // Inválidos por causa da inconsistência do dígito:
-Brdoc.IsCPF ("248.438.034-99") // => false
-Brdoc.IsCNPJ ("26.637.142 / 0001-00") // => false
+brdoc.IsCPF("248.438.034-99") //=> false
+brdoc.IsCNPJ("26.637.142/0001-00") //=> false
 
 // Inválidos por causa do formato:
-Brdoc.IsCPF ("248 438 034 80") // => false
-Brdoc.IsCNPJ ("26637142-0001.58") // => false
+brdoc.IsCPF("248 438 034 80") //=> false
+brdoc.IsCNPJ("26637142-0001.58") //=> false
 
 // Válidos:
-Brdoc.IsCPF ("248.438.034-80") // => true
-Brdoc.IsCPF ("24843803480") // => true
-Brdoc.IsCNPJ ("26.637.142 / 0001-58") // => true
-Brdoc.IsCNPJ ("26637142000158") // => true
+brdoc.IsCPF("248.438.034-80") //=> true
+brdoc.IsCPF("24843803480") //=> true
+brdoc.IsCNPJ("26.637.142/0001-58") //=> true
+brdoc.IsCNPJ("26637142000158") //=> true
 ```
 
 ### To-do list
