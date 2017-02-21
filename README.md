@@ -7,15 +7,15 @@
 
 CPF, CNPJ, CEP validator for Go, with [govalidator][1] integration!
 
-[x] CPF
-[x] CNPJ
-[ ] CEP
+- [x] CPF
+- [x] CNPJ
+- [ ] CEP
 
 Everything in this file, but the [License section](#license).
 
 ### Description
 
-BR Doc is a package for validation of both the format and the digits of Brazilian documents, such as CPF, CNPJ, (and in the future) CEP and RG. This package has only the individual validation functions. To use integration with [govalidator] [1], it is necessary to import the package [BR Doc Govalidator] [2].
+BR Doc is a package for validation of both the format and the digits of Brazilian documents, such as CPF, CNPJ, (and in the future) CEP This package has only the individual validation functions. To use integration with [govalidator] [1], it is necessary to import the package [BR Doc Govalidator] [2].
 
 ### Usage
 
