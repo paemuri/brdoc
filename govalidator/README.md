@@ -2,13 +2,13 @@
 
 [govalidator][1] integration for [BR Doc][2]!
 
-Everything in this file, but the [License section](#license), is in brazilian portuguese.
+Everything in this file, but the [License section](#license).
 
 ### Descrição
 
-Este pacote tem como objetivo integrar o [BR Doc][2] com o [govalidator][1]. Adiciona os valores `"cpf"`, `"cnpj"`, (e futuramente) `"cep"` e `"rg"` para a tag `valid`.
+This package integrate o [BR Doc][2] with [govalidator][1]. Add values `"cpf"`, `"cnpj"`, (and in the future) `"cep"` for tag `valid`.
 
-### Uso
+### Usage
 
 ```go
 pessoa := struct {
