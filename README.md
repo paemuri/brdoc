@@ -7,29 +7,31 @@
 
 CPF, CNPJ, CEP validator for Go, with [govalidator][1] integration!
 
-Everything in this file, but the [License section](#license).
+Everything in this file, but the [To-do](#to-do-list) and [License](#license) sections, is in brazilian portuguese.
 
-### Description
+### Descrição
 
-BR Doc is a package for validation of both the format and the digits of Brazilian documents, such as CPF, CNPJ, (and in the future) CEP This package has only the individual validation functions. To use integration with [govalidator] [1], it is necessary to import the package [BR Doc Govalidator] [2].
+BR Doc é um pacote para validação, tanto do formato quanto dos dígitos, de documentos brasileiros, como CPF, CNPJ, (e futuramente) CEP e RG. Este pacote possui apenas as funções individuais de validação. Para utilizar da integração com o [govalidator][1], é necessário importar o pacote [BR Doc Govalidator][2].
 
-### Usage
+### Uso
+
+Principais funções:
 
 - `func IsCPF (doc string) bool`
 - `func IsCNPJ (doc string) bool`
 
-Example of valid and invalid values:
+Exemplo de valores válidos e inválidos:
 
 ```go
-// Invalid because of the inconsistency of the digit:
+// Inválidos por causa da inconsistência do dígito:
 Brdoc.IsCPF ("248.438.034-99") // => false
 Brdoc.IsCNPJ ("26.637.142 / 0001-00") // => false
 
-// Invalid because of the format:
+// Inválidos por causa do formato:
 Brdoc.IsCPF ("248 438 034 80") // => false
 Brdoc.IsCNPJ ("26637142-0001.58") // => false
 
-// Valid:
+// Válidos:
 Brdoc.IsCPF ("248.438.034-80") // => true
 Brdoc.IsCPF ("24843803480") // => true
 Brdoc.IsCNPJ ("26.637.142 / 0001-58") // => true
