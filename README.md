@@ -1,37 +1,45 @@
 # BR Doc
 
-CPF, CNPJ, CEP and RG validator for Go, with [govalidator][1] integration!
+![Build Status](https://travis-ci.org/Nhanderu/brdoc.svg?branch=master)](https://travis-ci.org/Nhanderu/brdoc)
+[![GoDoc](https://godoc.org/github.com/Nhanderu/brdoc?status.png)](https://godoc.org/github.com/Nhanderu/brdoc)
+[![Go Report Card](https://goreportcard.com/badge/github.com/Nhanderu/brdoc)](https://goreportcard.com/report/github.com/Nhanderu/brdoc)
+[![codecov](https://codecov.io/gh/Nhanderu/brdoc/branch/master/graph/badge.svg)](https://codecov.io/gh/Nhanderu/brdoc)
 
-Everything in this file, but the [License section](#license), is in brazilian portuguese.
+CPF, CNPJ, CEP validator for Go, with [govalidator][1] integration!
 
-### Descrição
+[x] CPF
+[x] CNPJ
+[ ] CEP
 
-BR Doc é um pacote para validação, tanto do formato quanto dos dígitos, de documentos brasileiros, como CPF, CNPJ, (e futuramente) CEP e RG. Este pacote possui apenas as funções individuais de validação. Para utilizar da integração com o [govalidator][1], é necessário importar o pacote [BR Doc Govalidator][2].
+Everything in this file, but the [License section](#license).
 
-### Uso
+### Description
 
-Principais funções:
+BR Doc is a package for validation of both the format and the digits of Brazilian documents, such as CPF, CNPJ, (and in the future) CEP and RG. This package has only the individual validation functions. To use integration with [govalidator] [1], it is necessary to import the package [BR Doc Govalidator] [2].
 
-- `func IsCPF(doc string) bool`
-- `func IsCNPJ(doc string) bool`
+### Usage
 
-Exemplo de valores válidos e inválidos:
+- `func IsCPF (doc string) bool`
+- `func IsCNPJ (doc string) bool`
 
-````go
-// Inválidos por causa da inconsistência do dígito:
-brdoc.IsCPF("248.438.034-99") //=> false
-brdoc.IsCNPJ("26.637.142/0001-00") //=> false
+Example of valid and invalid values:
 
-// Inválidos por causa do formato:
-brdoc.IsCPF("248 438 034 80") //=> false
-brdoc.IsCNPJ("26637142-0001.58") //=> false
+```go
+// Invalid because of the inconsistency of the digit:
+Brdoc.IsCPF ("248.438.034-99") // => false
+Brdoc.IsCNPJ ("26.637.142 / 0001-00") // => false
 
-// Válidos:
-brdoc.IsCPF("248.438.034-80") //=> true
-brdoc.IsCPF("24843803480") //=> true
-brdoc.IsCNPJ("26.637.142/0001-58") //=> true
-brdoc.IsCNPJ("26637142000158") //=> true
+// Invalid because of the format:
+Brdoc.IsCPF ("248 438 034 80") // => false
+Brdoc.IsCNPJ ("26637142-0001.58") // => false
+
+// Valid:
+Brdoc.IsCPF ("248.438.034-80") // => true
+Brdoc.IsCPF ("24843803480") // => true
+Brdoc.IsCNPJ ("26.637.142 / 0001-58") // => true
+Brdoc.IsCNPJ ("26637142000158") // => true
 ```
+
 
 ### License
 
