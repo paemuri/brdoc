@@ -2,103 +2,83 @@ package brdoc
 
 import . "testing"
 
+const (
+	checkMark = "\u2713"
+	ballotX   = "\u2717"
+)
+
 func TestIsCPF(t *T) {
-	t.Run("Invalid CPF format", func(t *T) {
-		for _, v := range []string{
-			"3467875434578764345789654",
-			"",
-			"#$%¨&*(ABCDEF",
-		} {
-			r := IsCPF(v)
-			assert(t, v, r, false)
+	for i, v := range []struct {
+		v string
+		r bool
+	}{
+		// Invalid format.
+		{"3467875434578764345789654", false},
+		{"", false},
+		{"#$%¨&*(ABCDEF", false},
+
+		// Common invalid patterns.
+		{"000.000.000-00", false},
+		{"111.111.111-11", false},
+		{"222.222.222-22", false},
+		{"333.333.333-33", false},
+		{"444.444.444-44", false},
+		{"555.555.555-55", false},
+		{"666.666.666-66", false},
+		{"777.777.777-77", false},
+		{"888.888.888-88", false},
+		{"999.999.999-99", false},
+
+		// Invalid digits.
+		{"248.438.034-08", false},
+		{"099.075.865-06", false},
+
+		// Valid.
+		{"248.438.034-80", true},
+		{"099.075.865-60", true},
+	} {
+		t.Logf("#%d CPF validation of %s should return %v: ", i, v.v, v.r)
+		if IsCPF(v.v) != v.r {
+			t.Fatal(ballotX)
 		}
-	})
-	t.Run("Common invalid patterns in CPF", func(t *T) {
-		for _, v := range []string{
-			"000.000.000-00",
-			"111.111.111-11",
-			"222.222.222-22",
-			"333.333.333-33",
-			"444.444.444-44",
-			"555.555.555-55",
-			"666.666.666-66",
-			"777.777.777-77",
-			"888.888.888-88",
-			"999.999.999-99",
-		} {
-			r := IsCPF(v)
-			assert(t, v, r, false)
-		}
-	})
-	t.Run("Invalid digits in CPF", func(t *T) {
-		for _, v := range []string{
-			"248.438.034-08",
-			"099.075.865-06",
-		} {
-			r := IsCPF(v)
-			assert(t, v, r, false)
-		}
-	})
-	t.Run("Valid CPF", func(t *T) {
-		for _, v := range []string{
-			"248.438.034-80",
-			"099.075.865-60",
-		} {
-			r := IsCPF(v)
-			assert(t, v, r, true)
-		}
-	})
+		t.Log(checkMark)
+	}
 }
 
 func TestIsCNPJ(t *T) {
-	t.Run("Invalid CNPJ format", func(t *T) {
-		for _, v := range []string{
-			"3467875434578764345789654",
-			"",
-			"#$%¨&*(ABCDEF",
-		} {
-			r := IsCNPJ(v)
-			assert(t, v, r, false)
+	for i, v := range []struct {
+		v string
+		r bool
+	}{
+		// Invalid format.
+		{"3467875434578764345789654", false},
+		{"", false},
+		{"#$%¨&*(ABCDEF", false},
+
+		// Common invalid patterns.
+		{"00.000.000/0000-00", false},
+		{"11.111.111/1111-11", false},
+		{"22.222.222/2222-22", false},
+		{"33.333.333/3333-33", false},
+		{"44.444.444/4444-44", false},
+		{"55.555.555/5555-55", false},
+		{"66.666.666/6666-66", false},
+		{"77.777.777/7777-77", false},
+		{"88.888.888/8888-88", false},
+		{"99.999.999/9999-99", false},
+
+		// Invalid digits.
+		{"26.637.142/0001-85", false},
+		{"74.221.325/0001-03", false},
+
+		// Valid.
+		{"26.637.142/0001-58", true},
+		{"74.221.325/0001-30", true},
+	} {
+		t.Logf("#%d CNPJ validation of %s should return %v: ", i, v.v, v.r)
+		if IsCNPJ(v.v) != v.r {
+			t.Fatal(ballotX)
 		}
-	})
-	t.Run("Common invalid patterns in CNPJ", func(t *T) {
-		for _, v := range []string{
-			"00.000.000/0000-00",
-			"11.111.111/1111-11",
-			"22.222.222/2222-22",
-			"33.333.333/3333-33",
-			"44.444.444/4444-44",
-			"55.555.555/5555-55",
-			"66.666.666/6666-66",
-			"77.777.777/7777-77",
-			"88.888.888/8888-88",
-			"99.999.999/9999-99",
-		} {
-			r := IsCNPJ(v)
-			assert(t, v, r, false)
-		}
-	})
-	t.Run("Invalid values in CNPJ", func(t *T) {
-		v := "26.637.142/0000-58"
-		r := IsCNPJ(v)
-		assert(t, v, r, false)
-	})
-	t.Run("Invalid digits in CNPJ", func(t *T) {
-		for _, v := range []string{
-			"26.637.142/0001-85",
-			"74.221.325/0001-03",
-		} {
-			r := IsCNPJ(v)
-			assert(t, v, r, false)
-		}
-	})
-	t.Run("Valid CNPJ", func(t *T) {
-		for _, v := range []string{
-			"26.637.142/0001-58",
-			"74.221.325/0001-30",
-		} {
-			r := IsCNPJ(v)
-			assert(t, v, r, true)
-		}
-	})
+		t.Log(checkMark)
+	}
 }
