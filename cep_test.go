@@ -91,3 +91,39 @@ func TestIsCEP(t *testing.T) {
 		t.Log(checkMark)
 	}
 }
+
+func TestValidateCEPFormat(t *testing.T) {
+	for i, v := range []struct {
+		v string
+		r bool
+	}{
+		// Invalid.
+		{"3467875434578764345789654", false},
+		{"", false},
+		{"#$%¨&*(ABCDEF", false},
+		{"0-0000000", false},
+		{"00-000000", false},
+		{"000-00000", false},
+		{"0000-0000", false},
+		{"000000-00", false},
+		{"0000000-0", false},
+		{"0000x000", false},
+		{"0000x-000", false},
+		{"0000000x", false},
+		{"00000-00x", false},
+
+		// Valid.
+		{"00000000", true},
+		{"00000-000", true},
+		{"12345678", true},
+		{"87654-321", true},
+		{"99999999", true},
+		{"99999-999", true},
+	} {
+		t.Logf("#%d CEP format validation of %s should return %v: ", i, v.v, v.r)
+		if ValidateCEPFormat(v.v) != v.r {
+			t.Fatal(ballotX)
+		}
+		t.Log(checkMark)
+	}
+}
