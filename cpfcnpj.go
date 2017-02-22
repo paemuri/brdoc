@@ -2,8 +2,7 @@ package brdoc
 
 import (
 	"regexp"
-
-	"github.com/Nhanderu/tuyo/convert"
+	"strconv"
 )
 
 // IsCPF verifies if the string is a valid CPF document.
@@ -97,9 +96,9 @@ func calculateDigit(doc string, positions int) string {
 	// x10   x9   x8   x7   x6   x5   x4   x3   x2
 	//  30 + 36 + 16 + 42 +  6 + 40 + 28 +  3 +  0 = 201
 	for i := 0; i < len(doc); i++ {
-		digit, _ := convert.ToInt(string(doc[i]))
+		digit, _ := strconv.ParseInt(string(doc[i]), 10, 0)
 
-		sum += digit * positions
+		sum += int(digit) * positions
 		positions--
 
 		if positions < 2 {
@@ -111,5 +110,5 @@ func calculateDigit(doc string, positions int) string {
 	if sum < 2 {
 		return "0"
 	}
-	return convert.ToString(11 - sum)
+	return strconv.FormatInt(int64(11-sum), 10)
 }
