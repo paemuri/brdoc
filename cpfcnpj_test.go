@@ -1,13 +1,13 @@
 package brdoc
 
-import . "testing"
+import "testing"
 
 const (
 	checkMark = "\u2713"
 	ballotX   = "\u2717"
 )
 
-func TestIsCPF(t *T) {
+func TestIsCPF(t *testing.T) {
 	for i, v := range []struct {
 		v string
 		r bool
@@ -45,7 +45,7 @@ func TestIsCPF(t *T) {
 	}
 }
 
-func TestIsCNPJ(t *T) {
+func TestIsCNPJ(t *testing.T) {
 	for i, v := range []struct {
 		v string
 		r bool
