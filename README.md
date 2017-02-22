@@ -5,7 +5,7 @@
 [![Go Report Card][tag3img]][tag3link]
 [![codecov][tag4img]][tag4link]
 
-CPF, CNPJ, CEP validator for Go, with [govalidator][1] integration!
+CPF, CNPJ, CEP validator for Go!
 
 Everything in this file, but the [To-do](#to-do-list) and [License](#license) sections, is in brazilian portuguese.
 
