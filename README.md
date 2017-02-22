@@ -9,9 +9,11 @@ CPF, CNPJ, CEP validator for Go!
 
 Everything in this file, but the [To-do](#to-do-list) and [License](#license) sections, is in brazilian portuguese.
 
+This package is also available in gopkg.in as [Nhanderu/brdoc.v1][1].
+
 ### Descrição
 
-BR Doc é um pacote para validação, tanto do formato quanto dos dígitos, de documentos brasileiros, como CPF, CNPJ, (e futuramente) CEP e RG. Este pacote possui apenas as funções individuais de validação. Para utilizar da integração com o [govalidator][1], é necessário importar o pacote [BR Doc Govalidator][2].
+BR Doc é um pacote para validação, tanto do formato quanto dos dígitos, de documentos brasileiros, como CPF, CNPJ, (e futuramente) CEP e RG. Este pacote possui apenas as funções individuais de validação. Para utilizar da integração com o [govalidator][2], é necessário importar o pacote [BR Doc Govalidator][3].
 
 ### Uso
 
@@ -47,11 +49,12 @@ brdoc.IsCNPJ("26637142000158") //=> true
 
 ### License
 
-This project code is in the public domain. See the [LICENSE file][3].
+This project code is in the public domain. See the [LICENSE file][4].
 
-[1]: https://github.com/asaskevich/govalidator
-[2]: https://github.com/Nhanderu/brdoc-govalidator
-[3]: https://github.com/Nhanderu/brdoc/blob/master/LICENSE
+[1]: https://gopkg.in/Nhanderu/brdoc.v1
+[2]: https://github.com/asaskevich/govalidator
+[3]: https://github.com/Nhanderu/brdoc-govalidator
+[4]: https://github.com/Nhanderu/brdoc/blob/master/LICENSE
 
 [tag1img]: https://travis-ci.org/Nhanderu/brdoc.svg?branch=master
 [tag1link]: https://travis-ci.org/Nhanderu/brdoc
