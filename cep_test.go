@@ -3,7 +3,7 @@ package brdoc
 import "testing"
 
 func TestIsCEP(t *testing.T) {
-	for i, v := range []struct {
+	for i, c := range []struct {
 		v string
 		u []FederativeUnit
 		r bool
@@ -84,8 +84,8 @@ func TestIsCEP(t *testing.T) {
 		{"00000-000", []FederativeUnit{SP}, false},
 		{"29500-000", []FederativeUnit{MT, MS, MG}, false},
 	} {
-		t.Logf("#%d CEP validation of %s should return %v: ", i, v.v, v.r)
-		if IsCEP(v.v, v.u...) != v.r {
+		t.Logf("#%d CEP validation of %s should return %v: ", i, c.v, c.r)
+		if IsCEP(c.v, c.u...) != c.r {
 			t.Fatal(ballotX)
 		}
 		t.Log(checkMark)
@@ -93,7 +93,7 @@ func TestIsCEP(t *testing.T) {
 }
 
 func TestValidateCEPFormat(t *testing.T) {
-	for i, v := range []struct {
+	for i, c := range []struct {
 		v string
 		r bool
 	}{
@@ -120,8 +120,8 @@ func TestValidateCEPFormat(t *testing.T) {
 		{"99999999", true},
 		{"99999-999", true},
 	} {
-		t.Logf("#%d CEP format validation of %s should return %v: ", i, v.v, v.r)
-		if ValidateCEPFormat(v.v) != v.r {
+		t.Logf("#%d CEP format validation of %s should return %v: ", i, c.v, c.r)
+		if ValidateCEPFormat(c.v) != c.r {
 			t.Fatal(ballotX)
 		}
 		t.Log(checkMark)
