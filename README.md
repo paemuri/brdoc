@@ -50,7 +50,7 @@ brdoc.IsCNPJ("26637142000158") //=> true
 This project code is in the public domain. See the [LICENSE file][3].
 
 [1]: https://github.com/asaskevich/govalidator
-[2]: https://github.com/Nhanderu/brdoc/govalidator
+[2]: https://github.com/Nhanderu/brdoc-govalidator
 [3]: https://github.com/Nhanderu/brdoc/blob/master/LICENSE
 
 [tag1img]: https://travis-ci.org/Nhanderu/brdoc.svg?branch=master
