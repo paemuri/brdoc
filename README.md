@@ -44,7 +44,7 @@ brdoc.IsCNPJ("26637142000158") //=> true
 
 - [x] CPF validation
 - [x] CNPJ validation
-- [ ] CEP validation
+- [x] CEP validation
 - [ ] RG validation
 
 ### License
