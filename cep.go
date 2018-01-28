@@ -9,16 +9,16 @@ import (
 // `ufs` represents the possible Federative Units the CEP should matches.
 // If none is provided, it validates the document for any state/district.
 func IsCEP(doc string, ufs ...FederativeUnit) bool {
+
 	if !ValidateCEPFormat(doc) {
 		return false
 	}
+
 	if len(ufs) == 0 {
 		return true
 	}
-	h, err := strconv.ParseInt(doc[0:3], 10, 0)
-	if err != nil {
-		return false
-	}
+
+	h, _ := strconv.Atoi(doc[0:3])
 	for _, uf := range ufs {
 		if (uf == SP && h >= 010 && h <= 199) ||
 			(uf == RJ && h >= 200 && h <= 289) ||
@@ -50,9 +50,11 @@ func IsCEP(doc string, ufs ...FederativeUnit) bool {
 			(uf == PR && h >= 800 && h <= 879) ||
 			(uf == SC && h >= 880 && h <= 899) ||
 			(uf == RS && h >= 900 && h <= 999) {
+
 			return true
 		}
 	}
+
 	return false
 }
 
