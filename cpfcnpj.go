@@ -9,7 +9,7 @@ import (
 func IsCPF(doc string) bool {
 	return isCPFOrCNPJ(
 		doc,
-		validateCPFFormat,
+		ValidateCPFFormat,
 		9,
 		10, 11,
 	)
@@ -19,7 +19,7 @@ func IsCPF(doc string) bool {
 func IsCNPJ(doc string) bool {
 	return isCPFOrCNPJ(
 		doc,
-		validateCNPJFormat,
+		ValidateCNPJFormat,
 		12,
 		5, 6,
 	)
@@ -44,7 +44,8 @@ func isCPFOrCNPJ(doc string, validate func(string) bool, size int, pos1, pos2 in
 	return doc == d+digit
 }
 
-func validateCPFFormat(doc string) bool {
+// ValidateCPFFormat verifies if the CPF has a valid format.
+func ValidateCPFFormat(doc string) bool {
 	return validateFormat("^\\d{3}\\.?\\d{3}\\.?\\d{3}-?\\d{2}$", doc,
 		"^000\\.?000\\.?000-?00$",
 		"^111\\.?111\\.?111-?11$",
@@ -58,7 +59,8 @@ func validateCPFFormat(doc string) bool {
 		"^999\\.?999\\.?999-?99$")
 }
 
-func validateCNPJFormat(doc string) bool {
+// ValidateCNPJFormat verifies if the CNPJ has a valid format.
+func ValidateCNPJFormat(doc string) bool {
 	return validateFormat("^\\d{2}\\.?\\d{3}\\.?\\d{3}\\/?\\d{4}-?\\d{2}$", doc,
 		"^\\d{2}\\.?\\d{3}\\.?\\d{3}\\/?0000-?\\d{2}$",
 		"^11\\.?111\\.?111\\/?1111-?11$",

@@ -56,7 +56,7 @@ func IsCEP(doc string, ufs ...FederativeUnit) bool {
 	return false
 }
 
-// ValidateCEPFormat verifies if the CEP has a valid *format*.
+// ValidateCEPFormat verifies if the CEP has a valid format.
 func ValidateCEPFormat(doc string) bool {
 	m, err := regexp.MatchString("^\\d{5}-?\\d{3}$", doc)
 	return m && err == nil
