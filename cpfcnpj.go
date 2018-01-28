@@ -1,8 +1,10 @@
 package brdoc
 
 import (
+	"bytes"
 	"regexp"
 	"strconv"
+	"unicode"
 )
 
 // IsCPF verifies if the string is a valid CPF document.
@@ -31,6 +33,7 @@ func isCPFOrCNPJ(doc string, validate func(string) bool, size int, pos1, pos2 in
 		return false
 	}
 
+	// Removes special characters.
 	doc = clean(doc)
 
 	// Calculates the first digit.
@@ -85,11 +88,15 @@ func validateFormat(pattern, doc string, invalid ...string) bool {
 }
 
 func clean(doc string) string {
-	re, err := regexp.Compile("\\D")
-	if err != nil {
-		return ""
+
+	buf := bytes.NewBufferString("")
+	for _, r := range doc {
+		if unicode.IsDigit(r) {
+			buf.WriteRune(r)
+		}
 	}
-	return re.ReplaceAllString(doc, "")
+
+	return buf.String()
 }
 
 func calculateDigit(doc string, positions int) string {
@@ -101,7 +108,7 @@ func calculateDigit(doc string, positions int) string {
 	// x10   x9   x8   x7   x6   x5   x4   x3   x2
 	//  30 + 36 + 16 + 42 +  6 + 40 + 28 +  3 +  0 = 201
 	for i := 0; i < len(doc); i++ {
-		digit, _ := strconv.ParseInt(string(doc[i]), 10, 0)
+		digit, _ := strconv.Atoi(string(doc[i]))
 
 		sum += int(digit) * positions
 		positions--
@@ -115,5 +122,5 @@ func calculateDigit(doc string, positions int) string {
 	if sum < 2 {
 		return "0"
 	}
-	return strconv.FormatInt(int64(11-sum), 10)
+	return strconv.Itoa(11 - sum)
 }
