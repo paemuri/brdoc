@@ -126,8 +126,7 @@ func calculateDigit(doc string, position int) string {
 	var sum int
 	for _, r := range doc {
 
-		digit, _ := strconv.Atoi(string(r))
-		sum += digit * position
+		sum += int(r-'0') * position
 		position--
 
 		if position < 2 {
