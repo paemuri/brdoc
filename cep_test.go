@@ -8,10 +8,14 @@ func TestIsCEP(t *testing.T) {
 		u []FederativeUnit
 		r bool
 	}{
-		// Invalid format.
+		// Random data.
 		{"3467875434578764345789654", []FederativeUnit{}, false},
 		{"", []FederativeUnit{}, false},
 		{"#$%¨&*(ABCDEF", []FederativeUnit{}, false},
+
+		// Invalid format.
+		{"10000 000", []FederativeUnit{}, false},
+		{"25000.000", []FederativeUnit{}, false},
 
 		// Invalid Federative Unit.
 		{"10000-000", []FederativeUnit{RJ}, false},
