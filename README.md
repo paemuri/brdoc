@@ -14,7 +14,7 @@ This package is also available in gopkg.in as [Nhanderu/brdoc.v1][1].
 ## Descrição
 
 
-BR Doc é um pacote para validação, tanto do formato quanto dos dígitos, de documentos brasileiros, como CPF, CNPJ, CEP e (futuramente) RG. Este pacote possui apenas as funções individuais de validação. Para utilizar da integração com o [govalidator][2], é necessário importar o pacote [BR Doc Govalidator][3].
+BR Doc é um pacote para validação, tanto do formato quanto dos dígitos, de documentos brasileiros, como CPF, CNPJ, CEP e (futuramente) RG.
 
 ## Uso
 
