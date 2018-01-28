@@ -55,8 +55,8 @@ brdoc.IsCEP("01001001", brdoc.SP) //=> true
 - [x] validação de CEP
 - [ ] validação de RG
 
-Validação de RG não foi implementado porque cada estado tem as suas regras]
-e eu não estou com vontade de terminar isso.
+Validação de RG não foi implementado porque cada estado tem as suas regras
+e eu não estou com vontade de terminar isso. :zzz:
 
 ## License
 
