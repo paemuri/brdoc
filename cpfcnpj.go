@@ -7,7 +7,8 @@ import (
 	"unicode"
 )
 
-// IsCPF verifies if the string is a valid CPF document.
+// IsCPF verifies if the string is a valid CPF
+// document.
 func IsCPF(doc string) bool {
 
 	const (
@@ -23,7 +24,8 @@ func IsCPF(doc string) bool {
 	)
 }
 
-// IsCNPJ verifies if the string is a valid CNPJ document.
+// IsCNPJ verifies if the string is a valid CNPJ
+// document.
 func IsCNPJ(doc string) bool {
 
 	const (
@@ -39,7 +41,8 @@ func IsCNPJ(doc string) bool {
 	)
 }
 
-// ValidateCPFFormat verifies if the CPF has a valid format.
+// ValidateCPFFormat verifies if the CPF has a
+// valid format.
 func ValidateCPFFormat(doc string) bool {
 
 	const (
@@ -49,7 +52,8 @@ func ValidateCPFFormat(doc string) bool {
 	return regexp.MustCompile(pattern).MatchString(doc)
 }
 
-// ValidateCNPJFormat verifies if the CNPJ has a valid format.
+// ValidateCNPJFormat verifies if the CNPJ has a
+// valid format.
 func ValidateCNPJFormat(doc string) bool {
 
 	const (
@@ -59,6 +63,9 @@ func ValidateCNPJFormat(doc string) bool {
 	return regexp.MustCompile(pattern).MatchString(doc)
 }
 
+// isCPFOrCNPJ generates the digits for a given
+// CPF or CNPJ and compares it with the original
+// digits.
 func isCPFOrCNPJ(doc string, validate func(string) bool, size int, position int) bool {
 
 	if !validate(doc) {
@@ -85,6 +92,7 @@ func isCPFOrCNPJ(doc string, validate func(string) bool, size int, position int)
 	return doc == d+digit
 }
 
+// clean removes every rune that is not a digit.
 func clean(doc *string) {
 
 	buf := bytes.NewBufferString("")
@@ -97,6 +105,8 @@ func clean(doc *string) {
 	*doc = buf.String()
 }
 
+// allEq checks if every rune in a given string
+// is equal.
 func allEq(doc string) bool {
 
 	base := doc[0]
@@ -109,6 +119,8 @@ func allEq(doc string) bool {
 	return true
 }
 
+// calculateDigit calculates the next digit for
+// the given document.
 func calculateDigit(doc string, position int) string {
 
 	var sum int

@@ -6,8 +6,10 @@ import (
 )
 
 // IsCEP verifies if `doc` is a valid CEP.
-// `ufs` represents the possible Federative Units the CEP should matches.
-// If none is provided, it validates the document for any state/district.
+// `ufs` represents the possible Federative Units the
+// CEP should matches.
+// If none is provided, it validates the document for
+// any state/district.
 func IsCEP(doc string, ufs ...FederativeUnit) bool {
 
 	if !ValidateCEPFormat(doc) {
@@ -18,6 +20,8 @@ func IsCEP(doc string, ufs ...FederativeUnit) bool {
 		return true
 	}
 
+	// Matches the first three numbers in the document
+	// with the availables UFs.
 	h, _ := strconv.Atoi(doc[0:3])
 	for _, uf := range ufs {
 		if (uf == SP && h >= 010 && h <= 199) ||
@@ -58,7 +62,8 @@ func IsCEP(doc string, ufs ...FederativeUnit) bool {
 	return false
 }
 
-// ValidateCEPFormat verifies if the CEP has a valid format.
+// ValidateCEPFormat verifies if the CEP has a valid
+// format.
 func ValidateCEPFormat(doc string) bool {
 
 	const (
