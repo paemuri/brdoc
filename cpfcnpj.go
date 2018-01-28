@@ -9,48 +9,34 @@ import (
 
 // IsCPF verifies if the string is a valid CPF document.
 func IsCPF(doc string) bool {
+
+	const (
+		sizeWithoutDigits = 9
+		position          = 10
+	)
+
 	return isCPFOrCNPJ(
 		doc,
 		ValidateCPFFormat,
-		9,
-		10, 11,
+		sizeWithoutDigits,
+		position,
 	)
 }
 
 // IsCNPJ verifies if the string is a valid CNPJ document.
 func IsCNPJ(doc string) bool {
+
+	const (
+		sizeWithoutDigits = 12
+		position          = 5
+	)
+
 	return isCPFOrCNPJ(
 		doc,
 		ValidateCNPJFormat,
-		12,
-		5, 6,
+		sizeWithoutDigits,
+		position,
 	)
-}
-
-func isCPFOrCNPJ(doc string, validate func(string) bool, size int, pos1, pos2 int) bool {
-
-	if !validate(doc) {
-		return false
-	}
-
-	// Removes special characters.
-	clean(&doc)
-
-	// Invalidates documents with all
-	// digits equal.
-	if allEq(doc) {
-		return false
-	}
-
-	// Calculates the first digit.
-	d := doc[:size]
-	digit := calculateDigit(d, pos1)
-
-	// Calculates the second digit.
-	d = d + digit
-	digit = calculateDigit(d, pos2)
-
-	return doc == d+digit
 }
 
 // ValidateCPFFormat verifies if the CPF has a valid format.
@@ -73,6 +59,32 @@ func ValidateCNPJFormat(doc string) bool {
 	return regexp.MustCompile(pattern).MatchString(doc)
 }
 
+func isCPFOrCNPJ(doc string, validate func(string) bool, size int, position int) bool {
+
+	if !validate(doc) {
+		return false
+	}
+
+	// Removes special characters.
+	clean(&doc)
+
+	// Invalidates documents with all
+	// digits equal.
+	if allEq(doc) {
+		return false
+	}
+
+	// Calculates the first digit.
+	d := doc[:size]
+	digit := calculateDigit(d, position)
+
+	// Calculates the second digit.
+	d = d + digit
+	digit = calculateDigit(d, position+1)
+
+	return doc == d+digit
+}
+
 func clean(doc *string) {
 
 	buf := bytes.NewBufferString("")
@@ -87,10 +99,6 @@ func clean(doc *string) {
 
 func allEq(doc string) bool {
 
-	if len(doc) == 0 {
-		return true
-	}
-
 	base := doc[0]
 	for i := 1; i < len(doc); i++ {
 		if base != doc[i] {
@@ -101,22 +109,17 @@ func allEq(doc string) bool {
 	return true
 }
 
-func calculateDigit(doc string, positions int) string {
-	sum := 0
+func calculateDigit(doc string, position int) string {
 
-	// Sums all the digits in the document.
-	// Ex.
-	//   3    4    2    6    1    8    7    1    0
-	// x10   x9   x8   x7   x6   x5   x4   x3   x2
-	//  30 + 36 + 16 + 42 +  6 + 40 + 28 +  3 +  0 = 201
-	for i := 0; i < len(doc); i++ {
-		digit, _ := strconv.Atoi(string(doc[i]))
+	var sum int
+	for _, r := range doc {
 
-		sum += int(digit) * positions
-		positions--
+		digit, _ := strconv.Atoi(string(r))
+		sum += digit * position
+		position--
 
-		if positions < 2 {
-			positions = 9
+		if position < 2 {
+			position = 9
 		}
 	}
 
@@ -124,5 +127,6 @@ func calculateDigit(doc string, positions int) string {
 	if sum < 2 {
 		return "0"
 	}
+
 	return strconv.Itoa(11 - sum)
 }
