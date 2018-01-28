@@ -34,7 +34,13 @@ func isCPFOrCNPJ(doc string, validate func(string) bool, size int, pos1, pos2 in
 	}
 
 	// Removes special characters.
-	doc = clean(doc)
+	clean(&doc)
+
+	// Invalidates documents with all
+	// digits equal.
+	if allEq(doc) {
+		return false
+	}
 
 	// Calculates the first digit.
 	d := doc[:size]
@@ -49,54 +55,50 @@ func isCPFOrCNPJ(doc string, validate func(string) bool, size int, pos1, pos2 in
 
 // ValidateCPFFormat verifies if the CPF has a valid format.
 func ValidateCPFFormat(doc string) bool {
-	return validateFormat("^\\d{3}\\.?\\d{3}\\.?\\d{3}-?\\d{2}$", doc,
-		"^000\\.?000\\.?000-?00$",
-		"^111\\.?111\\.?111-?11$",
-		"^222\\.?222\\.?222-?22$",
-		"^333\\.?333\\.?333-?33$",
-		"^444\\.?444\\.?444-?44$",
-		"^555\\.?555\\.?555-?55$",
-		"^666\\.?666\\.?666-?66$",
-		"^777\\.?777\\.?777-?77$",
-		"^888\\.?888\\.?888-?88$",
-		"^999\\.?999\\.?999-?99$")
+
+	const (
+		pattern = `^\d{3}\.?\d{3}\.?\d{3}-?\d{2}$`
+	)
+
+	return regexp.MustCompile(pattern).MatchString(doc)
 }
 
 // ValidateCNPJFormat verifies if the CNPJ has a valid format.
 func ValidateCNPJFormat(doc string) bool {
-	return validateFormat("^\\d{2}\\.?\\d{3}\\.?\\d{3}\\/?\\d{4}-?\\d{2}$", doc,
-		"^\\d{2}\\.?\\d{3}\\.?\\d{3}\\/?0000-?\\d{2}$",
-		"^11\\.?111\\.?111\\/?1111-?11$",
-		"^22\\.?222\\.?222\\/?2222-?22$",
-		"^33\\.?333\\.?333\\/?3333-?33$",
-		"^44\\.?444\\.?444\\/?4444-?44$",
-		"^55\\.?555\\.?555\\/?5555-?55$",
-		"^66\\.?666\\.?666\\/?6666-?66$",
-		"^77\\.?777\\.?777\\/?7777-?77$",
-		"^88\\.?888\\.?888\\/?8888-?88$",
-		"^99\\.?999\\.?999\\/?9999-?99$")
+
+	const (
+		pattern = `^\d{2}\.?\d{3}\.?\d{3}\/?(:?\d{3}[1-9]|\d{2}[1-9]\d|\d[1-9]\d{2}|[1-9]\d{3})-?\d{2}$`
+	)
+
+	return regexp.MustCompile(pattern).MatchString(doc)
 }
 
-func validateFormat(pattern, doc string, invalid ...string) bool {
-	for _, p := range invalid {
-		if ok, err := regexp.MatchString(p, doc); err != nil || ok {
-			return false
-		}
-	}
-	ok, err := regexp.MatchString(pattern, doc)
-	return err == nil && ok
-}
-
-func clean(doc string) string {
+func clean(doc *string) {
 
 	buf := bytes.NewBufferString("")
-	for _, r := range doc {
+	for _, r := range *doc {
 		if unicode.IsDigit(r) {
 			buf.WriteRune(r)
 		}
 	}
 
-	return buf.String()
+	*doc = buf.String()
+}
+
+func allEq(doc string) bool {
+
+	if len(doc) == 0 {
+		return true
+	}
+
+	base := doc[0]
+	for i := 1; i < len(doc); i++ {
+		if base != doc[i] {
+			return false
+		}
+	}
+
+	return true
 }
 
 func calculateDigit(doc string, positions int) string {
