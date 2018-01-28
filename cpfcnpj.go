@@ -7,36 +7,39 @@ import (
 
 // IsCPF verifies if the string is a valid CPF document.
 func IsCPF(doc string) bool {
-	doc = clean(doc)
-	if !validateCPFFormat(doc) {
-		return false
-	}
-
-	// Calculates the first digit.
-	d := doc[:9]
-	digit := calculateDigit(d, 10)
-
-	// Calculates the second digit.
-	d = d + digit
-	digit = calculateDigit(d, 11)
-
-	return doc == d+digit
+	return isCPFOrCNPJ(
+		doc,
+		validateCPFFormat,
+		9,
+		10, 11,
+	)
 }
 
 // IsCNPJ verifies if the string is a valid CNPJ document.
 func IsCNPJ(doc string) bool {
-	doc = clean(doc)
-	if !validateCNPJFormat(doc) {
+	return isCPFOrCNPJ(
+		doc,
+		validateCNPJFormat,
+		12,
+		5, 6,
+	)
+}
+
+func isCPFOrCNPJ(doc string, validate func(string) bool, size int, pos1, pos2 int) bool {
+
+	if !validate(doc) {
 		return false
 	}
 
+	doc = clean(doc)
+
 	// Calculates the first digit.
-	d := doc[:12]
-	digit := calculateDigit(d, 5)
+	d := doc[:size]
+	digit := calculateDigit(d, pos1)
 
 	// Calculates the second digit.
 	d = d + digit
-	digit = calculateDigit(d, 6)
+	digit = calculateDigit(d, pos2)
 
 	return doc == d+digit
 }
