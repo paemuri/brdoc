@@ -5,6 +5,11 @@ import (
 	"strconv"
 )
 
+// Regexp pattern for CEP.
+var (
+	CEPRegexp = regexp.MustCompile(`^\d{5}-?\d{3}$`)
+)
+
 // IsCEP verifies if `doc` is a valid CEP.
 // `ufs` represents the possible Federative Units the
 // CEP should matches.
@@ -12,7 +17,7 @@ import (
 // any state/district.
 func IsCEP(doc string, ufs ...FederativeUnit) bool {
 
-	if !ValidateCEPFormat(doc) {
+	if !CEPRegexp.MatchString(doc) {
 		return false
 	}
 
@@ -62,13 +67,36 @@ func IsCEP(doc string, ufs ...FederativeUnit) bool {
 	return false
 }
 
-// ValidateCEPFormat verifies if the CEP has a valid
-// format.
-func ValidateCEPFormat(doc string) bool {
+// FederativeUnit represents a state or a district in Brazil.
+type FederativeUnit uint8
 
-	const (
-		pattern = `^\d{5}-?\d{3}$`
-	)
-
-	return regexp.MustCompile(pattern).MatchString(doc)
-}
+// Federative unit for CEP validation.
+const (
+	AC FederativeUnit = iota
+	AL
+	AP
+	AM
+	BA
+	CE
+	DF
+	ES
+	GO
+	MA
+	MT
+	MS
+	MG
+	PA
+	PB
+	PR
+	PE
+	PI
+	RJ
+	RN
+	RS
+	RO
+	RR
+	SC
+	SP
+	SE
+	TO
+)
