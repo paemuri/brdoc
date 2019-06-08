@@ -1,6 +1,8 @@
 package brdoc
 
-import "testing"
+import (
+	"testing"
+)
 
 const (
 	checkMark = "\u2713"

@@ -1,6 +1,8 @@
 package brdoc
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestIsCEP(t *testing.T) {
 	for i, c := range []struct {
@@ -96,7 +98,7 @@ func TestIsCEP(t *testing.T) {
 	}
 }
 
-func TestValidateCEPFormat(t *testing.T) {
+func TestCEPRegexp(t *testing.T) {
 	for i, c := range []struct {
 		v string
 		r bool
@@ -125,7 +127,7 @@ func TestValidateCEPFormat(t *testing.T) {
 		{"99999-999", true},
 	} {
 		t.Logf("#%d CEP format validation of %s should return %v: ", i, c.v, c.r)
-		if ValidateCEPFormat(c.v) != c.r {
+		if CEPRegexp.MatchString(c.v) != c.r {
 			t.Fatal(ballotX)
 		}
 		t.Log(checkMark)
