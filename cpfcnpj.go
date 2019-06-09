@@ -13,28 +13,28 @@ var (
 	CNPJRegexp = regexp.MustCompile(`^\d{2}\.?\d{3}\.?\d{3}\/?(:?\d{3}[1-9]|\d{2}[1-9]\d|\d[1-9]\d{2}|[1-9]\d{3})-?\d{2}$`)
 )
 
-// IsCPF verifies if the string is a valid CPF
+// IsCPF verifies if the given string is a valid CPF
 // document.
 func IsCPF(doc string) bool {
 
 	const (
-		sizeWithoutDigits = 9
-		position          = 10
+		size = 9
+		pos  = 10
 	)
 
-	return isCPFOrCNPJ(doc, CPFRegexp, sizeWithoutDigits, position)
+	return isCPFOrCNPJ(doc, CPFRegexp, size, pos)
 }
 
-// IsCNPJ verifies if the string is a valid CNPJ
+// IsCNPJ verifies if the given string is a valid CNPJ
 // document.
 func IsCNPJ(doc string) bool {
 
 	const (
-		sizeWithoutDigits = 12
-		position          = 5
+		size = 12
+		pos  = 5
 	)
 
-	return isCPFOrCNPJ(doc, CNPJRegexp, sizeWithoutDigits, position)
+	return isCPFOrCNPJ(doc, CNPJRegexp, size, pos)
 }
 
 // isCPFOrCNPJ generates the digits for a given
