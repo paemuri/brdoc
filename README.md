@@ -9,7 +9,7 @@ CPF, CNPJ and CEP validator for Go!
 
 Everything in this file, but the [License](#license) section, is in brazilian portuguese.
 
-This package is also available in gopkg.in as [Nhanderu/brdoc.v1][1].
+This package is also available in gopkg.in as [Nhanderu/brdoc.v2][1].
 
 ## Descrição
 
@@ -62,7 +62,7 @@ e eu não estou com vontade de terminar isso. :zzz:
 
 This project code is in the public domain. See the [LICENSE file][4].
 
-[1]: https://gopkg.in/Nhanderu/brdoc.v1
+[1]: https://gopkg.in/Nhanderu/brdoc.v2
 [2]: https://github.com/asaskevich/govalidator
 [3]: https://github.com/Nhanderu/brdoc-govalidator
 [4]: https://github.com/Nhanderu/brdoc/blob/master/LICENSE
