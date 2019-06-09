@@ -15,8 +15,8 @@ func TestIsPlate(t *testing.T) {
 		{"#$%¨&*(ABCDEF", false},
 
 		// Valid old format.
-		{"AAAA000", true},
-		{"ABCD-123", true},
+		{"AAA0000", true},
+		{"ABC-1234", true},
 
 		// Valid new format.
 		{"AAA0A00", true},
@@ -45,8 +45,8 @@ func TestIsNationalPlate(t *testing.T) {
 		{"ABC1D23", false},
 
 		// Valid.
-		{"AAAA000", true},
-		{"ABCD-123", true},
+		{"AAA0000", true},
+		{"ABC-1234", true},
 	} {
 		t.Logf("#%d national plate validation of %s should return %v: ", i, v.v, v.r)
 		if IsNationalPlate(v.v) != v.r {
@@ -67,8 +67,8 @@ func TestIsMercosulPlate(t *testing.T) {
 		{"#$%¨&*(ABCDEF", false},
 
 		// Invalid old format.
-		{"AAAA000", false},
-		{"ABCD-123", false},
+		{"AAA0000", false},
+		{"ABC-1234", false},
 
 		// Valid.
 		{"AAA0A00", true},
