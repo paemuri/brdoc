@@ -4,11 +4,6 @@ import (
 	"testing"
 )
 
-const (
-	checkMark = "\u2713"
-	ballotX   = "\u2717"
-)
-
 func TestIsCPF(t *testing.T) {
 	for i, v := range []struct {
 		v string
