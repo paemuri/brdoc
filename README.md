@@ -5,7 +5,7 @@
 [![Go Report Card][tag3img]][tag3link]
 [![codecov][tag4img]][tag4link]
 
-CPF, CNPJ and CEP validator for Go!
+CPF, CNPJ, CEP and license plate validator for Go!
 
 Everything in this file, but the [License](#license) section, is in brazilian portuguese.
 
@@ -13,8 +13,8 @@ This package is also available in gopkg.in as [Nhanderu/brdoc.v2][1].
 
 ## Descrição
 
-
-BR Doc é um pacote para validação, tanto do formato quanto dos dígitos, de documentos brasileiros, como CPF, CNPJ, CEP e (futuramente) RG.
+BR Doc é um pacote para validação, tanto do formato quanto dos dígitos, de documentos
+brasileiros, como CPF, CNPJ, CEP, placa veicular e (futuramente) RG.
 
 ## Uso
 
@@ -23,29 +23,36 @@ Principais funções:
 - `func IsCPF(doc string) bool`
 - `func IsCNPJ(doc string) bool`
 - `func IsCEP(doc string, ufs ...FederativeUnit) bool`
+- `func IsPlate(doc string) bool`
+- `func IsNationalPlate(doc string) bool`
+- `func IsMercosulPlate(doc string) bool`
 
 Exemplo de valores válidos e inválidos:
 
 ```go
 // Inválidos por causa da inconsistência do dígito:
-brdoc.IsCPF("248.438.034-99") //=> false
+brdoc.IsCPF("248.438.034-99")      //=> false
 brdoc.IsCNPJ("26.637.142/0001-00") //=> false
 
 // Inválidos por causa do formato:
-brdoc.IsCPF("248 438 034 80") //=> false
+brdoc.IsCPF("248 438 034 80")    //=> false
 brdoc.IsCNPJ("26637142-0001.58") //=> false
-brdoc.IsCEP("01 001.001") //=> false
+brdoc.IsCEP("01 001.001")        //=> false
+brdoc.IsPlate("A B C 0 0 0 0")   //=> false
 
 // Inválidos por causa da UF:
 brdoc.IsCEP("01001-001", brdoc.RJ) //=> false
 
 // Válidos:
-brdoc.IsCPF("248.438.034-80") //=> true
-brdoc.IsCPF("24843803480") //=> true
+brdoc.IsCPF("248.438.034-80")      //=> true
+brdoc.IsCPF("24843803480")         //=> true
 brdoc.IsCNPJ("26.637.142/0001-58") //=> true
-brdoc.IsCNPJ("26637142000158") //=> true
+brdoc.IsCNPJ("26637142000158")     //=> true
 brdoc.IsCEP("01001-001", brdoc.SP) //=> true
-brdoc.IsCEP("01001001", brdoc.SP) //=> true
+brdoc.IsCEP("01001001", brdoc.SP)  //=> true
+brdoc.IsPlate("AAA-0000")          //=> true
+brdoc.IsNationalPlate("ABC1234")   //=> true
+brdoc.IsMercosulPlate("ABC1D23")   //=> true
 ```
 
 ## To-do list
@@ -53,6 +60,7 @@ brdoc.IsCEP("01001001", brdoc.SP) //=> true
 - [x] validação de CPF
 - [x] validação de CNPJ
 - [x] validação de CEP
+- [x] validação de placa veicular
 - [ ] validação de RG
 
 Validação de RG não foi implementado porque cada estado tem as suas regras
