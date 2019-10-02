@@ -13,6 +13,12 @@ var (
 	CNPJRegexp = regexp.MustCompile(`^\d{2}\.?\d{3}\.?\d{3}\/?(:?\d{3}[1-9]|\d{2}[1-9]\d|\d[1-9]\d{2}|[1-9]\d{3})-?\d{2}$`)
 )
 
+// IsDocument verifies if the given string is a valid
+// CPF or CNPJ document.
+func IsDocument(doc string) bool {
+	return IsCPF(doc) || IsCNPJ(doc)
+}
+
 // IsCPF verifies if the given string is a valid CPF
 // document.
 func IsCPF(doc string) bool {
