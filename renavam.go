@@ -5,24 +5,28 @@ import (
 )
 
 var (
-	vSum = 0
-	vDV = 0
-	vNumber = 0
-	vDigit = 0
-	vSequence = []int{3,2,9,8,7,6,5,4,3,2}
+	vSum      = 0
+	vDV       = 0
+	vNumber   = 0
+	vSequence = []int{3, 2, 9, 8, 7, 6, 5, 4, 3, 2}
 )
 
+// IsRenavam verifies if the given string is a valid Renavam document.
 func IsRenavam(doc string) bool {
-	
-	if len(doc) < 11 {
+
+	runes := []rune(doc)
+	if len(runes) != 11 {
 		return false
 	}
-		
+
+	vNumber = 0
+	vSum = 0
+	vDV = 0
 	for i := 0; i <= 9; i++ {
-		vNumber, err := strconv.Atoi(string(doc[i]))
+		vNumber, err := strconv.Atoi(string(runes[i]))
 		if err != nil {
 			return false
-		}		
+		}
 		vSum = vSum + (vNumber * vSequence[i])
 	}
 
@@ -31,10 +35,5 @@ func IsRenavam(doc string) bool {
 		vDV = 0
 	}
 
-	vDigit, err := strconv.Atoi(string(doc[10]))
-	if err != nil {
-		return false
-	}		
-  
-	return (vDV == vDigit)
+	return (string(runes[10]) == strconv.Itoa(vDV))
 }
