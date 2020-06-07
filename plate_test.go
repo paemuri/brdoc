@@ -5,79 +5,61 @@ import (
 )
 
 func TestIsPlate(t *testing.T) {
-	for i, v := range []struct {
-		v string
-		r bool
+	for i, tc := range []struct {
+		name     string
+		expected bool
+		v        string
 	}{
-		// Random data.
-		{"3467875434578764345789654", false},
-		{"", false},
-		{"#$%¨&*(ABCDEF", false},
-
-		// Valid old format.
-		{"AAA0000", true},
-		{"ABC-1234", true},
-
-		// Valid new format.
-		{"AAA0A00", true},
-		{"ABC1D23", true},
+		{"InvalidData_ShouldReturnFalse", false, "3467875434578764345789654"},
+		{"InvalidData_ShouldReturnFalse", false, ""},
+		{"InvalidData_ShouldReturnFalse", false, "#$%¨&*(ABCDEF"},
+		{"ValidOldFormat_ShouldReturnTrue", true, "AAA0000"},
+		{"ValidOldFormat_ShouldReturnTrue", true, "ABC-1234"},
+		{"ValidNewFormat_ShouldReturnTrue", true, "AAA0A00"},
+		{"ValidNewFormat_ShouldReturnTrue", true, "ABC1D23"},
 	} {
-		t.Logf("#%d plate validation of %s should return %v: ", i, v.v, v.r)
-		if IsPlate(v.v) != v.r {
-			t.Fatal(ballotX)
-		}
-		t.Log(checkMark)
+		t.Run(testName(i, tc.name), func(t *testing.T) {
+			assertEqual(t, tc.expected, IsPlate(tc.v))
+		})
 	}
 }
 
 func TestIsNationalPlate(t *testing.T) {
-	for i, v := range []struct {
-		v string
-		r bool
+	for i, tc := range []struct {
+		name     string
+		expected bool
+		v        string
 	}{
-		// Random data.
-		{"3467875434578764345789654", false},
-		{"", false},
-		{"#$%¨&*(ABCDEF", false},
-
-		// Invalid new format.
-		{"AAA0A00", false},
-		{"ABC1D23", false},
-
-		// Valid.
-		{"AAA0000", true},
-		{"ABC-1234", true},
+		{"InvalidData_ShouldReturnFalse", false, "3467875434578764345789654"},
+		{"InvalidData_ShouldReturnFalse", false, ""},
+		{"InvalidData_ShouldReturnFalse", false, "#$%¨&*(ABCDEF"},
+		{"InvalidNewFormat_ShouldReturnFlase", false, "AAA0A00"},
+		{"InvalidNewFormat_ShouldReturnFlase", false, "ABC1D23"},
+		{"ValidOldFormat_ShouldReturnTrue", true, "AAA0000"},
+		{"ValidOldFormat_ShouldReturnTrue", true, "ABC-1234"},
 	} {
-		t.Logf("#%d national plate validation of %s should return %v: ", i, v.v, v.r)
-		if IsNationalPlate(v.v) != v.r {
-			t.Fatal(ballotX)
-		}
-		t.Log(checkMark)
+		t.Run(testName(i, tc.name), func(t *testing.T) {
+			assertEqual(t, tc.expected, IsNationalPlate(tc.v))
+		})
 	}
 }
 
 func TestIsMercosulPlate(t *testing.T) {
-	for i, v := range []struct {
-		v string
-		r bool
+	for i, tc := range []struct {
+		name     string
+		expected bool
+		v        string
 	}{
-		// Random data.
-		{"3467875434578764345789654", false},
-		{"", false},
-		{"#$%¨&*(ABCDEF", false},
-
-		// Invalid old format.
-		{"AAA0000", false},
-		{"ABC-1234", false},
-
-		// Valid.
-		{"AAA0A00", true},
-		{"ABC1D23", true},
+		{"InvalidData_ShouldReturnFalse", false, "3467875434578764345789654"},
+		{"InvalidData_ShouldReturnFalse", false, ""},
+		{"InvalidData_ShouldReturnFalse", false, "#$%¨&*(ABCDEF"},
+		{"InvalidOldFormat_ShouldReturnFlase", false, "AAA0000"},
+		{"InvalidOldFormat_ShouldReturnFlase", false, "ABC-1234"},
+		{"ValidNewFormat_ShouldReturnTrue", true, "AAA0A00"},
+		{"ValidNewFormat_ShouldReturnTrue", true, "ABC1D23"},
 	} {
-		t.Logf("#%d Mercosul plate validation of %s should return %v: ", i, v.v, v.r)
-		if IsMercosulPlate(v.v) != v.r {
-			t.Fatal(ballotX)
-		}
-		t.Log(checkMark)
+		t.Run(testName(i, tc.name), func(t *testing.T) {
+			assertEqual(t, tc.expected, IsMercosulPlate(tc.v))
+		})
 	}
 }

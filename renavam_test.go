@@ -4,31 +4,27 @@ import (
 	"testing"
 )
 
-func TestIsRenavam(t *testing.T) {
-	for i, v := range []struct {
-		v string
-		r bool
+func TestIsRENAVAM(t *testing.T) {
+	for i, tc := range []struct {
+		name     string
+		expected bool
+		v        string
 	}{
-		// Valid
-		{"81285820857", true},
-		{"03135375023", true},
-		{"10016211275", true},
-		{"38872054176", true},
-		{"40999838201", true},
-		{"31789431483", true},
-
-		// Invalid
-		{"38872054170", false},
-		{"40999838209", false},
-		{"31789431480", false},
-		{"38919643060", false},
-		{"123", false},
-		{"abcdefghijk", false},
+		{"Invalid_ShouldReturnFalse", false, "38872054170"},
+		{"Invalid_ShouldReturnFalse", false, "40999838209"},
+		{"Invalid_ShouldReturnFalse", false, "31789431480"},
+		{"Invalid_ShouldReturnFalse", false, "38919643060"},
+		{"Invalid_ShouldReturnFalse", false, "123"},
+		{"Invalid_ShouldReturnFalse", false, "abcdefghijk"},
+		{"Valid_ShouldReturnTrue", true, "81285820857"},
+		{"Valid_ShouldReturnTrue", true, "03135375023"},
+		{"Valid_ShouldReturnTrue", true, "10016211275"},
+		{"Valid_ShouldReturnTrue", true, "38872054176"},
+		{"Valid_ShouldReturnTrue", true, "40999838201"},
+		{"Valid_ShouldReturnTrue", true, "31789431483"},
 	} {
-		t.Logf("#%d Renavam validation of %s should return %v: ", i, v.v, v.r)
-		if IsRenavam(v.v) != v.r {
-			t.Fatal(ballotX)
-		}
-		t.Log(checkMark)
+		t.Run(testName(i, tc.name), func(t *testing.T) {
+			assertEqual(t, tc.expected, IsRENAVAM(tc.v))
+		})
 	}
 }

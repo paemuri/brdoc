@@ -5,32 +5,27 @@ import (
 )
 
 var (
-	vSum      = 0
-	vDV       = 0
-	vNumber   = 0
-	vSequence = []int{3, 2, 9, 8, 7, 6, 5, 4, 3, 2}
+	renavamSequence = []int{3, 2, 9, 8, 7, 6, 5, 4, 3, 2}
 )
 
-// IsRenavam verifies if the given string is a valid Renavam document.
-func IsRenavam(doc string) bool {
+// IsRENAVAM verifies if the given string is a valid RENAVAM document.
+func IsRENAVAM(doc string) bool {
 
 	runes := []rune(doc)
 	if len(runes) != 11 {
 		return false
 	}
 
-	vNumber = 0
-	vSum = 0
-	vDV = 0
+	vSum := 0
 	for i := 0; i <= 9; i++ {
 		vNumber, err := strconv.Atoi(string(runes[i]))
 		if err != nil {
 			return false
 		}
-		vSum = vSum + (vNumber * vSequence[i])
+		vSum = vSum + (vNumber * renavamSequence[i])
 	}
 
-	vDV = (vSum * 10) % 11
+	vDV := (vSum * 10) % 11
 	if vDV == 10 {
 		vDV = 0
 	}

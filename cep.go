@@ -21,13 +21,12 @@ func IsCEP(doc string, ufs ...FederativeUnit) bool {
 		return false
 	}
 
+	h, _ := strconv.Atoi(doc[0:3])
+
 	if len(ufs) == 0 {
-		return true
+		return h >= 010
 	}
 
-	// Matches the first three numbers in the document
-	// with the availables UFs.
-	h, _ := strconv.Atoi(doc[0:3])
 	for _, uf := range ufs {
 		if (uf == SP && h >= 010 && h <= 199) ||
 			(uf == RJ && h >= 200 && h <= 289) ||
