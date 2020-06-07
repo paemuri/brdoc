@@ -9,8 +9,6 @@ CPF, CNPJ, CEP, CNH, RENAVAM and license plate validator for Go!
 
 Everything in this file, but the [License](#license) section, is in portuguese.
 
-This package is also available in gopkg.in as [Nhanderu/brdoc.v2][1].
-
 ## Descrição
 
 BR Doc é um pacote para validação, tanto do formato quanto dos dígitos, de documentos
@@ -47,12 +45,9 @@ estou com vontade de terminar isso. :zzz:
 
 ## License
 
-This project code is in the public domain. See the [LICENSE file][4].
+This project code is in the public domain. See the [LICENSE file][1].
 
-[1]: https://gopkg.in/Nhanderu/brdoc.v2
-[2]: https://github.com/asaskevich/govalidator
-[3]: https://github.com/Nhanderu/brdoc-govalidator
-[4]: https://github.com/Nhanderu/brdoc/blob/master/LICENSE
+[1]: https://github.com/Nhanderu/brdoc/blob/master/LICENSE
 
 [tag1img]: https://travis-ci.org/Nhanderu/brdoc.svg?branch=master
 [tag1link]: https://travis-ci.org/Nhanderu/brdoc
