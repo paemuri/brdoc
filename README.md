@@ -14,8 +14,9 @@ This package is also available in gopkg.in as [Nhanderu/brdoc.v2][1].
 ## Descrição
 
 BR Doc é um pacote para validação, tanto do formato quanto dos dígitos, de documentos
-brasileiros, como CPF, CNPJ, CEP, CNH, RENAVAM, placa veicular e futuramente RG (aceitamos
-PRs).
+brasileiros, como CPF, CNPJ, CEP, CNH, RENAVAM, placa veicular e futuramente RG.
+
+Aceito PRs de todas as formas. Está permitido escrever em português, também. :)
 
 ## Uso
 
@@ -38,6 +39,7 @@ Principais funções:
 - [x] validação de CNH (obrigado @eminetto!)
 - [x] validação de RENAVAM (obrigado @leogregianin!)
 - [x] validação de placa veicular
+- [ ] entender como funciona hífen na CNH (ex. `0067600300-1`)
 - [ ] validação de RG
 
 Validação de RG não foi implementado porque cada estado tem as suas regras e eu não
