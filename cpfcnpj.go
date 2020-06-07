@@ -13,8 +13,7 @@ var (
 	CNPJRegexp = regexp.MustCompile(`^\d{2}\.?\d{3}\.?\d{3}\/?(:?\d{3}[1-9]|\d{2}[1-9]\d|\d[1-9]\d{2}|[1-9]\d{3})-?\d{2}$`)
 )
 
-// IsCPF verifies if the given string is a valid CPF
-// document.
+// IsCPF verifies if the given string is a valid CPF document.
 func IsCPF(doc string) bool {
 
 	const (
@@ -25,8 +24,7 @@ func IsCPF(doc string) bool {
 	return isCPFOrCNPJ(doc, CPFRegexp, size, pos)
 }
 
-// IsCNPJ verifies if the given string is a valid CNPJ
-// document.
+// IsCNPJ verifies if the given string is a valid CNPJ document.
 func IsCNPJ(doc string) bool {
 
 	const (
@@ -37,37 +35,31 @@ func IsCNPJ(doc string) bool {
 	return isCPFOrCNPJ(doc, CNPJRegexp, size, pos)
 }
 
-// isCPFOrCNPJ generates the digits for a given
-// CPF or CNPJ and compares it with the original
-// digits.
+// isCPFOrCNPJ generates the digits for a given CPF or CNPJ and compares it with the original digits.
 func isCPFOrCNPJ(doc string, pattern *regexp.Regexp, size int, position int) bool {
 
 	if !pattern.MatchString(doc) {
 		return false
 	}
 
-	// Removes special characters.
-	clean(&doc)
+	cleanNonDigits(&doc)
 
-	// Invalidates documents with all
-	// digits equal.
+	// Invalidates documents with all digits equal.
 	if allEq(doc) {
 		return false
 	}
 
-	// Calculates the first digit.
 	d := doc[:size]
 	digit := calculateDigit(d, position)
 
-	// Calculates the second digit.
 	d = d + digit
 	digit = calculateDigit(d, position+1)
 
 	return doc == d+digit
 }
 
-// clean removes every rune that is not a digit.
-func clean(doc *string) {
+// cleanNonDigits removes every rune that is not a digit.
+func cleanNonDigits(doc *string) {
 
 	buf := bytes.NewBufferString("")
 	for _, r := range *doc {
@@ -79,8 +71,7 @@ func clean(doc *string) {
 	*doc = buf.String()
 }
 
-// allEq checks if every rune in a given string
-// is equal.
+// allEq checks if every rune in a given string is equal.
 func allEq(doc string) bool {
 
 	base := doc[0]
@@ -93,14 +84,13 @@ func allEq(doc string) bool {
 	return true
 }
 
-// calculateDigit calculates the next digit for
-// the given document.
+// calculateDigit calculates the next digit for the given document.
 func calculateDigit(doc string, position int) string {
 
 	var sum int
 	for _, r := range doc {
 
-		sum += int(r-'0') * position
+		sum += toInt(r) * position
 		position--
 
 		if position < 2 {
