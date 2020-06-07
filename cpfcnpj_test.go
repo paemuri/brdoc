@@ -12,7 +12,7 @@ func TestIsCPF(t *testing.T) {
 	}{
 		{"InvalidData_ShouldReturnFalse", false, "3467875434578764345789654"},
 		{"InvalidData_ShouldReturnFalse", false, ""},
-		{"InvalidData_ShouldReturnFalse", false, "#$%¨&*(ABCDEF"},
+		{"InvalidData_ShouldReturnFalse", false, "AAAAAAAAAAA"},
 		{"InvalidPattern_ShouldReturnFalse", false, "000.000.000-00"},
 		{"InvalidPattern_ShouldReturnFalse", false, "111.111.111-11"},
 		{"InvalidPattern_ShouldReturnFalse", false, "222.222.222-22"},
@@ -44,7 +44,7 @@ func TestIsCNPJ(t *testing.T) {
 	}{
 		{"InvalidData_ShouldReturnFalse", false, "3467875434578764345789654"},
 		{"InvalidData_ShouldReturnFalse", false, ""},
-		{"InvalidData_ShouldReturnFalse", false, "#$%¨&*(ABCDEF"},
+		{"InvalidData_ShouldReturnFalse", false, "AAAAAAAAAAAAAA"},
 		{"InvalidPattern_ShouldReturnFalse", false, "00.000.000/0000-00"},
 		{"InvalidPattern_ShouldReturnFalse", false, "11.111.111/1111-11"},
 		{"InvalidPattern_ShouldReturnFalse", false, "22.222.222/2222-22"},

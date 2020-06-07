@@ -13,7 +13,7 @@ func TestIsCEP(t *testing.T) {
 	}{
 		{"InvalidData_ShouldReturnFalse", false, "3467875434578764345789654", []FederativeUnit{}},
 		{"InvalidData_ShouldReturnFalse", false, "", []FederativeUnit{}},
-		{"InvalidData_ShouldReturnFalse", false, "#$%¨&*(ABCDEF", []FederativeUnit{}},
+		{"InvalidData_ShouldReturnFalse", false, "AAAAAAAA", []FederativeUnit{}},
 		{"InvalidData_ShouldReturnFalse", false, "00000-000", []FederativeUnit{}},
 		{"InvalidFormat_ShouldReturnFalse", false, "10000 000", []FederativeUnit{}},
 		{"InvalidFormat_ShouldReturnFalse", false, "25000.000", []FederativeUnit{}},
@@ -95,7 +95,7 @@ func TestCEPRegexp(t *testing.T) {
 	}{
 		{"Invalid_ShouldReturnFalse", false, "3467875434578764345789654"},
 		{"Invalid_ShouldReturnFalse", false, ""},
-		{"Invalid_ShouldReturnFalse", false, "#$%¨&*(ABCDEF"},
+		{"Invalid_ShouldReturnFalse", false, "AAAAAAAA"},
 		{"Invalid_ShouldReturnFalse", false, "0-0000000"},
 		{"Invalid_ShouldReturnFalse", false, "00-000000"},
 		{"Invalid_ShouldReturnFalse", false, "000-00000"},
