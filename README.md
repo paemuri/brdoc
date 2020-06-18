@@ -29,7 +29,7 @@ Principais funções:
 - `func IsNationalPlate(doc string) bool`
 - `func IsMercosulPlate(doc string) bool`
 
-## To-do list
+## Coisas a fazer
 
 - [x] validação de CPF
 - [x] validação de CNPJ
