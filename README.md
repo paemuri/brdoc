@@ -46,6 +46,12 @@ Principais funções:
 
 This project code is in the public domain. See the [LICENSE file][1].
 
+### Contribution
+
+Unless you explicitly state otherwise, any contribution intentionally submitted
+for inclusion in the work by you shall be in the public domain, without any
+additional terms or conditions.
+
 [1]: ./LICENSE
 
 [badge-1-img]: https://img.shields.io/github/license/Nhanderu/brdoc?style=flat-square
