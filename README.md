@@ -8,15 +8,17 @@
 
 CPF, CNPJ, CEP, CNH, RENAVAM and license plate validator for Go!
 
-Everything in this file, but the [License](#license) section, is in portuguese.
+Everything in this file, but the [License](#license) section, is in
+portuguese.
 
 ## Descrição
 
-BR Doc é um pacote para validação, tanto do formato quanto dos dígitos, de
-documentos brasileiros, como CPF, CNPJ, CEP, CNH, RENAVAM, placa veicular e
-futuramente RG.
+BR Doc é um pacote para validação, tanto do formato quanto dos dígitos,
+de documentos brasileiros, como CPF, CNPJ, CEP, CNH, RENAVAM, placa
+veicular e futuramente RG.
 
-Aceito PRs de todas as formas. Está permitido escrever em português, também. :)
+Aceito PRs de todas as formas. Está permitido escrever em português,
+também. :)
 
 ## Uso
 
@@ -48,9 +50,9 @@ This project code is in the public domain. See the [LICENSE file][1].
 
 ### Contribution
 
-Unless you explicitly state otherwise, any contribution intentionally submitted
-for inclusion in the work by you shall be in the public domain, without any
-additional terms or conditions.
+Unless you explicitly state otherwise, any contribution intentionally
+submitted for inclusion in the work by you shall be in the public
+domain, without any additional terms or conditions.
 
 [1]: ./LICENSE
 
