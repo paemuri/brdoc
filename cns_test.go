@@ -16,6 +16,8 @@ func TestIsCNS(t *testing.T) {
 		{"InvalidDigit_ShouldReturnFalse", false, "915501701930306"},
 		{"InvalidDigit_ShouldReturnFalse", false, "174224171330004"},
 		{"InvalidDigit_ShouldReturnFalse", false, "259755733880001"},
+		{"InvalidDigit_ShouldReturnFalse", false, "259755-33880001"},
+		{"InvalidDigit_ShouldReturnFalse", false, "2597550R3880001"},
 		{"Valid_ShouldReturnTrue", true, "259955733880001"},
 		{"Valid_ShouldReturnTrue", true, "174524171330004"},
 		{"Valid_ShouldReturnTrue", true, "915501701930006"},
