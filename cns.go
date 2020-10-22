@@ -3,10 +3,8 @@ package brdoc
 // IsCNS verifies if the given string is a valid CNS document.
 func IsCNS(doc string) bool {
 
+	cleanNonDigits(&doc)
 	if len(doc) != 15 {
-		return false
-	}
-	if !allDigit(doc) {
 		return false
 	}
 
