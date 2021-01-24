@@ -6,7 +6,7 @@
 [![Codecov.io][badge-4-img]][badge-4-link]
 [![Go Report Card][badge-5-img]][badge-5-link]
 
-CPF, CNPJ, CEP, CNH, RENAVAM and license plate validator for Go!
+CPF, CNPJ, CEP, CNH, RENAVAM, CNS and license plate validator for Go!
 
 Everything in this file, but the [License](#license) section, is in
 portuguese.
@@ -32,6 +32,7 @@ Principais funções:
 - `func IsPlate(doc string) bool`
 - `func IsNationalPlate(doc string) bool`
 - `func IsMercosulPlate(doc string) bool`
+- `func IsCNS(doc string) bool`
 
 ## Coisas a fazer
 
@@ -41,6 +42,7 @@ Principais funções:
 - [x] validação de CNH (obrigado @eminetto!)
 - [x] validação de RENAVAM (obrigado @leogregianin!)
 - [x] validação de placa veicular
+- [x] validação de CNS (obrigado @renatosuero!)
 - [ ] entender como funciona hífen na CNH (ex. `0067600300-1`)
 - [ ] validação de RG
 
