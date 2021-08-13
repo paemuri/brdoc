@@ -58,13 +58,13 @@ domain, without any additional terms or conditions.
 
 [1]: ./LICENSE
 
-[badge-1-img]: https://img.shields.io/github/license/Nhanderu/brdoc?style=flat-square
-[badge-1-link]: https://github.com/Nhanderu/brdoc/blob/master/LICENSE
+[badge-1-img]: https://img.shields.io/github/license/paemuri/brdoc?style=flat-square
+[badge-1-link]: https://github.com/paemuri/brdoc/blob/master/LICENSE
 [badge-2-img]: https://img.shields.io/badge/go.dev-reference-007d9c?style=flat-square&logo=go&logoColor=white
-[badge-2-link]: https://pkg.go.dev/github.com/Nhanderu/brdoc
-[badge-3-img]: https://img.shields.io/travis/Nhanderu/brdoc?style=flat-square
-[badge-3-link]: https://travis-ci.org/Nhanderu/brdoc
-[badge-4-img]: https://img.shields.io/codecov/c/gh/Nhanderu/brdoc?style=flat-square
-[badge-4-link]: https://codecov.io/gh/Nhanderu/brdoc
-[badge-5-img]: https://goreportcard.com/badge/github.com/Nhanderu/brdoc?style=flat-square
-[badge-5-link]: https://goreportcard.com/report/github.com/Nhanderu/brdoc
+[badge-2-link]: https://pkg.go.dev/github.com/paemuri/brdoc
+[badge-3-img]: https://img.shields.io/travis/paemuri/brdoc?style=flat-square
+[badge-3-link]: https://travis-ci.org/paemuri/brdoc
+[badge-4-img]: https://img.shields.io/codecov/c/gh/paemuri/brdoc?style=flat-square
+[badge-4-link]: https://codecov.io/gh/paemuri/brdoc
+[badge-5-img]: https://goreportcard.com/badge/github.com/paemuri/brdoc?style=flat-square
+[badge-5-link]: https://goreportcard.com/report/github.com/paemuri/brdoc
