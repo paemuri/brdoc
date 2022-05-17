@@ -43,7 +43,6 @@ Principais funções:
 - [x] validação de RENAVAM (obrigado @leogregianin!)
 - [x] validação de placa veicular
 - [x] validação de CNS (obrigado @renatosuero!)
-- [ ] entender como funciona hífen na CNH (ex. `0067600300-1`)
 - [ ] validação de RG
 
 ## License
