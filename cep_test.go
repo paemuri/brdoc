@@ -48,6 +48,8 @@ func TestIsCEP(t *testing.T) {
 		{"InvalidFederativeUnit_ShouldReturnFalse", false, "89000-000", []FederativeUnit{RS}},
 		{"InvalidFederativeUnit_ShouldReturnFalse", false, "95000-000", []FederativeUnit{SP}},
 		{"InvalidFederativeUnit_ShouldReturnFalse", false, "29500-000", []FederativeUnit{MT, MS, MG}},
+		{"InvalidFederativeUnit_ShouldReturnFalse", false, "00801-000", []FederativeUnit{SP}},
+		{"InvalidFederativeUnit_ShouldReturnFalse", false, "00801-000", []FederativeUnit{}},
 		{"Valid_ShouldReturnTrue", true, "10000-000", []FederativeUnit{SP}},
 		{"Valid_ShouldReturnTrue", true, "25000-000", []FederativeUnit{RJ}},
 		{"Valid_ShouldReturnTrue", true, "29500-000", []FederativeUnit{ES}},
