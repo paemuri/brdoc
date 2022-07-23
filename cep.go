@@ -22,11 +22,11 @@ func IsCEP(doc string, ufs ...FederativeUnit) bool {
 	h, _ := strconv.Atoi(doc[0:3])
 
 	if len(ufs) == 0 {
-		return h >= 010
+		return h >= 10
 	}
 
 	for _, uf := range ufs {
-		if (uf == SP && h >= 010 && h <= 199) ||
+		if (uf == SP && h >= 10 && h <= 199) ||
 			(uf == RJ && h >= 200 && h <= 289) ||
 			(uf == ES && h >= 290 && h <= 299) ||
 			(uf == MG && h >= 300 && h <= 399) ||
