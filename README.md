@@ -6,7 +6,7 @@
 [![Codecov.io][badge-4-img]][badge-4-link]
 [![Go Report Card][badge-5-img]][badge-5-link]
 
-CPF, CNPJ, CEP, CNH, RENAVAM, CNS and license plate validator for Go!
+CPF, CNPJ, CEP, CNH, PIS/PASEP, RENAVAM, CNS and license plate validator for Go!
 
 Everything in this file, but the [License](#license) section, is in
 portuguese.
@@ -14,7 +14,7 @@ portuguese.
 ## Descrição
 
 BR Doc é um pacote para validação, tanto do formato quanto dos dígitos,
-de documentos brasileiros, como CPF, CNPJ, CEP, CNH, RENAVAM, placa
+de documentos brasileiros, como CPF, CNPJ, CEP, CNH, PIS/PASEP, RENAVAM, placa
 veicular e futuramente RG.
 
 Aceito PRs de todas as formas. Está permitido escrever em português,
@@ -28,6 +28,7 @@ Principais funções:
 - `func IsCNPJ(doc string) bool`
 - `func IsCEP(doc string, ufs ...FederativeUnit) bool`
 - `func IsCNH(doc string) bool`
+- `func IsPIS(doc string) bool`
 - `func IsRENAVAM(doc string) bool`
 - `func IsPlate(doc string) bool`
 - `func IsNationalPlate(doc string) bool`
