@@ -15,7 +15,7 @@ portuguese.
 
 BR Doc é um pacote para validação, tanto do formato quanto dos dígitos,
 de documentos brasileiros, como CPF, CNPJ, CEP, CNH, PIS/PASEP, RENAVAM, placa
-veicular e futuramente RG.
+veicular e RG no padrão SP e RJ (futuramente demais padrões).
 
 Aceito PRs de todas as formas. Está permitido escrever em português,
 também. :)
@@ -34,6 +34,7 @@ Principais funções:
 - `func IsNationalPlate(doc string) bool`
 - `func IsMercosulPlate(doc string) bool`
 - `func IsCNS(doc string) bool`
+- `func IsRG(doc string) bool`
 
 ## Coisas a fazer
 
@@ -44,7 +45,8 @@ Principais funções:
 - [x] validação de RENAVAM (obrigado @leogregianin!)
 - [x] validação de placa veicular
 - [x] validação de CNS (obrigado @renatosuero!)
-- [ ] validação de RG
+- [x] validação de RG padrão SP e RJ
+- [ ] validação de RG demais estados
 
 ## License
 
