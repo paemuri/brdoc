@@ -2,23 +2,38 @@ package brdoc
 
 import (
 	"bytes"
+	"errors"
 	"regexp"
 	"unicode"
 )
 
 var (
-	RGRegexp = regexp.MustCompile(`^\d{2}\.?\d{3}\.?\d{3}-?[0-9xX]$`)
+	rgRegexp = map[FederativeUnit]*regexp.Regexp{
+		SP: regexp.MustCompile(`^\d{2}\.?\d{3}\.?\d{3}-?[0-9xX]$`),
+		RJ: regexp.MustCompile(`^\d{2}\.?\d{3}\.?\d{3}-?[0-9xX]$`),
+	}
+	errNotImplementedUF = errors.New("federative unit not implemented")
 )
 
-func IsRG(doc string) bool {
-	if !RGRegexp.MatchString(doc) {
-		return false
+// IsRG verifies if `doc` is a valid RG.
+// `uf` represents the Federative Unit the RG belongs to.
+// Curently the only validation algorithm implemented works for the following Federative Units:
+//   - SP
+//   - RJ
+func IsRG(doc string, uf FederativeUnit) (isValid bool, err error) {
+	if uf != SP && uf != RJ {
+		return false, errNotImplementedUF
+	}
+
+	if !rgRegexp[uf].MatchString(doc) {
+		return false, nil
 	}
 
 	checkDigit := getRGCheckDigit(doc)
 	calculatedCheckDigit := calculateRGCheckDigit(doc)
 
-	return calculatedCheckDigit == checkDigit
+	return calculatedCheckDigit == checkDigit, nil
+
 }
 
 func calculateRGCheckDigit(doc string) int {
