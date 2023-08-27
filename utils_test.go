@@ -5,27 +5,7 @@ import (
 	"testing"
 )
 
-func assertEqual(t *testing.T, expected, actual bool) {
-	if expected != actual {
-		t.Fatalf(`
-Not equal!
-expected: %v
-actual:   %v
-`, expected, actual)
-	}
-}
-
-func assertIntEqual(t *testing.T, expected, actual int) {
-	if expected != actual {
-		t.Fatalf(`
-Not equal!
-expected: %v
-actual:   %v
-`, expected, actual)
-	}
-}
-
-func assertStringEqual(t *testing.T, expected, actual string) {
+func assertEqual(t *testing.T, expected, actual interface{}) {
 	if expected != actual {
 		t.Fatalf(`
 Not equal!

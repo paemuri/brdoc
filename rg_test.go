@@ -6,31 +6,44 @@ import (
 
 func TestIsRG(t *testing.T) {
 	for i, tc := range []struct {
-		name     string
-		expected bool
-		v        string
+		name            string
+		expectedIsValid bool
+		expectedErr     error
+		v               string
+		uf              FederativeUnit
 	}{
-		{"InvalidData_ShouldReturnFalse", false, "3467875434578764345789654"},
-		{"InvalidData_ShouldReturnFalse", false, ""},
-		{"InvalidData_ShouldReturnFalse", false, "AAAAAAA"},
-		{"InvalidData_ShouldReturnFalse", false, "34.112.513-A"},
-		{"InvalidData_ShouldReturnFalse", false, "34.112.513-X"},
-		{"InvalidData_ShouldReturnFalse", false, "34.112.513-x"},
-		{"InvalidCheckDigit_ShouldReturnFalse", false, "34.112.513-9"},
-		{"ValidFormat_ShouldReturnTrue", true, "34.112.513-1"},
-		{"ValidFormat_ShouldReturnTrue", true, "341125131"},
-		{"ValidFormat_ShouldReturnTrue", true, "25.540.324-0"},
-		{"ValidFormat_ShouldReturnTrue", true, "255403240"},
-		{"ValidFormat_ShouldReturnTrue", true, "39.406.714-9"},
-		{"ValidFormat_ShouldReturnTrue", true, "24.454.119-X"},
-		{"ValidFormat_ShouldReturnTrue", true, "24454119X"},
-		{"ValidFormat_ShouldReturnTrue", true, "24.454.119-x"},
-		{"ValidFormat_ShouldReturnTrue", true, "24454119x"},
-		{"InvalidData_ShouldReturnFalse", false, "39.406.714-X"},
-		{"InvalidData_ShouldReturnFalse", false, "39.406.714-0"},
+		{"InvalidData_ShouldReturnFalse", false, nil, "3467875434578764345789654", SP},
+		{"InvalidData_ShouldReturnFalse", false, nil, "", SP},
+		{"InvalidData_ShouldReturnFalse", false, nil, "AAAAAAA", SP},
+		{"InvalidData_ShouldReturnFalse", false, nil, "34.112.513-A", SP},
+		{"InvalidData_ShouldReturnFalse", false, nil, "34.112.513-X", SP},
+		{"InvalidData_ShouldReturnFalse", false, nil, "34.112.513-x", SP},
+		{"InvalidCheckDigit_ShouldReturnFalse", false, nil, "34.112.513-9", SP},
+		{"ValidFormat_ShouldReturnTrue", true, nil, "34.112.513-1", SP},
+		{"ValidFormat_ShouldReturnTrue", true, nil, "341125131", SP},
+		{"ValidFormat_ShouldReturnTrue", true, nil, "25.540.324-0", RJ},
+		{"ValidFormat_ShouldReturnTrue", true, nil, "255403240", RJ},
+		{"ValidFormat_ShouldReturnTrue", true, nil, "39.406.714-9", RJ},
+		{"ValidFormat_ShouldReturnTrue", true, nil, "24.454.119-X", RJ},
+		{"ValidFormat_ShouldReturnTrue", true, nil, "24454119X", RJ},
+		{"ValidFormat_ShouldReturnTrue", true, nil, "24.454.119-x", RJ},
+		{"ValidFormat_ShouldReturnTrue", true, nil, "24454119x", RJ},
+		{"InvalidData_ShouldReturnFalse", false, nil, "39.406.714-X", RJ},
+		{"InvalidData_ShouldReturnFalse", false, nil, "39.406.714-0", RJ},
+		{"InvalidData_ShouldReturnFalse", false, errNotImplementedUF, "39.406.714-0", PR},
+		{"ValidFormat_ShouldReturnTrue", false, errNotImplementedUF, "25.540.324-0", ES},
+		{"ValidFormat_ShouldReturnTrue", false, errNotImplementedUF, "255403240", BA},
+		{"ValidFormat_ShouldReturnTrue", false, errNotImplementedUF, "39.406.714-9", MT},
+		{"ValidFormat_ShouldReturnTrue", false, errNotImplementedUF, "24.454.119-X", RS},
+		{"ValidFormat_ShouldReturnTrue", false, errNotImplementedUF, "24.454.119-X", RS},
+		{"ValidFormat_ShouldReturnTrue", false, errNotImplementedUF, "24454119X", DF},
 	} {
 		t.Run(testName(i, tc.name), func(t *testing.T) {
-			assertEqual(t, tc.expected, IsRG(tc.v))
+			isValid, err := IsRG(tc.v, tc.uf)
+			assertEqual(t, tc.expectedErr, err)
+			if err == nil {
+				assertEqual(t, tc.expectedIsValid, isValid)
+			}
 		})
 	}
 }
@@ -51,7 +64,7 @@ func TestCalculateRGCheckDigit(t *testing.T) {
 		{"CalculateRGCheckDigit_ShouldReturn_10", 10, "24454119X"},
 	} {
 		t.Run(testName(i, tc.name), func(t *testing.T) {
-			assertIntEqual(t, tc.expected, calculateRGCheckDigit(tc.v))
+			assertEqual(t, tc.expected, calculateRGCheckDigit(tc.v))
 		})
 	}
 }
@@ -72,7 +85,7 @@ func TestGetRGCheckDigit(t *testing.T) {
 		{"GetRGCheckDigit_ShouldReturn_10", 10, "24454119X"},
 	} {
 		t.Run(testName(i, tc.name), func(t *testing.T) {
-			assertIntEqual(t, tc.expected, getRGCheckDigit(tc.v))
+			assertEqual(t, tc.expected, getRGCheckDigit(tc.v))
 		})
 	}
 }
@@ -97,7 +110,7 @@ func TestCleanNonRGDigits(t *testing.T) {
 		{"CleanNonRGDigits", "XxXxXx", "XxXyxXx"},
 	} {
 		t.Run(testName(i, tc.name), func(t *testing.T) {
-			assertStringEqual(t, tc.expected, cleanNonRGDigits(tc.v))
+			assertEqual(t, tc.expected, cleanNonRGDigits(tc.v))
 		})
 	}
 }
