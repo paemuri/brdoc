@@ -45,8 +45,10 @@ Principais funções:
 - [x] validação de RENAVAM (obrigado @leogregianin!)
 - [x] validação de placa veicular
 - [x] validação de CNS (obrigado @renatosuero!)
-- [x] validação de RG padrão SP e RJ
-- [ ] validação de RG demais estados
+- [ ] validação de RG
+  - [x] SP (obrigado @robas!)
+  - [x] RJ (obrigado @robas!)
+  - [ ] demais estados
 
 ## License
 
