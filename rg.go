@@ -17,7 +17,7 @@ var (
 
 // IsRG verifies if `doc` is a valid RG.
 // `uf` represents the Federative Unit the RG belongs to.
-// Curently the only validation algorithm implemented works for the following Federative Units:
+// Currently, the only implemented UFs are the following (the remaining will return an error):
 //   - SP
 //   - RJ
 func IsRG(doc string, uf FederativeUnit) (isValid bool, err error) {
