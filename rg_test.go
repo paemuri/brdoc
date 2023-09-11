@@ -30,13 +30,13 @@ func TestIsRG(t *testing.T) {
 		{"ValidFormat_ShouldReturnTrue", true, nil, "24454119x", RJ},
 		{"InvalidData_ShouldReturnFalse", false, nil, "39.406.714-X", RJ},
 		{"InvalidData_ShouldReturnFalse", false, nil, "39.406.714-0", RJ},
-		{"InvalidData_ShouldReturnFalse", false, errNotImplementedUF, "39.406.714-0", PR},
-		{"ValidFormat_ShouldReturnTrue", false, errNotImplementedUF, "25.540.324-0", ES},
-		{"ValidFormat_ShouldReturnTrue", false, errNotImplementedUF, "255403240", BA},
-		{"ValidFormat_ShouldReturnTrue", false, errNotImplementedUF, "39.406.714-9", MT},
-		{"ValidFormat_ShouldReturnTrue", false, errNotImplementedUF, "24.454.119-X", RS},
-		{"ValidFormat_ShouldReturnTrue", false, errNotImplementedUF, "24.454.119-X", RS},
-		{"ValidFormat_ShouldReturnTrue", false, errNotImplementedUF, "24454119X", DF},
+		{"NotImplementedUF_ShouldReturnError", false, errNotImplementedUF, "39.406.714-0", PR},
+		{"NotImplementedUF_ShouldReturnError", false, errNotImplementedUF, "25.540.324-0", ES},
+		{"NotImplementedUF_ShouldReturnError", false, errNotImplementedUF, "255403240", BA},
+		{"NotImplementedUF_ShouldReturnError", false, errNotImplementedUF, "39.406.714-9", MT},
+		{"NotImplementedUF_ShouldReturnError", false, errNotImplementedUF, "24.454.119-X", RS},
+		{"NotImplementedUF_ShouldReturnError", false, errNotImplementedUF, "24.454.119-X", RS},
+		{"NotImplementedUF_ShouldReturnError", false, errNotImplementedUF, "24454119X", DF},
 	} {
 		t.Run(testName(i, tc.name), func(t *testing.T) {
 			isValid, err := IsRG(tc.v, tc.uf)
