@@ -6,7 +6,6 @@ import (
 
 // allDigit checks if every rune in a given string is a digit.
 func allDigit(doc string) bool {
-
 	for _, r := range doc {
 		if !unicode.IsDigit(r) {
 			return false

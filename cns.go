@@ -11,7 +11,6 @@ var (
 
 // IsCNS verifies if the given string is a valid CNS document.
 func IsCNS(doc string) bool {
-
 	if !CNSRegexp.MatchString(doc) {
 		return false
 	}

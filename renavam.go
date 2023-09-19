@@ -10,7 +10,6 @@ var (
 
 // IsRENAVAM verifies if the given string is a valid RENAVAM document.
 func IsRENAVAM(doc string) bool {
-
 	if len(doc) != 11 {
 		return false
 	}

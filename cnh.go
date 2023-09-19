@@ -2,7 +2,6 @@ package brdoc
 
 // IsCNH verifies if the given string is a valid CNH document.
 func IsCNH(doc string) bool {
-
 	if len(doc) != 11 {
 		return false
 	}
