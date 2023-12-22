@@ -61,6 +61,7 @@ func TestIsCNPJ(t *testing.T) {
 		{"InvalidFormat_ShouldReturnFalse", false, "74-221-325.0001/30"},
 		{"Valid_ShouldReturnTrue", true, "26.637.142/0001-58"},
 		{"Valid_ShouldReturnTrue", true, "74.221.325/0001-30"},
+		{"Valid_ShouldReturnTrue", true, "39.591.842/0000-10"},
 	} {
 		t.Run(testName(i, tc.name), func(t *testing.T) {
 			assertEqual(t, tc.expected, IsCNPJ(tc.v))
