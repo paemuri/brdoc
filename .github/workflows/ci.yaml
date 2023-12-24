@@ -11,7 +11,7 @@ jobs:
       - uses: actions/setup-go@v3
         with:
           go-version: "$CI_GO_VERSION"
-      - run: "[ $(gofmt -s -l . | wc -l) -gt 0 ] && exit 1"
+      - run: if [ $(gofmt -s -l . | wc -l) -gt 0 ]; then exit 1; fi
   staticcheck:
     name: Validate staticcheck
     runs-on: ubuntu-latest
