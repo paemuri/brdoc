@@ -1,5 +1,7 @@
 name: CI
 on: [push, pull_request]
+env:
+  CI_GO_VERSION: "1.21"
 jobs:
   gofmt:
     name: Validate gofmt
@@ -8,7 +10,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v3
         with:
-          go-version: "1.21"
+          go-version: "$CI_GO_VERSION"
       - run: "[ $(gofmt -s -l . | wc -l) -gt 0 ] && exit 1"
   staticcheck:
     name: Validate staticcheck
@@ -17,7 +19,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v3
         with:
-          go-version: "1.21"
+          go-version: "$$CI_GO_VERSION"
       - run: "go install honnef.co/go/tools/cmd/staticcheck@v0.4.6"
       - run: "staticcheck ./..."
   test:
