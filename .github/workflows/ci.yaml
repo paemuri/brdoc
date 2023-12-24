@@ -13,7 +13,6 @@ jobs:
   staticcheck:
     name: Validate staticcheck
     runs-on: ubuntu-latest
-    container: golang:bullseye # Needed for staticcheck to work properly.
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v3
