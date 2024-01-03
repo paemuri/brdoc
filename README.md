@@ -13,7 +13,7 @@ portuguese.
 
 BR Doc é um pacote para validação, tanto do formato quanto dos dígitos,
 de documentos brasileiros, como CPF, CNPJ, CEP, CNH, PIS/PASEP, RENAVAM, placa
-veicular, RG (só SP e RJ) e título de eleitor.
+veicular, RG (só SP e RJ), título de eleitor, telefone e celular.
 
 Aceito PRs de todas as formas. Está permitido escrever em português,
 também. :)
@@ -34,6 +34,7 @@ Principais funções:
 - `func IsCNS(doc string) bool`
 - `func IsRG(doc string, uf FederativeUnit) bool`
 - `func IsVoterID(doc string) bool`
+- `func IsPhone(phone string) (isValid bool, uf FederativeUnit)`
 
 ## Coisas a fazer
 
@@ -45,6 +46,7 @@ Principais funções:
 - [x] validação de placa veicular
 - [x] validação de CNS (obrigado @renatosuero!)
 - [x] validação de título de eleitor (obrigado @tiagompalte!)
+- [x] validação de telefone (obrigado @tiagompalte e @ArtusC!)
 - [ ] validação de RG
   - [x] SP (obrigado @robas!)
   - [x] RJ (obrigado @robas!)
@@ -61,7 +63,6 @@ submitted for inclusion in the work by you shall be in the public
 domain, without any additional terms or conditions.
 
 [1]: ./LICENSE
-
 [badge-1-img]: https://img.shields.io/github/license/paemuri/brdoc?style=flat-square
 [badge-1-link]: https://github.com/paemuri/brdoc/blob/master/LICENSE
 [badge-2-img]: https://img.shields.io/badge/go.dev-reference-007d9c?style=flat-square&logo=go&logoColor=white
