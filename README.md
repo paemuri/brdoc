@@ -4,7 +4,7 @@
 [![go.dev][badge-2-img]][badge-2-link]
 [![Go Report Card][badge-3-img]][badge-3-link]
 
-CPF, CNPJ, CEP, CNH, PIS/PASEP, RENAVAM, CNS, license plate and voter registration validator for Go!
+CPF, CNPJ, CEP, CNH, PIS/PASEP, RENAVAM, CNS, license plate and voter ID validator for Go!
 
 Everything in this file, but the [License](#license) section, is in
 portuguese.
@@ -61,6 +61,7 @@ submitted for inclusion in the work by you shall be in the public
 domain, without any additional terms or conditions.
 
 [1]: ./LICENSE
+
 [badge-1-img]: https://img.shields.io/github/license/paemuri/brdoc?style=flat-square
 [badge-1-link]: https://github.com/paemuri/brdoc/blob/master/LICENSE
 [badge-2-img]: https://img.shields.io/badge/go.dev-reference-007d9c?style=flat-square&logo=go&logoColor=white

@@ -5,7 +5,7 @@ import (
 	"strconv"
 )
 
-// IsVoterID verifies if the given string is a valid voter registration document
+// IsVoterID verifies if the given string is a valid voter ID document.
 func IsVoterID(doc string) bool {
 	if !allDigit(doc) || len(doc) != 12 {
 		return false
