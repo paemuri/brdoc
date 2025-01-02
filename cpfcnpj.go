@@ -1,13 +1,10 @@
 package brdoc
 
 import (
-	"bytes"
 	"regexp"
 	"strconv"
-	"unicode"
 )
 
-// Regexp pattern for CPF and CNPJ.
 var (
 	CPFRegexp  = regexp.MustCompile(`^\d{3}\.?\d{3}\.?\d{3}-?\d{2}$`)
 	CNPJRegexp = regexp.MustCompile(`^\d{2}\.?\d{3}\.?\d{3}\/?(:?\d{3}[1-9]|\d{2}[1-9]\d|\d[1-9]\d{2}|[1-9]\d{3})-?\d{2}$`)
@@ -53,18 +50,6 @@ func isCPFOrCNPJ(doc string, pattern *regexp.Regexp, size int, position int) boo
 	digit = calculateDigit(d, position+1)
 
 	return doc == d+digit
-}
-
-// cleanNonDigits removes every rune that is not a digit.
-func cleanNonDigits(doc *string) {
-	buf := bytes.NewBufferString("")
-	for _, r := range *doc {
-		if unicode.IsDigit(r) {
-			buf.WriteRune(r)
-		}
-	}
-
-	*doc = buf.String()
 }
 
 // allEq checks if every rune in a given string is equal.

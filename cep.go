@@ -5,7 +5,6 @@ import (
 	"strconv"
 )
 
-// Regexp pattern for CEP.
 var (
 	CEPRegexp = regexp.MustCompile(`^\d{5}-?\d{3}$`)
 )

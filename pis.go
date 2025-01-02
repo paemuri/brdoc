@@ -6,7 +6,6 @@ import (
 
 const pisLength = 11
 
-// Regexp pattern for PIS.
 var (
 	PISRegexp = regexp.MustCompile(`^\d{3}\.?\d{3,5}\.?\d{2,4}-?\d$`)
 

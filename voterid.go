@@ -7,6 +7,10 @@ import (
 
 // IsVoterID verifies if the given string is a valid voter ID document.
 func IsVoterID(doc string) bool {
+	// This function was based on the logic from [1]. It seems to be a bit
+	// sketchy, but it works for now.
+	// [1]: http://ghiorzi.org/DVnew.htm#e.
+
 	if !allDigit(doc) || len(doc) != 12 {
 		return false
 	}

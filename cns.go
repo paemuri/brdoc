@@ -4,7 +4,6 @@ import (
 	"regexp"
 )
 
-// Regexp pattern for CNS.
 var (
 	CNSRegexp = regexp.MustCompile(`^([12]\d{2}\s?\d{4}\s?\d{4}\s?00[01]\d|[789]\d{2}\s?\d{4}\s?\d{4}\s?\d{4})$`)
 )

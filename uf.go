@@ -1,9 +1,8 @@
 package brdoc
 
-// FederativeUnit represents a state or a district in Brazil.
+// FederativeUnit represents a first-level administrative division in Brazil: either a state or a federal district.
 type FederativeUnit uint8
 
-// Federative unit for CEP validation.
 const (
 	AC FederativeUnit = iota
 	AL
