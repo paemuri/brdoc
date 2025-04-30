@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"errors"
 	"regexp"
-	"unicode"
 )
 
 var (
@@ -60,7 +59,7 @@ func calcRGDigit(doc string) int {
 func cleanRG(doc *string) {
 	buf := bytes.NewBufferString("")
 	for _, r := range *doc {
-		if unicode.IsDigit(r) || r == 'X' || r == 'x' {
+		if isDigit(r) || r == 'X' || r == 'x' {
 			buf.WriteRune(r)
 		}
 	}
