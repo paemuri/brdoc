@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"regexp"
 	"strconv"
-	"unicode"
 )
 
 // "Cadastro" will be used internally to define both CPF and CNPJ.
@@ -85,7 +84,7 @@ func calcCadastroDigit(doc string, position int) string {
 func cleanCadastro(doc *string) {
 	buf := bytes.NewBufferString("")
 	for _, r := range *doc {
-		if unicode.IsDigit(r) || unicode.IsLetter(r) {
+		if isDigit(r) || ('A' <= r && r <= 'Z') {
 			buf.WriteRune(r)
 		}
 	}

@@ -2,13 +2,12 @@ package brdoc
 
 import (
 	"bytes"
-	"unicode"
 )
 
 // allDigit checks if every rune in a given string is a digit.
 func allDigit(doc string) bool {
 	for _, r := range doc {
-		if !unicode.IsDigit(r) {
+		if !isDigit(r) {
 			return false
 		}
 	}
@@ -25,7 +24,7 @@ func toInt(r rune) int {
 func cleanNonDigits(doc *string) {
 	buf := bytes.NewBufferString("")
 	for _, r := range *doc {
-		if unicode.IsDigit(r) {
+		if isDigit(r) {
 			buf.WriteRune(r)
 		}
 	}
@@ -56,4 +55,10 @@ func isFrom(uf UF, ufs []UF) bool {
 		}
 	}
 	return false
+}
+
+// isDigit is a simpler version of unicode.IsDigit: verifies whether a rune is
+// a single digit number.
+func isDigit(r rune) bool {
+	return '0' <= r && r <= '9'
 }
