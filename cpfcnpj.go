@@ -8,11 +8,24 @@ import (
 // "Cadastro" will be used internally to define both CPF and CNPJ.
 
 var (
-	cpfRegexp  = regexp.MustCompile(`^\d{3}\.?\d{3}\.?\d{3}-?\d{2}$`)
-	cnpjRegexp = regexp.MustCompile(
-		`^\d{2}\.?\d{3}\.?\d{3}\/?(:?\d{3}[1-9]|\d{2}[1-9]\d|\d[1-9]\d{2}|[1-9]\d{3})-?\d{2}$`,
-	)
+	CPFRegexp  = regexp.MustCompile(`^\d{3}\.?\d{3}\.?\d{3}-?\d{2}$`)
+	CNPJRegexp = regexp.MustCompile(`^[0-9A-Z]{2}\.?[0-9A-Z]{3}\.?[0-9A-Z]{3}/?[0-9A-Z]{4}-?[0-9]{2}$`)
 )
+
+type DocumentType string
+
+const (
+	CPF  DocumentType = "cpf"
+	CNPJ DocumentType = "cnpj"
+)
+
+func (d *DocumentType) IsCPF() bool {
+	return *d == CPF
+}
+
+func (d *DocumentType) IsCNPJ() bool {
+	return *d == CNPJ
+}
 
 // IsCPF verifies if the given string is a valid CPF document.
 func IsCPF(doc string) bool {
@@ -21,7 +34,7 @@ func IsCPF(doc string) bool {
 		pos  = 10
 	)
 
-	return isCadastro(doc, cpfRegexp, size, pos)
+	return isCPFOrCNPJ(doc, CPF, size, pos)
 }
 
 // IsCNPJ verifies if the given string is a valid CNPJ document.
@@ -31,22 +44,26 @@ func IsCNPJ(doc string) bool {
 		pos  = 5
 	)
 
-	return isCadastro(doc, cnpjRegexp, size, pos)
+	return isCPFOrCNPJ(doc, CNPJ, size, pos)
 }
 
-// isCadastro generates the digits for a given CPF or CNPJ and compares it with
-// the original digits.
-func isCadastro(
-	doc string,
-	pattern *regexp.Regexp,
-	size int,
-	position int,
-) bool {
-	if !pattern.MatchString(doc) {
-		return false
+// isCPFOrCNPJ generates the digits for a given CPF or CNPJ and compares it with the original digits.
+func isCPFOrCNPJ(doc string, docType DocumentType, size int, position int) bool {
+	if docType.IsCPF() {
+		if !CPFRegexp.MatchString(doc) {
+			return false
+		}
+
+		cleanNonDigits(&doc)
 	}
 
-	cleanNonDigits(&doc)
+	if docType.IsCNPJ() {
+		if !CNPJRegexp.MatchString(doc) {
+			return false
+		}
+
+		cleanNonDigitsAndNonLetters(&doc)
+	}
 
 	// Invalidates documents with all digits equal.
 	if allEq(doc) {
