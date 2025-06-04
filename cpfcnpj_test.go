@@ -28,7 +28,9 @@ func TestIsCPF(t *testing.T) {
 		{"InvalidFormat_ShouldReturnFalse", false, "248 438 034 80"},
 		{"InvalidFormat_ShouldReturnFalse", false, "099-075-865.60"},
 		{"Valid_ShouldReturnTrue", true, "248.438.034-80"},
+		{"Valid_ShouldReturnTrue", true, "24843803480"},
 		{"Valid_ShouldReturnTrue", true, "099.075.865-60"},
+		{"Valid_ShouldReturnTrue", true, "09907586560"},
 	} {
 		t.Run(testName(i, tc.name), func(t *testing.T) {
 			assertEqual(t, tc.expected, IsCPF(tc.v))
@@ -61,6 +63,15 @@ func TestIsCNPJ(t *testing.T) {
 		{"InvalidFormat_ShouldReturnFalse", false, "74-221-325.0001/30"},
 		{"Valid_ShouldReturnTrue", true, "26.637.142/0001-58"},
 		{"Valid_ShouldReturnTrue", true, "74.221.325/0001-30"},
+		{"Valid_ShouldReturnTrue", true, "19.JA2.KO8/Z001-51"},
+		{"Valid_ShouldReturnTrue", true, "19JA2KO8Z00151"},
+		{"Valid_ShouldReturnTrue", true, "SC.RCN.1NI/0001-30"},
+		{"Valid_ShouldReturnTrue", true, "SCRCN1NI000130"},
+		{"Valid_ShouldReturnTrue", true, "4Y.2OP.G99/0001-41"},
+		{"Valid_ShouldReturnTrue", true, "4Y2OPG99000141"},
+		{"Valid_ShouldReturnTrue", true, "WE.0PP.M4F/0001-91"},
+		{"Valid_ShouldReturnTrue", true, "WE0PPM4F000191"},
+		{"InvalidDigits_ShouldReturnFalse", false, "WE.0PP.M5F/0001-92"},
 	} {
 		t.Run(testName(i, tc.name), func(t *testing.T) {
 			assertEqual(t, tc.expected, IsCNPJ(tc.v))
