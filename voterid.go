@@ -11,7 +11,10 @@ func IsVoterID(doc string) bool {
 	// sketchy, but it works for now.
 	// [1]: http://ghiorzi.org/DVnew.htm#e.
 
-	if !allDigit(doc) || len(doc) != 12 {
+	if len(doc) != 12 {
+		return false
+	}
+	if !allDigit(doc) {
 		return false
 	}
 
@@ -26,15 +29,15 @@ func IsVoterID(doc string) bool {
 	for i, digit := range doc[:len(doc)-4] {
 		sumA += toInt(digit) * (i + 2)
 	}
-	dv1 := dvMod11(sumA)
+	dv1 := voterIDMod11(sumA)
 
 	sumB := toInt(docRune[8])*7 + toInt(docRune[9])*8 + dv1*9
-	dv2 := dvMod11(sumB)
+	dv2 := voterIDMod11(sumB)
 
 	return dv1 == toInt(docRune[10]) && dv2 == toInt(docRune[11])
 }
 
-func dvMod11(num int) int {
+func voterIDMod11(num int) int {
 	mod := num % 11
 	if mod == 10 || mod == 11 {
 		return 0
