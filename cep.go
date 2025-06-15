@@ -19,6 +19,7 @@ func IsCEP(doc string, ufs ...FederativeUnit) bool {
 
 	h, _ := strconv.Atoi(doc[0:3])
 
+	// If no UF is specified, anything between 010 and 999 is valid.
 	if len(ufs) == 0 {
 		return h >= 10
 	}
