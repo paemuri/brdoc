@@ -5,11 +5,6 @@ import (
 	"strconv"
 )
 
-const (
-	ddi = ``
-	ddd = ``
-)
-
 var (
 	phoneRegexp = regexp.MustCompile(`^(?:(?:(?:\+|00)?55\s?)?(\([1-9][0-9]\)|[1-9][0-9])\s?)((9[-.\s]?\d|[2-9]{1})\d{3}[-.\s]?\d{4})$`)
 )
