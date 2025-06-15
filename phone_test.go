@@ -6,7 +6,7 @@ func TestIsPhone(t *testing.T) {
 	for i, tc := range []struct {
 		name          string
 		expectedValid bool
-		expectedUf    FederativeUnit
+		expectedUf    UF
 		v             string
 	}{
 		{"Valid_ShouldReturnTrue", true, SP, "+55 (11) 99999-9999"},

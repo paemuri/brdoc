@@ -22,7 +22,7 @@ Principais funções:
 
 - `func IsCPF(doc string) bool`
 - `func IsCNPJ(doc string) bool`
-- `func IsCEP(doc string, ufs ...FederativeUnit) bool`
+- `func IsCEP(doc string, ufs ...UF) bool`
 - `func IsCNH(doc string) bool`
 - `func IsPIS(doc string) bool`
 - `func IsRENAVAM(doc string) bool`
@@ -30,9 +30,9 @@ Principais funções:
 - `func IsNationalPlate(doc string) bool`
 - `func IsMercosulPlate(doc string) bool`
 - `func IsCNS(doc string) bool`
-- `func IsRG(doc string, uf FederativeUnit) bool`
+- `func IsRG(doc string, uf UF) bool`
 - `func IsVoterID(doc string) bool`
-- `func IsPhone(phone string) (isValid bool, uf FederativeUnit)`
+- `func IsPhone(phone string) (isValid bool, uf UF)`
 
 ## Coisas a fazer
 

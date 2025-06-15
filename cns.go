@@ -5,12 +5,14 @@ import (
 )
 
 var (
-	CNSRegexp = regexp.MustCompile(`^([12]\d{2}(\s?\d{4}){2}\s?00[01]\d|[789]\d{2}(\s?\d{4}){3})$`)
+	cnsRegexp = regexp.MustCompile(
+		`^([12]\d{2}(\s?\d{4}){2}\s?00[01]\d|[789]\d{2}(\s?\d{4}){3})$`,
+	)
 )
 
 // IsCNS verifies if the given string is a valid CNS document.
 func IsCNS(doc string) bool {
-	if !CNSRegexp.MatchString(doc) {
+	if !cnsRegexp.MatchString(doc) {
 		return false
 	}
 

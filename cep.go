@@ -6,14 +6,14 @@ import (
 )
 
 var (
-	CEPRegexp = regexp.MustCompile(`^\d{5}-?\d{3}$`)
+	cepRegexp = regexp.MustCompile(`^\d{5}-?\d{3}$`)
 )
 
 // IsCEP verifies if `doc` is a valid CEP.
-// `ufs` represents the possible Federative Units the CEP should matches.
-// If none is provided, it validates the document for any state/district.
-func IsCEP(doc string, ufs ...FederativeUnit) bool {
-	if !CEPRegexp.MatchString(doc) {
+// `ufs` represents the possible UF the CEP should matches. If none is
+// provided, it validates the document for any state/district.
+func IsCEP(doc string, ufs ...UF) bool {
+	if !cepRegexp.MatchString(doc) {
 		return false
 	}
 

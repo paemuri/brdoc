@@ -6,11 +6,14 @@ import (
 )
 
 var (
-	phoneRegexp = regexp.MustCompile(`^(?:(?:(?:\+|00)?55\s?)?(\([1-9][0-9]\)|[1-9][0-9])\s?)((9[-.\s]?\d|[2-9]{1})\d{3}[-.\s]?\d{4})$`)
+	phoneRegexp = regexp.MustCompile(
+		`^(?:(?:(?:\+|00)?55\s?)?(\([1-9][0-9]\)|[1-9][0-9])\s?)((9[-.\s]?\d|[2-9]{1})\d{3}[-.\s]?\d{4})$`,
+	)
 )
 
-// IsPhone verifies if `phone` is a phone number valid and return UF from DDD.
-func IsPhone(phone string) (isValid bool, uf FederativeUnit) {
+// IsPhone verifies if `phone` is a valid Brazilian phone number and returns
+// its related UF.
+func IsPhone(phone string) (isValid bool, uf UF) {
 	matches := phoneRegexp.FindStringSubmatch(phone)
 	if matches == nil {
 		isValid = false

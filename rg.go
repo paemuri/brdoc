@@ -8,21 +8,23 @@ import (
 )
 
 var (
-	RGRegexp = regexp.MustCompile(`^\d{2}\.?\d{3}\.?\d{3}-?[0-9xX]$`)
+	rgRegexp = regexp.MustCompile(`^\d{2}\.?\d{3}\.?\d{3}-?[0-9xX]$`)
 )
 
 // IsRG verifies if `doc` is a valid RG.
-// `uf` represents the Federative Unit the RG belongs to.
-// Currently, the only implemented UFs are the following (the remaining will return an error):
+// `uf` represents the UFs the RG belongs to. Currently, the only implemented
+// UFs are the following:
 //   - SP
 //   - RJ
-func IsRG(doc string, uf FederativeUnit) (isValid bool, err error) {
+//
+// All the remaining UFs will return an error.
+func IsRG(doc string, uf UF) (isValid bool, err error) {
 	if uf != SP && uf != RJ {
 		err = errors.New("federative unit not implemented")
 		return
 	}
 
-	if !RGRegexp.MatchString(doc) {
+	if !rgRegexp.MatchString(doc) {
 		isValid = false
 		return
 	}

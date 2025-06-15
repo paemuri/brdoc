@@ -5,13 +5,24 @@ import (
 	"testing"
 )
 
-func TestIsRG_ValidUF(t *testing.T) {
-	for _, uf := range []FederativeUnit{SP, RJ} {
+func TestIsRG(t *testing.T) {
+	for _, uf := range []UF{SP, RJ} {
 		for i, tc := range []struct {
 			name     string
 			expected bool
 			v        string
 		}{
+			{"Valid_ShouldReturnTrue", true, "34.112.513-1"},
+			{"Valid_ShouldReturnTrue", true, "341125131"},
+			{"Valid_ShouldReturnTrue", true, "25.540.324-0"},
+			{"Valid_ShouldReturnTrue", true, "255403240"},
+			{"Valid_ShouldReturnTrue", true, "39.406.714-9"},
+			{"Valid_ShouldReturnTrue", true, "394067149"},
+			{"Valid_ShouldReturnTrue", true, "24.454.119-X"},
+			{"Valid_ShouldReturnTrue", true, "24454119X"},
+			{"Valid_ShouldReturnTrue", true, "24.454.119-x"},
+			{"Valid_ShouldReturnTrue", true, "24454119x"},
+
 			{"InvalidData_ShouldReturnFalse", false, "3467875434578764345789654"},
 			{"InvalidData_ShouldReturnFalse", false, ""},
 			{"InvalidData_ShouldReturnFalse", false, "AAAAAAA"},
@@ -21,23 +32,6 @@ func TestIsRG_ValidUF(t *testing.T) {
 			{"InvalidDigit_ShouldReturnFalse", false, "34.112.513-9"},
 			{"InvalidDigit_ShouldReturnFalse", false, "39.406.714-X"},
 			{"InvalidDigit_ShouldReturnFalse", false, "39.406.714-0"},
-			{"ValidFormat_ShouldReturnTrue", true, "34.112.513-1"},
-			{"ValidFormat_ShouldReturnTrue", true, "341125131"},
-			{"ValidFormat_ShouldReturnTrue", true, "25.540.324-0"},
-			{"ValidFormat_ShouldReturnTrue", true, "255403240"},
-			{"ValidFormat_ShouldReturnTrue", true, "39.406.714-9"},
-			{"ValidFormat_ShouldReturnTrue", true, "394067149"},
-			{"ValidFormat_ShouldReturnTrue", true, "24.454.119-X"},
-			{"ValidFormat_ShouldReturnTrue", true, "24454119X"},
-			{"ValidFormat_ShouldReturnTrue", true, "24.454.119-x"},
-			{"ValidFormat_ShouldReturnTrue", true, "24454119x"},
-			//{"NotImplementedUF_ShouldReturnError", false, true, "39.406.714-0"},
-			//{"NotImplementedUF_ShouldReturnError", false, true, "25.540.324-0"},
-			//{"NotImplementedUF_ShouldReturnError", false, true, "255403240"},
-			//{"NotImplementedUF_ShouldReturnError", false, true, "39.406.714-9"},
-			//{"NotImplementedUF_ShouldReturnError", false, true, "24.454.119-X"},
-			//{"NotImplementedUF_ShouldReturnError", false, true, "24.454.119-X"},
-			//{"NotImplementedUF_ShouldReturnError", false, true, "24454119X"},
 		} {
 			name := fmt.Sprintf("%s_%s", uf, tc.name)
 			t.Run(testName(i, name), func(t *testing.T) {
@@ -49,9 +43,9 @@ func TestIsRG_ValidUF(t *testing.T) {
 	}
 }
 
-func TestIsRG_InvalidUF(t *testing.T) {
-	for i, uf := range []FederativeUnit{AC, AL, AP, AM, BA, CE, DF, ES, GO, MA, MT, MS, MG, PA, PB, PR, PE, PI, RN, RS, RO, RR, SC, SE, TO} {
-		name := fmt.Sprintf("%s_InvalidUF", uf)
+func TestIsRG_NotImplemented(t *testing.T) {
+	for i, uf := range []UF{AC, AL, AP, AM, BA, CE, DF, ES, GO, MA, MT, MS, MG, PA, PB, PR, PE, PI, RN, RS, RO, RR, SC, SE, TO} {
+		name := fmt.Sprintf("%s_NotImplemented", uf)
 		t.Run(testName(i, name), func(t *testing.T) {
 			_, err := IsRG("341125131", uf)
 			assertEqual(t, err != nil, true) // Maybe a better assert.

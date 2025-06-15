@@ -5,12 +5,12 @@ import (
 )
 
 var (
-	PISRegexp = regexp.MustCompile(`^\d{3}\.?\d{3,5}\.?\d{2,4}-?\d$`)
+	pisRegexp = regexp.MustCompile(`^\d{3}\.?\d{3,5}\.?\d{2,4}-?\d$`)
 )
 
 // IsPIS verifies if the given string is a valid PIS number.
 func IsPIS(doc string) bool {
-	if !PISRegexp.MatchString(doc) {
+	if !pisRegexp.MatchString(doc) {
 		return false
 	}
 
