@@ -5,103 +5,117 @@ import (
 	"strconv"
 )
 
-var cellPhoneRegexp = regexp.MustCompile(`^(?:(?:\+|00)?(55)\s?)?(?:\(?([1-9][0-9])\)?\s?)(?:((?:9\s?\d|[6789]{1})\d{3})(?:(\-|\s|\.))?(\d{4}))$`)
-var residentialPhoneRegexp = regexp.MustCompile(`^(?:(?:\+|00)?(55)\s?)?(?:\(?([1-9][0-9])\)?\s?)(?:((?:\s?\d|[2345]{1})\d{3})(?:(\-|\s|\.))?(\d{4}))$`)
+const (
+	ddi = ``
+	ddd = ``
+)
 
-var mapDDD = map[int]FederativeUnit{
-	11: SP,
-	12: SP,
-	13: SP,
-	14: SP,
-	15: SP,
-	16: SP,
-	17: SP,
-	18: SP,
-	19: SP,
-	21: RJ,
-	22: RJ,
-	24: RJ,
-	27: ES,
-	28: ES,
-	31: MG,
-	32: MG,
-	33: MG,
-	34: MG,
-	35: MG,
-	37: MG,
-	38: MG,
-	41: PR,
-	42: PR,
-	43: PR,
-	44: PR,
-	45: PR,
-	46: PR,
-	47: SC,
-	48: SC,
-	49: SC,
-	51: RS,
-	53: RS,
-	54: RS,
-	55: RS,
-	61: DF,
-	62: GO,
-	63: TO,
-	64: GO,
-	65: MT,
-	66: MT,
-	67: MS,
-	68: AC,
-	69: RO,
-	71: BA,
-	73: BA,
-	74: BA,
-	75: BA,
-	77: BA,
-	79: SE,
-	81: PE,
-	82: AL,
-	83: PB,
-	84: RN,
-	85: CE,
-	86: PI,
-	87: PE,
-	88: CE,
-	89: PI,
-	91: PA,
-	92: AM,
-	93: PA,
-	94: PA,
-	95: RR,
-	96: AP,
-	97: AM,
-	98: MA,
-	99: MA,
-}
+var (
+	phoneRegexp = regexp.MustCompile(`^(?:(?:(?:\+|00)?55\s?)?(\([1-9][0-9]\)|[1-9][0-9])\s?)((9[-.\s]?\d|[2-9]{1})\d{3}[-.\s]?\d{4})$`)
+)
 
 // IsPhone verifies if `phone` is a phone number valid and return UF from DDD.
 func IsPhone(phone string) (isValid bool, uf FederativeUnit) {
-	if !cellPhoneRegexp.MatchString(phone) && !residentialPhoneRegexp.MatchString(phone) {
+	matches := phoneRegexp.FindStringSubmatch(phone)
+	if matches == nil {
 		isValid = false
 		return
 	}
 
-	cellPhoneGroups := cellPhoneRegexp.FindStringSubmatch(phone)
-	residentialPhoneGroups := residentialPhoneRegexp.FindStringSubmatch(phone)
-	var groups []string
+	match := matches[1]
+	cleanNonDigits(&match)
 
-	if residentialPhoneGroups != nil {
-		groups = residentialPhoneGroups
-	} else {
-		groups = cellPhoneGroups
-	}
-
-	ddd, err := strconv.Atoi(groups[2])
+	ddd, err := strconv.Atoi(match)
 	if err != nil || ddd < 11 || ddd > 99 {
 		isValid = false
 		return
 	}
 
-	uf, isValid = mapDDD[ddd]
+	if ddd >= 11 && ddd <= 19 {
+		return true, SP
+	}
+	if ddd == 21 || ddd == 22 || ddd == 24 {
+		return true, RJ
+	}
+	if ddd == 27 || ddd == 28 {
+		return true, ES
+	}
+	if (ddd >= 31 && ddd <= 35) || ddd == 37 || ddd == 38 {
+		return true, MG
+	}
+	if ddd >= 41 && ddd <= 46 {
+		return true, PR
+	}
+	if ddd >= 47 && ddd <= 49 {
+		return true, SC
+	}
+	if ddd == 51 || (ddd >= 53 && ddd <= 55) {
+		return true, RS
+	}
+	if ddd == 61 {
+		return true, DF
+	}
+	if ddd == 62 || ddd == 64 {
+		return true, GO
+	}
+	if ddd == 63 {
+		return true, TO
+	}
+	if ddd == 65 || ddd == 66 {
+		return true, MT
+	}
+	if ddd == 67 {
+		return true, MS
+	}
+	if ddd == 68 {
+		return true, AC
+	}
+	if ddd == 69 {
+		return true, RO
+	}
+	if ddd == 71 || (ddd >= 73 && ddd <= 75) || ddd == 77 {
+		return true, BA
+	}
+	if ddd == 79 {
+		return true, SE
+	}
+	if ddd == 81 || ddd == 87 {
+		return true, PE
+	}
+	if ddd == 82 {
+		return true, AL
+	}
+	if ddd == 83 {
+		return true, PB
+	}
+	if ddd == 84 {
+		return true, RN
+	}
+	if ddd == 85 || ddd == 88 {
+		return true, CE
+	}
+	if ddd == 86 {
+		return true, PI
+	}
+	if ddd == 89 {
+		return true, PI
+	}
+	if ddd == 91 || ddd == 93 || ddd == 94 {
+		return true, PA
+	}
+	if ddd == 92 || ddd == 97 {
+		return true, AM
+	}
+	if ddd == 95 {
+		return true, RR
+	}
+	if ddd == 96 {
+		return true, AP
+	}
+	if ddd == 98 || ddd == 99 {
+		return true, MA
+	}
 
+	isValid = false
 	return
 }

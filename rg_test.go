@@ -1,140 +1,121 @@
 package brdoc
 
 import (
+	"fmt"
 	"testing"
 )
 
-func TestIsRG(t *testing.T) {
-	for i, tc := range []struct {
-		name            string
-		expectedIsValid bool
-		expectedErr     error
-		v               string
-		uf              FederativeUnit
-	}{
-		{"InvalidData_ShouldReturnFalse", false, nil, "3467875434578764345789654", SP},
-		{"InvalidData_ShouldReturnFalse", false, nil, "", SP},
-		{"InvalidData_ShouldReturnFalse", false, nil, "AAAAAAA", SP},
-		{"InvalidData_ShouldReturnFalse", false, nil, "34.112.513-A", SP},
-		{"InvalidData_ShouldReturnFalse", false, nil, "34.112.513-X", SP},
-		{"InvalidData_ShouldReturnFalse", false, nil, "34.112.513-x", SP},
-		{"InvalidCheckDigit_ShouldReturnFalse", false, nil, "34.112.513-9", SP},
-		{"ValidFormat_ShouldReturnTrue", true, nil, "34.112.513-1", SP},
-		{"ValidFormat_ShouldReturnTrue", true, nil, "341125131", SP},
-		{"ValidFormat_ShouldReturnTrue", true, nil, "25.540.324-0", RJ},
-		{"ValidFormat_ShouldReturnTrue", true, nil, "255403240", RJ},
-		{"ValidFormat_ShouldReturnTrue", true, nil, "39.406.714-9", RJ},
-		{"ValidFormat_ShouldReturnTrue", true, nil, "24.454.119-X", RJ},
-		{"ValidFormat_ShouldReturnTrue", true, nil, "24454119X", RJ},
-		{"ValidFormat_ShouldReturnTrue", true, nil, "24.454.119-x", RJ},
-		{"ValidFormat_ShouldReturnTrue", true, nil, "24454119x", RJ},
-		{"InvalidData_ShouldReturnFalse", false, nil, "39.406.714-X", RJ},
-		{"InvalidData_ShouldReturnFalse", false, nil, "39.406.714-0", RJ},
-		{"NotImplementedUF_ShouldReturnError", false, errNotImplementedUF, "39.406.714-0", PR},
-		{"NotImplementedUF_ShouldReturnError", false, errNotImplementedUF, "25.540.324-0", ES},
-		{"NotImplementedUF_ShouldReturnError", false, errNotImplementedUF, "255403240", BA},
-		{"NotImplementedUF_ShouldReturnError", false, errNotImplementedUF, "39.406.714-9", MT},
-		{"NotImplementedUF_ShouldReturnError", false, errNotImplementedUF, "24.454.119-X", RS},
-		{"NotImplementedUF_ShouldReturnError", false, errNotImplementedUF, "24.454.119-X", RS},
-		{"NotImplementedUF_ShouldReturnError", false, errNotImplementedUF, "24454119X", DF},
-	} {
-		t.Run(testName(i, tc.name), func(t *testing.T) {
-			isValid, err := IsRG(tc.v, tc.uf)
-			assertEqual(t, tc.expectedErr, err)
-			if err == nil {
-				assertEqual(t, tc.expectedIsValid, isValid)
-			}
+func TestIsRG_ValidUF(t *testing.T) {
+	for _, uf := range []FederativeUnit{SP, RJ} {
+		for i, tc := range []struct {
+			name     string
+			expected bool
+			v        string
+		}{
+			{"InvalidData_ShouldReturnFalse", false, "3467875434578764345789654"},
+			{"InvalidData_ShouldReturnFalse", false, ""},
+			{"InvalidData_ShouldReturnFalse", false, "AAAAAAA"},
+			{"InvalidDigit_ShouldReturnFalse", false, "34.112.513-A"},
+			{"InvalidDigit_ShouldReturnFalse", false, "34.112.513-X"},
+			{"InvalidDigit_ShouldReturnFalse", false, "34.112.513-x"},
+			{"InvalidDigit_ShouldReturnFalse", false, "34.112.513-9"},
+			{"InvalidDigit_ShouldReturnFalse", false, "39.406.714-X"},
+			{"InvalidDigit_ShouldReturnFalse", false, "39.406.714-0"},
+			{"ValidFormat_ShouldReturnTrue", true, "34.112.513-1"},
+			{"ValidFormat_ShouldReturnTrue", true, "341125131"},
+			{"ValidFormat_ShouldReturnTrue", true, "25.540.324-0"},
+			{"ValidFormat_ShouldReturnTrue", true, "255403240"},
+			{"ValidFormat_ShouldReturnTrue", true, "39.406.714-9"},
+			{"ValidFormat_ShouldReturnTrue", true, "394067149"},
+			{"ValidFormat_ShouldReturnTrue", true, "24.454.119-X"},
+			{"ValidFormat_ShouldReturnTrue", true, "24454119X"},
+			{"ValidFormat_ShouldReturnTrue", true, "24.454.119-x"},
+			{"ValidFormat_ShouldReturnTrue", true, "24454119x"},
+			//{"NotImplementedUF_ShouldReturnError", false, true, "39.406.714-0"},
+			//{"NotImplementedUF_ShouldReturnError", false, true, "25.540.324-0"},
+			//{"NotImplementedUF_ShouldReturnError", false, true, "255403240"},
+			//{"NotImplementedUF_ShouldReturnError", false, true, "39.406.714-9"},
+			//{"NotImplementedUF_ShouldReturnError", false, true, "24.454.119-X"},
+			//{"NotImplementedUF_ShouldReturnError", false, true, "24.454.119-X"},
+			//{"NotImplementedUF_ShouldReturnError", false, true, "24454119X"},
+		} {
+			name := fmt.Sprintf("%s_%s", uf, tc.name)
+			t.Run(testName(i, name), func(t *testing.T) {
+				isValid, err := IsRG(tc.v, uf)
+				assertEqual(t, err, nil)
+				assertEqual(t, tc.expected, isValid)
+			})
+		}
+	}
+}
+
+func TestIsRG_InvalidUF(t *testing.T) {
+	for i, uf := range []FederativeUnit{AC, AL, AP, AM, BA, CE, DF, ES, GO, MA, MT, MS, MG, PA, PB, PR, PE, PI, RN, RS, RO, RR, SC, SE, TO} {
+		name := fmt.Sprintf("%s_InvalidUF", uf)
+		t.Run(testName(i, name), func(t *testing.T) {
+			_, err := IsRG("341125131", uf)
+			assertEqual(t, err != nil, true) // Maybe a better assert.
 		})
 	}
 }
 
-func TestCalculateRGCheckDigit(t *testing.T) {
-	for i, tc := range []struct {
-		name     string
-		expected int
-		v        string
-	}{
-		{"CalculateRGCheckDigit_ShouldReturn_1", 1, "34.112.513-1"},
-		{"CalculateRGCheckDigit_ShouldReturn_1", 1, "341125131"},
-		{"CalculateRGCheckDigit_ShouldReturn_9", 9, "39.406.714-9"},
-		{"CalculateRGCheckDigit_ShouldReturn_9", 9, "394067149"},
-		{"CalculateRGCheckDigit_ShouldReturn_11", 11, "25.540.324-0"},
-		{"CalculateRGCheckDigit_ShouldReturn_11", 11, "255403240"},
-		{"CalculateRGCheckDigit_ShouldReturn_10", 10, "24.454.119-X"},
-		{"CalculateRGCheckDigit_ShouldReturn_10", 10, "24454119X"},
-	} {
-		t.Run(testName(i, tc.name), func(t *testing.T) {
-			assertEqual(t, tc.expected, calculateRGCheckDigit(tc.v))
-		})
-	}
-}
-
-func TestGetRGCheckDigit(t *testing.T) {
+func TestCalcRGDigit(t *testing.T) {
 	for i, tc := range []struct {
 		name     string
 		expected int
 		v        string
 	}{
-		{"GetRGCheckDigit_ShouldReturn_1", 1, "34.112.513-1"},
-		{"GetRGCheckDigit_ShouldReturn_1", 1, "341125131"},
-		{"GetRGCheckDigit_ShouldReturn_9", 9, "39.406.714-9"},
-		{"GetRGCheckDigit_ShouldReturn_9", 9, "394067149"},
-		{"GetRGCheckDigit_ShouldReturn_11", 11, "25.540.324-0"},
-		{"GetRGCheckDigit_ShouldReturn_11", 11, "255403240"},
-		{"GetRGCheckDigit_ShouldReturn_10", 10, "24.454.119-X"},
-		{"GetRGCheckDigit_ShouldReturn_10", 10, "24454119X"},
+		{"CalcRGDigit", 1, "341125131"},
+		{"CalcRGDigit", 9, "394067149"},
+		{"CalcRGDigit", 11, "255403240"},
+		{"CalcRGDigit", 10, "24454119X"},
 	} {
 		t.Run(testName(i, tc.name), func(t *testing.T) {
-			assertEqual(t, tc.expected, getRGCheckDigit(tc.v))
+			assertEqual(t, tc.expected, calcRGDigit(tc.v))
 		})
 	}
 }
 
-func TestCleanNonRGDigits(t *testing.T) {
+func TestGetRGDigit(t *testing.T) {
+	for i, tc := range []struct {
+		name     string
+		expected int
+		v        string
+	}{
+		{"GetRGDigit", 1, "341125131"},
+		{"GetRGDigit", 9, "394067149"},
+		{"GetRGDigit", 11, "255403240"},
+		{"GetRGDigit", 10, "24454119X"},
+	} {
+		t.Run(testName(i, tc.name), func(t *testing.T) {
+			assertEqual(t, tc.expected, getRGDigit(tc.v))
+		})
+	}
+}
+
+func TestCleanRG(t *testing.T) {
 	for i, tc := range []struct {
 		name     string
 		expected string
 		v        string
 	}{
-		{"CleanNonRGDigits", "341125131", "34.112.513-1"},
-		{"CleanNonRGDigits", "341125131", "341125131"},
-		{"CleanNonRGDigits", "394067149", "39.406.714-9"},
-		{"CleanNonRGDigits", "394067149", "394067149"},
-		{"CleanNonRGDigits", "24454119X", "24.454.119-X"},
-		{"CleanNonRGDigits", "24454119X", "24454119X"},
-		{"CleanNonRGDigits", "24454119x", "24.454.119-x"},
-		{"CleanNonRGDigits", "24454119x", "24454119x"},
-		{"CleanNonRGDigits", "24454119x", "24//45///41--1.9x"},
-		{"CleanNonRGDigits", "", "AAaaaAAaaa"},
-		{"CleanNonRGDigits", "XxXxXx", "XxXxXx"},
-		{"CleanNonRGDigits", "XxXxXx", "XxXyxXx"},
+		{"CleanRG", "341125131", "34.112.513-1"},
+		{"CleanRG", "341125131", "341125131"},
+		{"CleanRG", "394067149", "39.406.714-9"},
+		{"CleanRG", "394067149", "394067149"},
+		{"CleanRG", "24454119X", "24.454.119-X"},
+		{"CleanRG", "24454119X", "24454119X"},
+		{"CleanRG", "24454119x", "24.454.119-x"},
+		{"CleanRG", "24454119x", "24454119x"},
+		{"CleanRG", "24454119x", "24//45///41--1.9x"},
+		{"CleanRG", "", "AAaaaAAaaa"},
+		{"CleanRG", "XxXxXx", "XxXxXx"},
+		{"CleanRG", "XxXxXx", "XxXyxXx"},
 	} {
 		t.Run(testName(i, tc.name), func(t *testing.T) {
-			assertEqual(t, tc.expected, cleanNonRGDigits(tc.v))
-		})
-	}
-}
-
-func TestIsRGValidDigit(t *testing.T) {
-	for i, tc := range []struct {
-		name     string
-		expected bool
-		v        rune
-	}{
-		{"ValidDigit_ShouldReturnTrue", true, 'x'},
-		{"ValidDigit_ShouldReturnTrue", true, 'X'},
-		{"ValidDigit_ShouldReturnTrue", true, '1'},
-		{"ValidDigit_ShouldReturnTrue", true, '2'},
-		{"ValidDigit_ShouldReturnTrue", true, '3'},
-		{"ValidDigit_ShouldReturnTrue", true, '9'},
-		{"ValidDigit_ShouldReturnTrue", true, '0'},
-		{"InvalidDigit_ShouldReturnFalse", false, 'Y'},
-		{"InvalidDigit_ShouldReturnFalse", false, 'A'},
-		{"InvalidDigit_ShouldReturnFalse", false, '-'},
-		{"InvalidDigit_ShouldReturnFalse", false, '.'},
-	} {
-		t.Run(testName(i, tc.name), func(t *testing.T) {
-			assertEqual(t, tc.expected, isRGValidDigit(tc.v))
+			doc := tc.v
+			cleanRG(&doc)
+			assertEqual(t, tc.expected, doc)
 		})
 	}
 }

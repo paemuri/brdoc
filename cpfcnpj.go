@@ -5,6 +5,8 @@ import (
 	"strconv"
 )
 
+// "Cadastro" will be used internally to define both CPF and CNPJ.
+
 var (
 	CPFRegexp  = regexp.MustCompile(`^\d{3}\.?\d{3}\.?\d{3}-?\d{2}$`)
 	CNPJRegexp = regexp.MustCompile(`^\d{2}\.?\d{3}\.?\d{3}\/?(:?\d{3}[1-9]|\d{2}[1-9]\d|\d[1-9]\d{2}|[1-9]\d{3})-?\d{2}$`)
@@ -17,7 +19,7 @@ func IsCPF(doc string) bool {
 		pos  = 10
 	)
 
-	return isCPFOrCNPJ(doc, CPFRegexp, size, pos)
+	return isCadastro(doc, CPFRegexp, size, pos)
 }
 
 // IsCNPJ verifies if the given string is a valid CNPJ document.
@@ -27,11 +29,11 @@ func IsCNPJ(doc string) bool {
 		pos  = 5
 	)
 
-	return isCPFOrCNPJ(doc, CNPJRegexp, size, pos)
+	return isCadastro(doc, CNPJRegexp, size, pos)
 }
 
-// isCPFOrCNPJ generates the digits for a given CPF or CNPJ and compares it with the original digits.
-func isCPFOrCNPJ(doc string, pattern *regexp.Regexp, size int, position int) bool {
+// isCadastro generates the digits for a given CPF or CNPJ and compares it with the original digits.
+func isCadastro(doc string, pattern *regexp.Regexp, size int, position int) bool {
 	if !pattern.MatchString(doc) {
 		return false
 	}
@@ -44,31 +46,18 @@ func isCPFOrCNPJ(doc string, pattern *regexp.Regexp, size int, position int) boo
 	}
 
 	d := doc[:size]
-	digit := calculateDigit(d, position)
+	digit := calcCadastroDigit(d, position)
 
 	d = d + digit
-	digit = calculateDigit(d, position+1)
+	digit = calcCadastroDigit(d, position+1)
 
 	return doc == d+digit
 }
 
-// allEq checks if every rune in a given string is equal.
-func allEq(doc string) bool {
-	base := doc[0]
-	for i := 1; i < len(doc); i++ {
-		if base != doc[i] {
-			return false
-		}
-	}
-
-	return true
-}
-
-// calculateDigit calculates the next digit for the given document.
-func calculateDigit(doc string, position int) string {
+// calcCadastroDigit calculates the next digit for the given document.
+func calcCadastroDigit(doc string, position int) string {
 	var sum int
 	for _, r := range doc {
-
 		sum += toInt(r) * position
 		position--
 

@@ -32,3 +32,15 @@ func cleanNonDigits(doc *string) {
 
 	*doc = buf.String()
 }
+
+// allEq checks if every rune in a given string is equal.
+func allEq(doc string) bool {
+	base := doc[0]
+	for i := 1; i < len(doc); i++ {
+		if base != doc[i] {
+			return false
+		}
+	}
+
+	return true
+}
