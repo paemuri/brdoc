@@ -44,3 +44,16 @@ func allEq(doc string) bool {
 
 	return true
 }
+
+// isFrom checks whether the doc's UF is part of the given options.
+func isFrom(uf UF, ufs []UF) bool {
+	if len(ufs) == 0 {
+		return true
+	}
+	for _, u := range ufs {
+		if uf == u {
+			return true
+		}
+	}
+	return false
+}

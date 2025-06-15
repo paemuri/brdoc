@@ -11,6 +11,19 @@ var (
 	)
 )
 
+// IsPhoneFrom verifies if `phone` is a valid Brazilian phone number.
+// Also, it validates if its related UF is part of the giving options. If none
+// is provided, it validates the document for any state/district.
+// This function is a wrapper on `IsPhone`.
+func IsPhoneFrom(phone string, ufs ...UF) bool {
+	isValid, uf := IsPhone(phone)
+	if !isValid {
+		return false
+	}
+
+	return isFrom(uf, ufs)
+}
+
 // IsPhone verifies if `phone` is a valid Brazilian phone number and returns
 // its related UF.
 func IsPhone(phone string) (isValid bool, uf UF) {

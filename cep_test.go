@@ -84,7 +84,7 @@ func TestIsCEP(t *testing.T) {
 		{"Valid_ShouldReturnTrue", true, "25000-000", []UF{}},
 	} {
 		t.Run(testName(i, tc.name), func(t *testing.T) {
-			assertEqual(t, tc.expected, IsCEP(tc.v, tc.u...))
+			assertEqual(t, tc.expected, IsCEPFrom(tc.v, tc.u...))
 		})
 	}
 }
