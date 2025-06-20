@@ -41,15 +41,15 @@ Principais funções:
 - [x] validação de CPF
 - [x] validação de CNPJ
 - [x] validação de CEP
-- [x] validação de CNH (obrigado @eminetto!)
-- [x] validação de RENAVAM (obrigado @leogregianin!)
+- [x] validação de CNH
+- [x] validação de RENAVAM
 - [x] validação de placa veicular
-- [x] validação de CNS (obrigado @renatosuero!)
-- [x] validação de título de eleitor (obrigado @tiagompalte!)
-- [x] validação de telefone (obrigado @tiagompalte e @ArtusC!)
+- [x] validação de CNS
+- [x] validação de título de eleitor
+- [x] validação de telefone
 - [ ] validação de RG
-  - [x] SP (obrigado @robas!)
-  - [x] RJ (obrigado @robas!)
+  - [x] SP
+  - [x] RJ
   - [ ] demais estados
 
 ## License
