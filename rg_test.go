@@ -48,7 +48,7 @@ func TestIsRG_NotImplemented(t *testing.T) {
 		name := fmt.Sprintf("%s_NotImplemented", uf)
 		t.Run(testName(i, name), func(t *testing.T) {
 			_, err := IsRG("341125131", uf)
-			assertEqual(t, err != nil, true) // Maybe a better assert.
+			assertEqual(t, err != nil, true) // TODO Maybe a better assert.
 		})
 	}
 }
