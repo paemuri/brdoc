@@ -7,7 +7,7 @@ import (
 func TestIsPhone(t *testing.T) {
 	for i, tc := range []struct {
 		name     string
-		doc      string
+		phone    string
 		valid    bool
 		ufs      []UF
 		validUFs bool
@@ -253,10 +253,10 @@ func TestIsPhone(t *testing.T) {
 		{"Valid", "1399999999", true, []UF{}, true},
 	} {
 		t.Run(testName(i, tc.name), func(t *testing.T) {
-			validFrom := IsPhoneFrom(tc.doc, tc.ufs...)
+			validFrom := IsPhoneFrom(tc.phone, tc.ufs...)
 			assertEq(t, tc.valid && tc.validUFs, validFrom)
 
-			valid, uf := IsPhone(tc.doc)
+			valid, uf := IsPhone(tc.phone)
 			assertEq(t, tc.valid, valid)
 
 			if tc.validUFs && len(tc.ufs) == 1 {
