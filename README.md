@@ -22,7 +22,7 @@ Principais funções:
 
 - `func IsCPF(doc string) bool`
 - `func IsCNPJ(doc string) bool`
-- `func IsCEP(doc string) (isValid bool, uf UF)`
+- `func IsCEP(doc string) (valid bool, uf UF)`
 - `func IsCEPFrom(doc string, ufs ...UF) bool`
 - `func IsCNH(doc string) bool`
 - `func IsPIS(doc string) bool`
@@ -33,7 +33,7 @@ Principais funções:
 - `func IsCNS(doc string) bool`
 - `func IsRG(doc string, uf UF) bool`
 - `func IsVoterID(doc string) bool`
-- `func IsPhone(phone string) (isValid bool, uf UF)`
+- `func IsPhone(phone string) (valid bool, uf UF)`
 - `func IsPhoneFrom(phone string, ufs ...UF) bool`
 
 ## Coisas a fazer

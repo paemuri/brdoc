@@ -14,8 +14,8 @@ var (
 // is provided, it validates the document for any state/district.
 // This function is a wrapper on `IsCEP`.
 func IsCEPFrom(doc string, ufs ...UF) bool {
-	isValid, uf := IsCEP(doc)
-	if !isValid {
+	valid, uf := IsCEP(doc)
+	if !valid {
 		return false
 	}
 
@@ -23,9 +23,9 @@ func IsCEPFrom(doc string, ufs ...UF) bool {
 }
 
 // IsCEP verifies if `doc` is a valid CEP and returns its related UF.
-func IsCEP(doc string) (isValid bool, uf UF) {
+func IsCEP(doc string) (valid bool, uf UF) {
 	if !cepRegexp.MatchString(doc) {
-		isValid = false
+		valid = false
 		return
 	}
 
@@ -122,6 +122,6 @@ func IsCEP(doc string) (isValid bool, uf UF) {
 		return true, RS
 	}
 
-	isValid = false
+	valid = false
 	return
 }

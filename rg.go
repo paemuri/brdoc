@@ -18,20 +18,20 @@ var (
 //   - RJ
 //
 // All the remaining UFs will return an error.
-func IsRG(doc string, uf UF) (isValid bool, err error) {
+func IsRG(doc string, uf UF) (valid bool, err error) {
 	if uf != SP && uf != RJ {
 		err = errors.New("federative unit not implemented")
 		return
 	}
 
 	if !rgRegexp.MatchString(doc) {
-		isValid = false
+		valid = false
 		return
 	}
 
 	cleanRG(&doc)
 
-	isValid = getRGDigit(doc) == calcRGDigit(doc)
+	valid = getRGDigit(doc) == calcRGDigit(doc)
 	return
 }
 

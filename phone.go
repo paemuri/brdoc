@@ -16,8 +16,8 @@ var (
 // is provided, it validates the document for any state/district.
 // This function is a wrapper on `IsPhone`.
 func IsPhoneFrom(phone string, ufs ...UF) bool {
-	isValid, uf := IsPhone(phone)
-	if !isValid {
+	valid, uf := IsPhone(phone)
+	if !valid {
 		return false
 	}
 
@@ -26,10 +26,10 @@ func IsPhoneFrom(phone string, ufs ...UF) bool {
 
 // IsPhone verifies if `phone` is a valid Brazilian phone number and returns
 // its related UF.
-func IsPhone(phone string) (isValid bool, uf UF) {
+func IsPhone(phone string) (valid bool, uf UF) {
 	matches := phoneRegexp.FindStringSubmatch(phone)
 	if matches == nil {
-		isValid = false
+		valid = false
 		return
 	}
 
@@ -38,7 +38,7 @@ func IsPhone(phone string) (isValid bool, uf UF) {
 
 	ddd, err := strconv.Atoi(match)
 	if err != nil || ddd < 11 || ddd > 99 {
-		isValid = false
+		valid = false
 		return
 	}
 
@@ -127,6 +127,6 @@ func IsPhone(phone string) (isValid bool, uf UF) {
 		return true, MA
 	}
 
-	isValid = false
+	valid = false
 	return
 }
