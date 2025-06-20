@@ -31,7 +31,7 @@ Principais funções:
 - `func IsNationalPlate(doc string) bool`
 - `func IsMercosulPlate(doc string) bool`
 - `func IsCNS(doc string) bool`
-- `func IsRG(doc string, uf UF) bool`
+- `func IsRG(doc string, uf UF) (valid bool, err error)`
 - `func IsVoterID(doc string) bool`
 - `func IsPhone(phone string) (valid bool, uf UF)`
 - `func IsPhoneFrom(phone string, ufs ...UF) bool`
