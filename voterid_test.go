@@ -1,52 +1,57 @@
 package brdoc
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestIsVoterID(t *testing.T) {
 	for i, tc := range []struct {
-		name     string
-		expected bool
-		v        string
+		name  string
+		doc   string
+		valid bool
 	}{
-		{"Invalid_ShouldReturnFalse", false, "3467875434578764345789654"},
-		{"Invalid_ShouldReturnFalse", false, ""},
-		{"Invalid_ShouldReturnFalse", false, "AAAAAAAAAAA"},
-		{"Invalid_ShouldReturnFalse", false, "915 5017 0193 0306"},
-		{"Invalid_ShouldReturnFalse", false, "174 2241 7133 0004"},
-		{"Invalid_ShouldReturnFalse", false, "259 7557 3388 0001"},
-		{"Invalid_ShouldReturnFalse", false, "808-2536-1743-0486"},
-		{"Invalid_ShouldReturnFalse", false, "9999 0236 0200 834"},
-		{"Invalid_ShouldReturnFalse", false, "111122223333"},
-		{"Invalid_ShouldReturnFalse", false, "098756718298"},
-		{"Valid_ShouldReturnTrue", true, "381026662437"},
-		{"Valid_ShouldReturnTrue", true, "048751641724"},
-		{"Valid_ShouldReturnTrue", true, "285823622500"},
-		{"Valid_ShouldReturnTrue", true, "115180722291"},
-		{"Valid_ShouldReturnTrue", true, "455422250574"},
-		{"Valid_ShouldReturnTrue", true, "122364350701"},
-		{"Valid_ShouldReturnTrue", true, "103464042020"},
-		{"Valid_ShouldReturnTrue", true, "737736771015"},
-		{"Valid_ShouldReturnTrue", true, "222803251481"},
-		{"Valid_ShouldReturnTrue", true, "877174621180"},
-		{"Valid_ShouldReturnTrue", true, "837133461872"},
-		{"Valid_ShouldReturnTrue", true, "686457161910"},
-		{"Valid_ShouldReturnTrue", true, "300020430205"},
-		{"Valid_ShouldReturnTrue", true, "704478161317"},
-		{"Valid_ShouldReturnTrue", true, "875456481201"},
-		{"Valid_ShouldReturnTrue", true, "513443030671"},
-		{"Valid_ShouldReturnTrue", true, "816231560876"},
-		{"Valid_ShouldReturnTrue", true, "211404870302"},
-		{"Valid_ShouldReturnTrue", true, "557212661694"},
-		{"Valid_ShouldReturnTrue", true, "353615220469"},
-		{"Valid_ShouldReturnTrue", true, "350436562380"},
-		{"Valid_ShouldReturnTrue", true, "684185562631"},
-		{"Valid_ShouldReturnTrue", true, "035200670175"},
-		{"Valid_ShouldReturnTrue", true, "468332130981"},
-		{"Valid_ShouldReturnTrue", true, "034315432186"},
-		{"Valid_ShouldReturnTrue", true, "426044362739"},
+		{"InvalidData", "3467875434578764345789654", false},
+		{"InvalidData", "", false},
+		{"InvalidData", "AAAAAAAAAAA", false},
+
+		{"InvalidDigit", "111122223333", false},
+		{"InvalidDigit", "098756718298", false},
+
+		{"InvalidFormat", "915 5017 0193 0306", false},
+		{"InvalidFormat", "174 2241 7133 0004", false},
+		{"InvalidFormat", "259 7557 3388 0001", false},
+		{"InvalidFormat", "808-2536-1743-0486", false},
+		{"InvalidFormat", "9999 0236 0200 834", false},
+
+		{"Valid", "381026662437", true},
+		{"Valid", "048751641724", true},
+		{"Valid", "285823622500", true},
+		{"Valid", "115180722291", true},
+		{"Valid", "455422250574", true},
+		{"Valid", "122364350701", true},
+		{"Valid", "103464042020", true},
+		{"Valid", "737736771015", true},
+		{"Valid", "222803251481", true},
+		{"Valid", "877174621180", true},
+		{"Valid", "837133461872", true},
+		{"Valid", "686457161910", true},
+		{"Valid", "300020430205", true},
+		{"Valid", "704478161317", true},
+		{"Valid", "875456481201", true},
+		{"Valid", "513443030671", true},
+		{"Valid", "816231560876", true},
+		{"Valid", "211404870302", true},
+		{"Valid", "557212661694", true},
+		{"Valid", "353615220469", true},
+		{"Valid", "350436562380", true},
+		{"Valid", "684185562631", true},
+		{"Valid", "035200670175", true},
+		{"Valid", "468332130981", true},
+		{"Valid", "034315432186", true},
+		{"Valid", "426044362739", true},
 	} {
 		t.Run(testName(i, tc.name), func(t *testing.T) {
-			assertEqual(t, tc.expected, IsVoterID(tc.v))
+			assertEq(t, tc.valid, IsVoterID(tc.doc))
 		})
 	}
 }

@@ -6,30 +6,33 @@ import (
 
 func TestIsCNH(t *testing.T) {
 	for i, tc := range []struct {
-		name     string
-		expected bool
-		v        string
+		name  string
+		doc   string
+		valid bool
 	}{
-		{"InvalidData_ShouldReturnFalse", false, "3467875434578764345789654"},
-		{"InvalidData_ShouldReturnFalse", false, ""},
-		{"InvalidData_ShouldReturnFalse", false, "AAAAAAAAAAA"},
-		{"InvalidFormat_ShouldReturnFalse", false, "8195247601-1"},
-		{"InvalidFormat_ShouldReturnFalse", false, "337989413-53"},
-		{"InvalidFormat_ShouldReturnFalse", false, "872 227 006 00"},
-		{"InvalidFormat_ShouldReturnFalse", false, "459.911.677-05"},
-		{"InvalidDigit_ShouldReturnFalse", false, "02102234243"},
-		{"InvalidDigit_ShouldReturnFalse", false, "02102234142"},
-		{"InvalidDigit_ShouldReturnFalse", false, "13798941353"},
-		{"InvalidDigit_ShouldReturnFalse", false, "00676003001"},
-		{"Valid_ShouldReturnTrue", true, "81952476011"},
-		{"Valid_ShouldReturnTrue", true, "33798941353"},
-		{"Valid_ShouldReturnTrue", true, "87222700600"},
-		{"Valid_ShouldReturnTrue", true, "45991167705"},
-		{"Valid_ShouldReturnTrue", true, "19595699996"},
-		{"Valid_ShouldReturnTrue", true, "00067600300"},
+		{"InvalidData", "3467875434578764345789654", false},
+		{"InvalidData", "", false},
+		{"InvalidData", "AAAAAAAAAAA", false},
+
+		{"InvalidDigit", "02102234243", false},
+		{"InvalidDigit", "02102234142", false},
+		{"InvalidDigit", "13798941353", false},
+		{"InvalidDigit", "00676003001", false},
+
+		{"InvalidFormat", "8195247601-1", false},
+		{"InvalidFormat", "337989413-53", false},
+		{"InvalidFormat", "872 227 006 00", false},
+		{"InvalidFormat", "459.911.677-05", false},
+
+		{"Valid", "81952476011", true},
+		{"Valid", "33798941353", true},
+		{"Valid", "87222700600", true},
+		{"Valid", "45991167705", true},
+		{"Valid", "19595699996", true},
+		{"Valid", "00067600300", true},
 	} {
 		t.Run(testName(i, tc.name), func(t *testing.T) {
-			assertEqual(t, tc.expected, IsCNH(tc.v))
+			assertEq(t, tc.valid, IsCNH(tc.doc))
 		})
 	}
 }

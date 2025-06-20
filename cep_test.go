@@ -134,13 +134,13 @@ func TestIsCEP(t *testing.T) {
 	} {
 		t.Run(testName(i, tc.name), func(t *testing.T) {
 			validFrom := IsCEPFrom(tc.doc, tc.ufs...)
-			assertEqual(t, validFrom, tc.valid && tc.validUFs)
+			assertEq(t, tc.valid && tc.validUFs, validFrom)
 
 			valid, uf := IsCEP(tc.doc)
-			assertEqual(t, valid, tc.valid)
+			assertEq(t, tc.valid, valid)
 
 			if tc.validUFs && len(tc.ufs) == 1 {
-				assertEqual(t, uf, tc.ufs[0])
+				assertEq(t, tc.ufs[0], uf)
 			}
 		})
 	}

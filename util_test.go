@@ -5,8 +5,18 @@ import (
 	"testing"
 )
 
-func assertEqual(t *testing.T, expected, actual interface{}) {
+func assertEq(t *testing.T, expected, actual interface{}) {
 	if expected != actual {
+		t.Fatalf(`
+Not equal!
+expected: %v
+actual:   %v
+`, expected, actual)
+	}
+}
+
+func assertNotEq(t *testing.T, expected, actual interface{}) {
+	if expected == actual {
 		t.Fatalf(`
 Not equal!
 expected: %v

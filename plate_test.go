@@ -6,60 +6,66 @@ import (
 
 func TestIsPlate(t *testing.T) {
 	for i, tc := range []struct {
-		name     string
-		expected bool
-		v        string
+		name  string
+		doc   string
+		valid bool
 	}{
-		{"InvalidData_ShouldReturnFalse", false, "3467875434578764345789654"},
-		{"InvalidData_ShouldReturnFalse", false, ""},
-		{"InvalidData_ShouldReturnFalse", false, "AAAAAAA"},
-		{"ValidOldFormat_ShouldReturnTrue", true, "AAA0000"},
-		{"ValidOldFormat_ShouldReturnTrue", true, "ABC-1234"},
-		{"ValidNewFormat_ShouldReturnTrue", true, "AAA0A00"},
-		{"ValidNewFormat_ShouldReturnTrue", true, "ABC1D23"},
+		{"InvalidData", "3467875434578764345789654", false},
+		{"InvalidData", "", false},
+		{"InvalidData", "AAAAAAA", false},
+
+		{"ValidOldFormat", "AAA0000", true},
+		{"ValidOldFormat", "ABC-1234", true},
+
+		{"ValidNewFormat", "AAA0A00", true},
+		{"ValidNewFormat", "ABC1D23", true},
 	} {
 		t.Run(testName(i, tc.name), func(t *testing.T) {
-			assertEqual(t, tc.expected, IsPlate(tc.v))
+			assertEq(t, tc.valid, IsPlate(tc.doc))
 		})
 	}
 }
 
 func TestIsNationalPlate(t *testing.T) {
 	for i, tc := range []struct {
-		name     string
-		expected bool
-		v        string
+		name  string
+		doc   string
+		valid bool
 	}{
-		{"InvalidData_ShouldReturnFalse", false, "3467875434578764345789654"},
-		{"InvalidData_ShouldReturnFalse", false, ""},
-		{"InvalidData_ShouldReturnFalse", false, "AAAAAAA"},
-		{"InvalidNewFormat_ShouldReturnFlase", false, "AAA0A00"},
-		{"InvalidNewFormat_ShouldReturnFlase", false, "ABC1D23"},
-		{"ValidOldFormat_ShouldReturnTrue", true, "AAA0000"},
-		{"ValidOldFormat_ShouldReturnTrue", true, "ABC-1234"},
+		{"InvalidData", "3467875434578764345789654", false},
+		{"InvalidData", "", false},
+		{"InvalidData", "AAAAAAA", false},
+
+		{"InvalidNewFormat", "AAA0A00", false},
+		{"InvalidNewFormat", "ABC1D23", false},
+
+		{"ValidOldFormat", "AAA0000", true},
+		{"ValidOldFormat", "ABC-1234", true},
 	} {
 		t.Run(testName(i, tc.name), func(t *testing.T) {
-			assertEqual(t, tc.expected, IsNationalPlate(tc.v))
+			assertEq(t, tc.valid, IsNationalPlate(tc.doc))
 		})
 	}
 }
 
 func TestIsMercosulPlate(t *testing.T) {
 	for i, tc := range []struct {
-		name     string
-		expected bool
-		v        string
+		name  string
+		doc   string
+		valid bool
 	}{
-		{"InvalidData_ShouldReturnFalse", false, "3467875434578764345789654"},
-		{"InvalidData_ShouldReturnFalse", false, ""},
-		{"InvalidData_ShouldReturnFalse", false, "AAAAAAA"},
-		{"InvalidOldFormat_ShouldReturnFlase", false, "AAA0000"},
-		{"InvalidOldFormat_ShouldReturnFlase", false, "ABC-1234"},
-		{"ValidNewFormat_ShouldReturnTrue", true, "AAA0A00"},
-		{"ValidNewFormat_ShouldReturnTrue", true, "ABC1D23"},
+		{"InvalidData", "3467875434578764345789654", false},
+		{"InvalidData", "", false},
+		{"InvalidData", "AAAAAAA", false},
+
+		{"InvalidOldFormat", "AAA0000", false},
+		{"InvalidOldFormat", "ABC-1234", false},
+
+		{"ValidNewFormat", "AAA0A00", true},
+		{"ValidNewFormat", "ABC1D23", true},
 	} {
 		t.Run(testName(i, tc.name), func(t *testing.T) {
-			assertEqual(t, tc.expected, IsMercosulPlate(tc.v))
+			assertEq(t, tc.valid, IsMercosulPlate(tc.doc))
 		})
 	}
 }
