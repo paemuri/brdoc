@@ -1,31 +1,18 @@
 package brdoc
 
 import (
+	"bytes"
 	"regexp"
 	"strconv"
+	"unicode"
 )
 
 // "Cadastro" will be used internally to define both CPF and CNPJ.
 
 var (
-	CPFRegexp  = regexp.MustCompile(`^\d{3}\.?\d{3}\.?\d{3}-?\d{2}$`)
-	CNPJRegexp = regexp.MustCompile(`^[0-9A-Z]{2}\.?[0-9A-Z]{3}\.?[0-9A-Z]{3}/?[0-9A-Z]{4}-?[0-9]{2}$`)
+	cpfRegexp  = regexp.MustCompile(`^\d{3}\.?\d{3}\.?\d{3}-?\d{2}$`)
+	cnpjRegexp = regexp.MustCompile(`^[0-9A-Z]{2}\.?[0-9A-Z]{3}\.?[0-9A-Z]{3}/?[0-9A-Z]{4}-?[0-9]{2}$`)
 )
-
-type DocumentType string
-
-const (
-	CPF  DocumentType = "cpf"
-	CNPJ DocumentType = "cnpj"
-)
-
-func (d *DocumentType) IsCPF() bool {
-	return *d == CPF
-}
-
-func (d *DocumentType) IsCNPJ() bool {
-	return *d == CNPJ
-}
 
 // IsCPF verifies if the given string is a valid CPF document.
 func IsCPF(doc string) bool {
@@ -34,7 +21,7 @@ func IsCPF(doc string) bool {
 		pos  = 10
 	)
 
-	return isCPFOrCNPJ(doc, CPF, size, pos)
+	return isCadastro(doc, cpfRegexp, size, pos)
 }
 
 // IsCNPJ verifies if the given string is a valid CNPJ document.
@@ -44,26 +31,22 @@ func IsCNPJ(doc string) bool {
 		pos  = 5
 	)
 
-	return isCPFOrCNPJ(doc, CNPJ, size, pos)
+	return isCadastro(doc, cnpjRegexp, size, pos)
 }
 
-// isCPFOrCNPJ generates the digits for a given CPF or CNPJ and compares it with the original digits.
-func isCPFOrCNPJ(doc string, docType DocumentType, size int, position int) bool {
-	if docType.IsCPF() {
-		if !CPFRegexp.MatchString(doc) {
-			return false
-		}
-
-		cleanNonDigits(&doc)
+// isCadastro generates the digits for a given CPF or CNPJ and compares it with
+// the original digits.
+func isCadastro(
+	doc string,
+	pattern *regexp.Regexp,
+	size int,
+	position int,
+) bool {
+	if !pattern.MatchString(doc) {
+		return false
 	}
 
-	if docType.IsCNPJ() {
-		if !CNPJRegexp.MatchString(doc) {
-			return false
-		}
-
-		cleanNonDigitsAndNonLetters(&doc)
-	}
+	cleanCadastro(&doc)
 
 	// Invalidates documents with all digits equal.
 	if allEq(doc) {
@@ -97,4 +80,15 @@ func calcCadastroDigit(doc string, position int) string {
 	}
 
 	return strconv.Itoa(11 - sum)
+}
+
+func cleanCadastro(doc *string) {
+	buf := bytes.NewBufferString("")
+	for _, r := range *doc {
+		if unicode.IsDigit(r) || unicode.IsLetter(r) {
+			buf.WriteRune(r)
+		}
+	}
+
+	*doc = buf.String()
 }

@@ -32,6 +32,8 @@ func TestIsCPF(t *testing.T) {
 		{"InvalidFormat", "099-075-865.60", false},
 
 		{"Valid", "248.438.034-80", true},
+		{"Valid", "099.075.865-60", true},
+		{"Valid", "24843803480", true},
 		{"Valid", "09907586560", true},
 	} {
 		t.Run(testName(i, tc.name), func(t *testing.T) {
@@ -63,12 +65,25 @@ func TestIsCNPJ(t *testing.T) {
 
 		{"InvalidDigits", "26.637.142/0001-85", false},
 		{"InvalidDigits", "74.221.325/0001-03", false},
+		{"InvalidDigits", "WE.0PP.M5F/0001-92", false},
 
 		{"InvalidFormat", "26-637-142.0001/58", false},
 		{"InvalidFormat", "74-221-325.0001/30", false},
 
 		{"Valid", "26.637.142/0001-58", true},
+		{"Valid", "74.221.325/0001-30", true},
+		{"Valid", "19.JA2.KO8/Z001-51", true},
+		{"Valid", "SC.RCN.1NI/0001-30", true},
+		{"Valid", "4Y.2OP.G99/0001-41", true},
+		{"Valid", "WE.0PP.M4F/0001-91", true},
+		{"Valid", "12.ABC.345/01DE-35", true},
+		{"Valid", "26637142000158", true},
 		{"Valid", "74221325000130", true},
+		{"Valid", "19JA2KO8Z00151", true},
+		{"Valid", "SCRCN1NI000130", true},
+		{"Valid", "4Y2OPG99000141", true},
+		{"Valid", "WE0PPM4F000191", true},
+		{"Valid", "12ABC34501DE35", true},
 	} {
 		t.Run(testName(i, tc.name), func(t *testing.T) {
 			assertEq(t, tc.valid, IsCNPJ(tc.doc))
