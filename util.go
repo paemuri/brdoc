@@ -57,15 +57,3 @@ func isFrom(uf UF, ufs []UF) bool {
 	}
 	return false
 }
-
-// cleanNonDigitsAndNonLetters removes every rune that is not a digit and letters.
-func cleanNonDigitsAndNonLetters(doc *string) {
-	buf := bytes.NewBufferString("")
-	for _, r := range *doc {
-		if unicode.IsDigit(r) || unicode.IsLetter(r) {
-			buf.WriteRune(r)
-		}
-	}
-
-	*doc = buf.String()
-}
