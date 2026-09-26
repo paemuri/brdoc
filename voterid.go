@@ -29,18 +29,23 @@ func IsVoterID(doc string) bool {
 	for i, digit := range doc[:len(doc)-4] {
 		sumA += toInt(digit) * (i + 2)
 	}
-	dv1 := voterIDMod11(sumA)
+	dv1 := voterIDDigit(sumA, docUFInt)
 
 	sumB := toInt(docRune[8])*7 + toInt(docRune[9])*8 + dv1*9
-	dv2 := voterIDMod11(sumB)
+	dv2 := voterIDDigit(sumB, docUFInt)
 
 	return dv1 == toInt(docRune[10]) && dv2 == toInt(docRune[11])
 }
 
-func voterIDMod11(num int) int {
+// voterIDDigit is the remainder modulo 11. A remainder of 10 is digit 0.
+// For Sao Paulo (01) and Minas Gerais (02), a remainder of 0 is digit 1.
+func voterIDDigit(num int, uf int) int {
 	mod := num % 11
-	if mod == 10 || mod == 11 {
+	if mod == 10 {
 		return 0
+	}
+	if mod == 0 && (uf == 1 || uf == 2) {
+		return 1
 	}
 	return mod
 }

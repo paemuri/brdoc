@@ -16,6 +16,8 @@ func TestIsVoterID(t *testing.T) {
 
 		{"InvalidDigit", "111122223333", false},
 		{"InvalidDigit", "098756718298", false},
+		{"InvalidDigit", "300020430205", false},
+		{"InvalidDigit", "007202350108", false},
 
 		{"InvalidFormat", "915 5017 0193 0306", false},
 		{"InvalidFormat", "174 2241 7133 0004", false},
@@ -35,7 +37,8 @@ func TestIsVoterID(t *testing.T) {
 		{"Valid", "877174621180", true},
 		{"Valid", "837133461872", true},
 		{"Valid", "686457161910", true},
-		{"Valid", "300020430205", true},
+		{"Valid", "300020430213", true},
+		{"Valid", "007202350116", true},
 		{"Valid", "704478161317", true},
 		{"Valid", "875456481201", true},
 		{"Valid", "513443030671", true},
