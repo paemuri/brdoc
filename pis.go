@@ -19,6 +19,9 @@ func IsPIS(doc string) bool {
 	if len(doc) != 11 {
 		return false
 	}
+	if allEq(doc) {
+		return false
+	}
 
 	return toInt(rune(doc[len(doc)-1])) == calcPISDigit(doc)
 }

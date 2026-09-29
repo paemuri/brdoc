@@ -16,6 +16,8 @@ func TestIsPIS(t *testing.T) {
 
 		{"InvalidDigit", "103.95199.01-6", false},
 		{"InvalidDigit", "120.1641.414-9", false},
+		{"InvalidDigit", "00000000000", false},
+		{"InvalidDigit", "000.00000.00-0", false},
 
 		{"InvalidFormat", "103.951.990-15", false},
 		{"InvalidFormat", "103 951 990 15", false},
