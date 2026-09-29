@@ -17,6 +17,8 @@ func TestIsCNS(t *testing.T) {
 		{"InvalidDigit", "915 5017 0193 0306", false},
 		{"InvalidDigit", "174 2241 7133 0004", false},
 		{"InvalidDigit", "259 7557 3388 0001", false},
+		{"InvalidDigit", "129 1417 7763 0014", false},
+		{"InvalidDigit", "174 5241 7133 0012", false},
 
 		{"InvalidFormat", "808-2536-1743-0486", false},
 		{"InvalidFormat", "9999 0236 0200 834", false},
