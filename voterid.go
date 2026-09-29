@@ -43,7 +43,7 @@ func IsVoterID(doc string) bool {
 
 func voterIDMod11(num int) int {
 	mod := num % 11
-	if mod == 10 || mod == 11 {
+	if mod == 10 {
 		return 0
 	}
 	return mod
