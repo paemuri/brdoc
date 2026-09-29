@@ -27,6 +27,11 @@ func IsPhoneFrom(phone string, ufs ...UF) bool {
 // IsPhone verifies if `phone` is a valid Brazilian phone number and returns
 // its related UF.
 func IsPhone(phone string) (valid bool, uf UF) {
+	// The numbering rules are defined by Articles 11, 12 and 15 of [1], and the
+	// area codes of each UF are listed at [2].
+	// [1]: https://informacoes.anatel.gov.br/legislacao/resolucoes/2022/1641-resolucao-749.
+	// [2]: https://www.anatel.gov.br/dadosabertos/PDA/Codigo_Nacional/PGCN.csv.
+
 	matches := phoneRegexp.FindStringSubmatch(phone)
 	if matches == nil {
 		valid = false
@@ -54,15 +59,18 @@ func IsPhone(phone string) (valid bool, uf UF) {
 	if (ddd >= 31 && ddd <= 35) || ddd == 37 || ddd == 38 {
 		return true, MG
 	}
+	// Area code 42 is also used by some municipalities of SC.
 	if ddd >= 41 && ddd <= 46 {
 		return true, PR
 	}
+	// Area codes 47 and 49 are also used by some municipalities of PR.
 	if ddd >= 47 && ddd <= 49 {
 		return true, SC
 	}
 	if ddd == 51 || (ddd >= 53 && ddd <= 55) {
 		return true, RS
 	}
+	// Area code 61 is also used by some municipalities of GO.
 	if ddd == 61 {
 		return true, DF
 	}

@@ -15,6 +15,10 @@ var (
 
 // IsCPF verifies if the given string is a valid CPF document.
 func IsCPF(doc string) bool {
+	// Documents with all digits equal are listed as invalid by [1]. No
+	// official source for the check digits algorithm or the mask.
+	// [1]: http://normas.receita.fazenda.gov.br/sijut2consulta/anexoOutros.action?idArquivoBinario=36307.
+
 	const (
 		size = 9
 		pos  = 10
@@ -25,6 +29,11 @@ func IsCPF(doc string) bool {
 
 // IsCNPJ verifies if the given string is a valid CNPJ document.
 func IsCNPJ(doc string) bool {
+	// The format, including alphanumeric characters, and the check digits
+	// algorithm are defined by Annex XV of [1]. The mask is defined by [2].
+	// [1]: http://normas.receita.fazenda.gov.br/sijut2consulta/anexoOutros.action?idArquivoBinario=76204.
+	// [2]: https://www.gov.br/receitafederal/pt-br/centrais-de-conteudo/publicacoes/perguntas-e-respostas/cnpj/cnpj-alfanumerico.pdf.
+
 	const (
 		size = 12
 		pos  = 5
@@ -47,7 +56,7 @@ func isCadastro(
 
 	cleanCadastro(&doc)
 
-	// Invalidates documents with all digits equal.
+	// Official for CPF, but not official logic for CNPJ.
 	if allEq(doc) {
 		return false
 	}

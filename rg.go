@@ -18,6 +18,8 @@ var (
 //
 // All the remaining UFs will return an error.
 func IsRG(doc string, uf UF) (valid bool, err error) {
+	// No official source for any of this logic, for either UF.
+
 	if uf != SP && uf != RJ {
 		err = errors.New("federative unit not implemented")
 		return
