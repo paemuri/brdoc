@@ -11,6 +11,10 @@ func IsCNH(doc string) bool {
 	if !allDigit(doc) {
 		return false
 	}
+	// Not official logic: reject documents with all digits equal.
+	if allEq(doc) {
+		return false
+	}
 
 	// Not official logic: check digits calculation.
 	sum := 0

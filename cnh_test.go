@@ -18,6 +18,9 @@ func TestIsCNH(t *testing.T) {
 		{"InvalidDigit", "02102234142", false},
 		{"InvalidDigit", "13798941353", false},
 		{"InvalidDigit", "00676003001", false},
+		{"InvalidDigit", "00000000000", false},
+		{"InvalidDigit", "11111111111", false},
+		{"InvalidDigit", "99999999999", false},
 
 		{"InvalidFormat", "8195247601-1", false},
 		{"InvalidFormat", "337989413-53", false},
