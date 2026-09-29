@@ -22,6 +22,10 @@ func TestIsVoterID(t *testing.T) {
 		{"InvalidFormat", "259 7557 3388 0001", false},
 		{"InvalidFormat", "808-2536-1743-0486", false},
 		{"InvalidFormat", "9999 0236 0200 834", false},
+		{"InvalidFormat", "3810  2666 2437", false},
+		{"InvalidFormat", "38102 666 2437", false},
+		{"InvalidFormat", " 3810 2666 2437", false},
+		{"InvalidFormat", "3810-2666-2437", false},
 
 		{"Valid", "381026662437", true},
 		{"Valid", "048751641724", true},
@@ -49,6 +53,9 @@ func TestIsVoterID(t *testing.T) {
 		{"Valid", "468332130981", true},
 		{"Valid", "034315432186", true},
 		{"Valid", "426044362739", true},
+		{"Valid", "3810 2666 2437", true},
+		{"Valid", "0487 5164 1724", true},
+		{"Valid", "28582362 2500", true},
 	} {
 		t.Run(testName(i, tc.name), func(t *testing.T) {
 			assertEq(t, tc.valid, IsVoterID(tc.doc))

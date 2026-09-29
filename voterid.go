@@ -2,7 +2,12 @@ package brdoc
 
 import (
 	"fmt"
+	"regexp"
 	"strconv"
+)
+
+var (
+	voterIDRegexp = regexp.MustCompile(`^\d{4} ?\d{4} ?\d{4}$`)
 )
 
 // IsVoterID verifies if the given string is a valid voter ID document.
@@ -11,12 +16,11 @@ func IsVoterID(doc string) bool {
 	// sketchy, but it works for now.
 	// [1]: http://ghiorzi.org/DVnew.htm#e.
 
-	if len(doc) != 12 {
+	if !voterIDRegexp.MatchString(doc) {
 		return false
 	}
-	if !allDigit(doc) {
-		return false
-	}
+
+	cleanNonDigits(&doc)
 
 	docRune := []rune(doc)
 	docUF := fmt.Sprintf("%d%d", toInt(docRune[8]), toInt(docRune[9]))
