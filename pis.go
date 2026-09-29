@@ -5,7 +5,7 @@ import (
 )
 
 var (
-	pisRegexp = regexp.MustCompile(`^\d{3}\.?\d{3,5}\.?\d{2,4}-?\d$`)
+	pisRegexp = regexp.MustCompile(`^\d{3}\.?\d{5}\.?\d{2}-?\d$`)
 )
 
 // IsPIS verifies if the given string is a valid PIS number.

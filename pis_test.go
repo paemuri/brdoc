@@ -15,19 +15,22 @@ func TestIsPIS(t *testing.T) {
 		{"InvalidData", "AAAAAAAAAAA", false},
 
 		{"InvalidDigit", "103.95199.01-6", false},
-		{"InvalidDigit", "120.1641.414-9", false},
+		{"InvalidDigit", "120.16414.14-9", false},
 		{"InvalidDigit", "00000000000", false},
 		{"InvalidDigit", "000.00000.00-0", false},
 
 		{"InvalidFormat", "103.951.990-15", false},
 		{"InvalidFormat", "103 951 990 15", false},
 		{"InvalidFormat", "103951-99015", false},
+		{"InvalidFormat", "103.951.9901-5", false},
+		{"InvalidFormat", "120.6372.482-4", false},
+		{"InvalidFormat", "120.1641.414-8", false},
 
-		{"Valid", "103.951.9901-5", true},
 		{"Valid", "103.95199.01-5", true},
 		{"Valid", "10395199015", true},
-		{"Valid", "120.6372.482-4", true},
-		{"Valid", "120.1641.414-8", true},
+		{"Valid", "120.63724.82-4", true},
+		{"Valid", "120.16414.14-8", true},
+		{"Valid", "12016414148", true},
 	} {
 		t.Run(testName(i, tc.name), func(t *testing.T) {
 			assertEq(t, tc.valid, IsPIS(tc.doc))
