@@ -24,6 +24,11 @@ func IsCEPFrom(doc string, ufs ...UF) bool {
 
 // IsCEP verifies if `doc` is a valid CEP and returns its related UF.
 func IsCEP(doc string) (valid bool, uf UF) {
+	// The CEP format is described at [1], and the ranges for each UF are
+	// listed at [2].
+	// [1]: https://www.correios.com.br/enviar/precisa-de-ajuda/tudo-sobre-cep.
+	// [2]: https://buscacepinter.correios.com.br/app/faixa_cep_uf_localidade/index.php.
+
 	if !cepRegexp.MatchString(doc) {
 		valid = false
 		return
