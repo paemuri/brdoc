@@ -12,9 +12,8 @@ var (
 
 // IsVoterID verifies if the given string is a valid voter ID document.
 func IsVoterID(doc string) bool {
-	// This function was based on the logic from [1]. It seems to be a bit
-	// sketchy, but it works for now.
-	// [1]: http://ghiorzi.org/DVnew.htm#e.
+	// The number format is defined by Article 36 of [1].
+	// [1]: https://www.tse.jus.br/legislacao/compilada/res/2021/resolucao-no-23-659-de-26-de-outubro-de-2021.
 
 	if !voterIDRegexp.MatchString(doc) {
 		return false
