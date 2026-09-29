@@ -10,6 +10,8 @@ var (
 
 // IsPIS verifies if the given string is a valid PIS number.
 func IsPIS(doc string) bool {
+	// No official source was found for any of this logic.
+
 	if !pisRegexp.MatchString(doc) {
 		return false
 	}
