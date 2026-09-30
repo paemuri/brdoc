@@ -13,16 +13,18 @@ var (
 	cnpjRegexp = regexp.MustCompile(`^[0-9A-Z]{2}\.?[0-9A-Z]{3}\.?[0-9A-Z]{3}/?[0-9A-Z]{4}-?[0-9]{2}$`)
 )
 
+type docType int
+
+const (
+	docCPF docType = iota
+	docCNPJ
+)
+
 // IsCPF verifies if the given string is a valid CPF document.
 func IsCPF(doc string) bool {
 	// No official source for the check digits algorithm or the mask.
 
-	const (
-		size = 9
-		pos  = 10
-	)
-
-	return isCadastro(doc, cpfRegexp, size, pos, isInvalidCPFBase)
+	return isCadastro(doc, docCPF)
 }
 
 // IsCNPJ verifies if the given string is a valid CNPJ document.
@@ -32,46 +34,46 @@ func IsCNPJ(doc string) bool {
 	// [1]: http://normas.receita.fazenda.gov.br/sijut2consulta/anexoOutros.action?idArquivoBinario=76204.
 	// [2]: https://www.gov.br/receitafederal/pt-br/centrais-de-conteudo/publicacoes/perguntas-e-respostas/cnpj/cnpj-alfanumerico.pdf.
 
-	const (
-		size = 12
-		pos  = 5
-	)
-
-	return isCadastro(doc, cnpjRegexp, size, pos, isInvalidCNPJBase)
-}
-
-// isInvalidCPFBase rejects CPF documents with all digits equal, as listed by
-// [1].
-// [1]: http://normas.receita.fazenda.gov.br/sijut2consulta/anexoOutros.action?idArquivoBinario=36307.
-func isInvalidCPFBase(doc string) bool {
-	return allEq(doc)
-}
-
-// isInvalidCNPJBase rejects CNPJ documents with order number 0000, as listed
-// by [1]. It also lists base numbers 11.111.111 to 99.999.999 as invalid, but
-// they are not rejected, as some were issued (e.g. 66.666.666/0001-91).
-// [1]: http://normas.receita.fazenda.gov.br/sijut2consulta/anexoOutros.action?idArquivoBinario=36307.
-func isInvalidCNPJBase(doc string) bool {
-	return doc[8:12] == "0000"
+	return isCadastro(doc, docCNPJ)
 }
 
 // isCadastro generates the digits for a given CPF or CNPJ and compares it with
 // the original digits.
-func isCadastro(
-	doc string,
-	pattern *regexp.Regexp,
-	size int,
-	position int,
-	isInvalidBase func(doc string) bool,
-) bool {
+func isCadastro(doc string, docType docType) bool {
+	var (
+		pattern  *regexp.Regexp
+		size     int
+		position int
+	)
+
+	switch docType {
+	case docCPF:
+		pattern, size, position = cpfRegexp, 9, 10
+	case docCNPJ:
+		pattern, size, position = cnpjRegexp, 12, 5
+	default:
+		return false
+	}
+
 	if !pattern.MatchString(doc) {
 		return false
 	}
 
 	cleanCadastro(&doc)
 
-	if isInvalidBase(doc) {
-		return false
+	// The invalid documents are listed by [1]. It also lists CNPJ base numbers
+	// 11.111.111 to 99.999.999 as invalid, but they are not rejected, as some
+	// were issued (e.g. 66.666.666/0001-91).
+	// [1]: http://normas.receita.fazenda.gov.br/sijut2consulta/anexoOutros.action?idArquivoBinario=36307.
+	switch docType {
+	case docCPF:
+		if allEq(doc) {
+			return false
+		}
+	case docCNPJ:
+		if doc[8:12] == "0000" {
+			return false
+		}
 	}
 
 	d := doc[:size]
