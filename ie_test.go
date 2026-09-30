@@ -13,6 +13,14 @@ func TestIsIE(t *testing.T) {
 	}{
 		{"InvalidUF", "290887780", UF("XX"), false},
 
+		// Documents with all digits equal.
+		{"AllEqual", "000000000", ES, false},
+		{"AllEqual", "000000000", SC, false},
+		{"AllEqual", "000000000", TO, false},
+		{"AllEqual", "00000000", RJ, false},
+		{"AllEqual", "00000000000-00", DF, false},
+		{"AllEqual", "000000000000", SP, false},
+
 		{"AC_InvalidData", "", AC, false},
 		{"AC_InvalidData", "AAAAAAAAAAAAA", AC, false},
 

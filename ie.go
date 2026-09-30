@@ -257,6 +257,11 @@ func IsIE(doc string, uf UF) bool {
 func (rule ieRule) valid(doc string) bool {
 	cleanNonDigits(&doc)
 
+	// Not official logic: reject documents with all digits equal.
+	if allEq(doc) {
+		return false
+	}
+
 	if rule.validDigits != nil {
 		return rule.validDigits(doc)
 	}
