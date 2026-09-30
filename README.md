@@ -4,7 +4,7 @@
 [![go.dev][badge-2-img]][badge-2-link]
 [![Go Report Card][badge-3-img]][badge-3-link]
 
-CPF, CNPJ, CEP, CNH, PIS/PASEP, RENAVAM, CNS, license plate and voter ID
+CPF, CNPJ, CEP, CNH, PIS/PASEP, RENAVAM, CNS, license plate, voter ID and phone
 validator for Go!
 
 Everything in this file, but the [License](#license) section, is in portuguese.

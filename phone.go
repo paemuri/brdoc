@@ -21,9 +21,9 @@ var (
 )
 
 // IsPhoneFrom verifies if `phone` is a valid Brazilian phone number. Also, it
-// validates if its related UF is part of the giving options. If none is
-// provided, it validates the document for any state/district. This function is
-// a wrapper on `IsPhone`.
+// validates if its related UF is part of the given options. If none is
+// provided, it validates the document for any state/district. Unlike `IsPhone`,
+// it also accepts the other UF of area codes shared by more than one UF.
 func IsPhoneFrom(phone string, ufs ...UF) bool {
 	ddd, valid := parsePhoneDDD(phone)
 	if !valid {

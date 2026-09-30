@@ -9,9 +9,9 @@ var (
 	cepRegexp = regexp.MustCompile(`^\d{5}-?\d{3}$`)
 )
 
-// IsCEP verifies if `doc` is a valid CEP. Also, it validates if its related UF
-// is part of the giving options. If none is provided, it validates the document
-// for any state/district. This function is a wrapper on `IsCEP`.
+// IsCEPFrom verifies if `doc` is a valid CEP. Also, it validates if its related
+// UF is part of the given options. If none is provided, it validates the
+// document for any state/district. This function is a wrapper on `IsCEP`.
 func IsCEPFrom(doc string, ufs ...UF) bool {
 	valid, uf := IsCEP(doc)
 	if !valid {
