@@ -6,13 +6,26 @@ import (
 
 var (
 	cnjRegexp = regexp.MustCompile(`^\d{7}-?\d{2}\.?\d{4}\.?\d\.?\d{2}\.?\d{4}$`)
+
+	cnjCourts = map[byte][][2]int{
+		'1': {{0, 0}},                       // STF.
+		'2': {{0, 0}},                       // CNJ.
+		'3': {{0, 0}},                       // STJ.
+		'4': {{1, 6}, {90, 90}},             // TRFs and CJF.
+		'5': {{0, 24}, {90, 90}},            // TST, TRTs and CSJT.
+		'6': {{0, 27}},                      // TSE and TREs.
+		'7': {{0, 12}},                      // STM and CJMs.
+		'8': {{1, 27}},                      // TJs.
+		'9': {{13, 13}, {21, 21}, {26, 26}}, // TJMs of MG, RS and SP.
+	}
 )
 
 // IsCNJ verifies if the given string is a valid CNJ document, the unique number
 // of the processes of the Judiciary.
 //
-// The format and the check digits algorithm are defined by Article 1 and Annex
-// VIII of [Res. CNJ 65/2008].
+// The format, the check digits algorithm and the courts (TR) of each segment of
+// the Judiciary (J) are defined by Article 1 and Annex VIII of
+// [Res. CNJ 65/2008].
 //
 // [Res. CNJ 65/2008]: https://atos.cnj.jus.br/atos/detalhar/119
 func IsCNJ(doc string) bool {
@@ -22,8 +35,7 @@ func IsCNJ(doc string) bool {
 
 	cleanNonDigits(&doc)
 
-	// The segment of the Judiciary (J) goes from 1 to 9.
-	if doc[13] == '0' {
+	if !validCNJCourt(doc[13], toInt(rune(doc[14]))*10+toInt(rune(doc[15]))) {
 		return false
 	}
 
@@ -36,4 +48,16 @@ func IsCNJ(doc string) bool {
 	}
 
 	return rem == 1
+}
+
+// validCNJCourt verifies if the court (TR) exists in the segment of the
+// Judiciary (J).
+func validCNJCourt(segment byte, court int) bool {
+	for _, r := range cnjCourts[segment] {
+		if r[0] <= court && court <= r[1] {
+			return true
+		}
+	}
+
+	return false
 }

@@ -26,6 +26,12 @@ func TestIsCNJ(t *testing.T) {
 		// Calculated by hand, with a valid digit but a segment (J) of 0.
 		{"InvalidSegment", "0000100-69.2008.0.00.0000", false},
 
+		// Calculated by hand, with a valid digit but a court (TR) that does not
+		// exist in the segment (J).
+		{"InvalidCourt", "0000100-41.2008.4.07.0000", false},
+		{"InvalidCourt", "0000100-89.2008.9.01.0000", false},
+		{"InvalidCourt", "0000100-03.2008.8.00.0000", false},
+
 		// Public numbers of processes.
 		{"Valid", "1001051-87.2025.4.01.3201", true},
 		{"Valid", "10010518720254013201", true},
