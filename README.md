@@ -47,6 +47,8 @@ Funções públicas:
 - `func IsCNJ(doc string) bool`: número de processo judicial
 - `func IsCivilCertificate(doc string) bool`: matrícula de certidão de registro
   civil (nascimento, casamento ou óbito)
+- `func IsNFE(doc string) bool`: chave de acesso de NF-e, NFC-e, CT-e, MDF-e e
+  outros documentos fiscais eletrônicos
 
 Tipos públicos:
 

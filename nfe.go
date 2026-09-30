@@ -1,0 +1,82 @@
+package brdoc
+
+import (
+	"regexp"
+)
+
+var (
+	nfeRegexp = regexp.MustCompile(
+		`^(?:[0-9A-Z]{4} ?){10}[0-9A-Z]{4}$`,
+	)
+	nfeCleanRegexp = regexp.MustCompile(`^[0-9]{6}[0-9A-Z]{12}[0-9]{26}$`)
+	nfeUFs         = map[string]bool{
+		"11": true, "12": true, "13": true, "14": true, "15": true, "16": true,
+		"17": true, "21": true, "22": true, "23": true, "24": true, "25": true,
+		"26": true, "27": true, "28": true, "29": true, "31": true, "32": true,
+		"33": true, "35": true, "41": true, "42": true, "43": true, "50": true,
+		"51": true, "52": true, "53": true,
+	}
+	nfeModels = map[string]bool{
+		"55": true, // NF-e.
+		"57": true, // CT-e.
+		"58": true, // MDF-e.
+		"62": true, // NFCom.
+		"63": true, // BP-e and BP-e TM.
+		"64": true, // GTV-e.
+		"65": true, // NFC-e.
+		"66": true, // NF3e.
+		"67": true, // CT-e OS.
+	}
+)
+
+// IsNFE verifies if the given string is a valid access key of an NF-e. It also
+// works for NFC-e, CT-e, MDF-e and the other electronic fiscal documents that
+// use the same access key.
+//
+// The format and the check digit algorithm are defined by the item 2.2.6 of the
+// [MOC 7.0], and the alphanumeric CNPJ by the [NT 2025.001].
+//
+// [MOC 7.0]: https://www.nfe.fazenda.gov.br/portal/exibirArquivo.aspx?conteudo=LrBx7WT9PuA=
+// [NT 2025.001]: https://www.nfe.fazenda.gov.br/portal/exibirArquivo.aspx?conteudo=5ZkvIZt10mQ=
+func IsNFE(doc string) bool {
+	if !nfeRegexp.MatchString(doc) {
+		return false
+	}
+
+	cleanTaxID(&doc)
+
+	if !nfeCleanRegexp.MatchString(doc) {
+		return false
+	}
+
+	month := doc[4:6]
+	if !nfeUFs[doc[:2]] || month < "01" || month > "12" ||
+		!nfeModels[doc[20:22]] {
+		return false
+	}
+
+	return toInt(rune(doc[43])) == calcNFEDigit(doc[:43])
+}
+
+// calcNFEDigit returns 11 minus the remainder of the weighted sum of `doc`
+// divided by 11, or 0 if it is 10 or 11. The weights go from 2 to 9, from right
+// to left, and letters are valued as their ASCII code minus 48.
+func calcNFEDigit(doc string) int {
+	sum := 0
+	weight := 2
+	for i := len(doc) - 1; i >= 0; i-- {
+		sum += toInt(rune(doc[i])) * weight
+
+		weight++
+		if weight > 9 {
+			weight = 2
+		}
+	}
+
+	digit := 11 - sum%11
+	if digit >= 10 {
+		return 0
+	}
+
+	return digit
+}
