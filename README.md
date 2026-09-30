@@ -8,7 +8,8 @@
 CPF, CNPJ, CEP, CNH, PIS/PASEP, RENAVAM, CNS, license plate, voter ID and phone
 validator for Go!
 
-Everything in this file, but the [License](#license) section, is in portuguese.
+Everything in this file, except this section and the [License](#license)
+one, is in Portuguese.
 
 ## Descrição
 
@@ -19,7 +20,13 @@ Aceito PRs de todas as formas. Está permitido escrever em português, também. 
 
 ## Uso
 
-Principais funções:
+Instalação:
+
+```sh
+go get github.com/paemuri/brdoc/v4
+```
+
+Funções públicas:
 
 - `func IsCPF(doc string) bool`
 - `func IsCNPJ(doc string) bool`
@@ -36,17 +43,18 @@ Principais funções:
 - `func IsPhone(phone string) (valid bool, ufs []UF)`
 - `func IsPhoneFrom(phone string, ufs ...UF) bool`
 
-## Coisas a fazer
+Tipo público: `type UF string`, representando cada unidade federativa.
 
-- [x] validação de CPF
-- [x] validação de CNPJ
-- [x] validação de CEP
-- [x] validação de CNH
-- [x] validação de RENAVAM
-- [x] validação de placa veicular
-- [x] validação de CNS
-- [x] validação de título de eleitor
-- [x] validação de telefone
+Exemplo:
+
+```go
+import "github.com/paemuri/brdoc/v4"
+
+func main() {
+	brdoc.IsCPF("123.456.789-09")                  // true
+	valid, ufs := brdoc.IsPhone("(11) 99999-9999") // true, [SP]
+}
+```
 
 ## License
 
