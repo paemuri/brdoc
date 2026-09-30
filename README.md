@@ -40,7 +40,7 @@ Funções públicas:
   (`AAA1A11`)
 - `func IsVoterID(doc string) bool`: título de eleitor
 - `func IsCNH(doc string) bool`
-- `func IsPIS(doc string) bool`
+- `func IsPIS(doc string) bool`: PIS/PASEP, também funciona para NIS e NIT
 - `func IsRENAVAM(doc string) bool`
 - `func IsCNS(doc string) bool`
 - `func IsIE(doc string, uf UF) bool`: Inscrição Estadual

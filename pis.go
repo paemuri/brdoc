@@ -8,7 +8,10 @@ var (
 	pisRegexp = regexp.MustCompile(`^\d{3}\.?\d{5}\.?\d{2}-?\d$`)
 )
 
-// IsPIS verifies if the given string is a valid PIS number.
+// IsPIS verifies if the given string is a valid PIS number. It also works for
+// NIS numbers, as stated by [Caixa], and NIT numbers, with no official source.
+//
+// [Caixa]: https://www.caixa.gov.br/servicos/nis/Paginas/default.aspx
 func IsPIS(doc string) bool {
 	// No official source for any of this logic.
 
