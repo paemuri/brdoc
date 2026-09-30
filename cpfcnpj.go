@@ -47,15 +47,12 @@ func isInvalidCPFBase(doc string) bool {
 	return allEq(doc)
 }
 
-// isInvalidCNPJBase rejects CNPJ documents with base number 11.111.111 to
-// 99.999.999, or with order number 0000, as listed by [1].
+// isInvalidCNPJBase rejects CNPJ documents with order number 0000, as listed
+// by [1]. It also lists base numbers 11.111.111 to 99.999.999 as invalid, but
+// they are not rejected, as some were issued (e.g. 66.666.666/0001-91).
 // [1]: http://normas.receita.fazenda.gov.br/sijut2consulta/anexoOutros.action?idArquivoBinario=36307.
 func isInvalidCNPJBase(doc string) bool {
-	base := doc[:8]
-	order := doc[8:12]
-
-	return (base[0] != '0' && isDigit(rune(base[0])) && allEq(base)) ||
-		order == "0000"
+	return doc[8:12] == "0000"
 }
 
 // isCadastro generates the digits for a given CPF or CNPJ and compares it with
