@@ -17,15 +17,15 @@ var (
 		"51": true, "52": true, "53": true,
 	}
 	nfeModels = map[string]bool{
-		"55": true, // NF-e.
-		"57": true, // CT-e.
-		"58": true, // MDF-e.
-		"62": true, // NFCom.
-		"63": true, // BP-e and BP-e TM.
-		"64": true, // GTV-e.
-		"65": true, // NFC-e.
-		"66": true, // NF3e.
-		"67": true, // CT-e OS.
+		"55": true, // NF-e (MOC 7.0).
+		"57": true, // CT-e (Ajuste SINIEF 9/07).
+		"58": true, // MDF-e (Ajuste SINIEF 21/10).
+		"62": true, // NFCom (Ajuste SINIEF 7/22).
+		"63": true, // BP-e and BP-e TM (Ajuste SINIEF 1/17).
+		"64": true, // GTV-e (Ajuste SINIEF 3/20).
+		"65": true, // NFC-e (MOC 7.0).
+		"66": true, // NF3e (Ajuste SINIEF 1/19).
+		"67": true, // CT-e OS (Ajuste SINIEF 9/07).
 	}
 )
 
