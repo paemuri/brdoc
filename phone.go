@@ -7,7 +7,7 @@ import (
 
 var (
 	phoneRegexp = regexp.MustCompile(
-		`^(?:(?:(?:\+|00)?55\s?)?(\([1-9][0-9]\)|[1-9][0-9])\s?)((9[-.\s]?\d|[2-6])\d{3}[-.\s]?\d{4})$`,
+		`^(?:(?:(?:\+|00)?55\s?)?(\([1-9][0-9]\)|[1-9][0-9])\s?)(([7-9][-.\s]?\d|[2-6])\d{3}[-.\s]?\d{4})$`,
 	)
 
 	// phoneSharedDDDs maps the area codes used by more than one UF to the UF
