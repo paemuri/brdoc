@@ -5,8 +5,8 @@
 [![CI][badge-3-img]][badge-3-link]
 [![Version][badge-4-img]][badge-4-link]
 
-CPF, CNPJ, CEP, CNH, PIS/PASEP, RENAVAM, CNS, license plate, voter ID and phone
-validator for Go!
+CPF, CNPJ, IE, CEP, CNH, PIS/PASEP, RENAVAM, CNS, license plate, voter ID and
+phone validator for Go!
 
 Everything in this file, except this section and the [License](#license)
 one, is in Portuguese.
