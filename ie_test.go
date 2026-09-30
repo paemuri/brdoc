@@ -73,6 +73,24 @@ func TestIsIE(t *testing.T) {
 		{"AP_Valid", "030190290", AP, true},
 		{"AP_InvalidDigit", "030170070", AP, false},
 
+		{"BA_InvalidData", "", BA, false},
+		{"BA_InvalidFormat", "12345-63", BA, false},
+		{"BA_InvalidFormat", "12345678-90", BA, false},
+		{"BA_InvalidDigit", "123456-64", BA, false},
+		{"BA_InvalidDigit", "123456-53", BA, false},
+		{"BA_InvalidDigit", "612345-58", BA, false},
+		{"BA_InvalidDigit", "1000003-07", BA, false},
+		// Examples from the official rules.
+		{"BA_Valid", "123456-63", BA, true},
+		{"BA_Valid", "612345-57", BA, true},
+		{"BA_Valid", "1000003-06", BA, true},
+		// Public IEs of companies.
+		{"BA_Valid", "0004786-96", BA, true},
+		{"BA_Valid", "0010273-89", BA, true},
+		// Calculated by hand, with 9 digits and modulo 11.
+		{"BA_Valid", "1600003-00", BA, true},
+		{"BA_Valid", "1700005-80", BA, true},
+
 		{"CE_InvalidData", "", CE, false},
 		{"CE_InvalidFormat", "0600001-5", CE, false},
 		{"CE_InvalidDigit", "06000001-4", CE, false},
@@ -80,6 +98,7 @@ func TestIsIE(t *testing.T) {
 		{"CE_Valid", "06000001-5", CE, true},
 		// Public IEs of companies.
 		{"CE_Valid", "06863259-2", CE, true},
+		{"CE_Valid", "06305950-9", CE, true},
 
 		{"DF_InvalidData", "", DF, false},
 		{"DF_InvalidFormat", "0730000100109-", DF, false},
@@ -97,6 +116,7 @@ func TestIsIE(t *testing.T) {
 		{"ES_Valid", "999999990", ES, true},
 		// Public IEs of companies.
 		{"ES_Valid", "000002976", ES, true},
+		{"ES_Valid", "000017744", ES, true},
 
 		{"GO_InvalidData", "", GO, false},
 		{"GO_InvalidFormat", "12.987.654-7", GO, false},
@@ -105,6 +125,7 @@ func TestIsIE(t *testing.T) {
 		{"GO_Valid", "10.987.654-7", GO, true},
 		// Public IEs of companies.
 		{"GO_Valid", "10.277.380-7", GO, true},
+		{"GO_Valid", "10.353.194-7", GO, true},
 
 		{"MA_InvalidData", "", MA, false},
 		{"MA_InvalidFormat", "130000385", MA, false},
@@ -113,6 +134,19 @@ func TestIsIE(t *testing.T) {
 		{"MA_Valid", "120000385", MA, true},
 		// Public IEs of companies.
 		{"MA_Valid", "126001049", MA, true},
+
+		{"MG_InvalidData", "", MG, false},
+		{"MG_InvalidFormat", "062.307.904/008", MG, false},
+		{"MG_InvalidFormat", "062.307.904-0081", MG, false},
+		{"MG_InvalidDigit", "062.307.904/0071", MG, false},
+		{"MG_InvalidDigit", "062.307.904/0082", MG, false},
+		// Example from the official rules.
+		{"MG_Valid", "062.307.904/0081", MG, true},
+		{"MG_Valid", "0623079040081", MG, true},
+		// Public IEs of companies.
+		{"MG_Valid", "503.058.237/0015", MG, true},
+		{"MG_Valid", "062.667.789/0073", MG, true},
+		{"MG_Valid", "062.213.378/0083", MG, true},
 
 		{"MS_InvalidData", "", MS, false},
 		{"MS_InvalidFormat", "292909575", MS, false},
@@ -138,6 +172,7 @@ func TestIsIE(t *testing.T) {
 		// Public IEs of companies.
 		{"PA_Valid", "15177432-3", PA, true},
 		{"PA_Valid", "15771637-6", PA, true},
+		{"PA_Valid", "15216699-8", PA, true},
 
 		{"PB_InvalidData", "", PB, false},
 		{"PB_InvalidFormat", "0600001-5", PB, false},
@@ -146,6 +181,7 @@ func TestIsIE(t *testing.T) {
 		{"PB_Valid", "06000001-5", PB, true},
 		// Public IEs of companies.
 		{"PB_Valid", "16999351-5", PB, true},
+		{"PB_Valid", "16900390-6", PB, true},
 
 		{"PE_InvalidData", "", PE, false},
 		{"PE_InvalidFormat", "032141-840", PE, false},
@@ -163,6 +199,7 @@ func TestIsIE(t *testing.T) {
 		{"PE_Valid", "0163235-30", PE, true},
 		{"PE_Valid", "0916078-76", PE, true},
 		{"PE_Valid", "0992431-05", PE, true},
+		{"PE_Valid", "0267359-20", PE, true},
 
 		{"PI_InvalidData", "", PI, false},
 		{"PI_InvalidFormat", "01234567", PI, false},
@@ -172,12 +209,14 @@ func TestIsIE(t *testing.T) {
 		// Public IEs of companies.
 		{"PI_Valid", "194155722", PI, true},
 		{"PI_Valid", "195195337", PI, true},
+		{"PI_Valid", "194468976", PI, true},
 
 		{"RJ_InvalidData", "", RJ, false},
 		{"RJ_InvalidFormat", "91.018.0-39", RJ, false},
 		{"RJ_InvalidDigit", "91.018.03-8", RJ, false},
 		// Public IEs of companies.
 		{"RJ_Valid", "91.018.03-9", RJ, true},
+		{"RJ_Valid", "92.001.02-4", RJ, true},
 
 		{"RN_InvalidData", "", RN, false},
 		{"RN_InvalidFormat", "21.040.040-1", RN, false},
@@ -187,6 +226,7 @@ func TestIsIE(t *testing.T) {
 		{"RN_Valid", "20.0.040.040-0", RN, true},
 		// Public IEs of companies.
 		{"RN_Valid", "20.300.936-3", RN, true},
+		{"RN_Valid", "20.301.158-9", RN, true},
 
 		{"RO_InvalidData", "", RO, false},
 		{"RO_InvalidFormat", "101.62521-3", RO, false},
@@ -231,6 +271,7 @@ func TestIsIE(t *testing.T) {
 		{"SE_Valid", "27123456-3", SE, true},
 		// Public IEs of companies.
 		{"SE_Valid", "27077995-7", SE, true},
+		{"SE_Valid", "27100154-2", SE, true},
 
 		{"PR_InvalidData", "", PR, false},
 		{"PR_InvalidData", "AAAAAAAAAA", PR, false},
@@ -279,6 +320,7 @@ func TestIsIE(t *testing.T) {
 		{"SP_Valid", "142.270.790.110", SP, true},
 		{"SP_Valid", "142.484.958.110", SP, true},
 		{"SP_Valid", "102.654.009.110", SP, true},
+		{"SP_Valid", "805.000.292.111", SP, true},
 	} {
 		t.Run(testName(i, tc.name), func(t *testing.T) {
 			assertEq(t, tc.valid, IsIE(tc.doc, tc.uf))

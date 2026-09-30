@@ -55,6 +55,12 @@ var (
 			pattern:     regexp.MustCompile(`^03\d{7}$`),
 			validDigits: validIEAPDigits,
 		}},
+		// There are IEs with 8 and 9 digits.
+		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_BA.html.
+		BA: {{
+			pattern:     regexp.MustCompile(`^\d{6,7}-?\d{2}$`),
+			validDigits: validIEBADigits,
+		}},
 		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_CE.html.
 		CE: {{
 			pattern:   regexp.MustCompile(`^\d{8}-?\d$`),
@@ -87,6 +93,11 @@ var (
 			pattern:   regexp.MustCompile(`^12\d{7}$`),
 			weights:   [][]int{ieWeights},
 			calcDigit: calcIEMod11Digit,
+		}},
+		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_MG.html.
+		MG: {{
+			pattern:     regexp.MustCompile(`^\d{3}\.?\d{3}\.?\d{3}/?\d{4}$`),
+			validDigits: validIEMGDigits,
 		}},
 		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_MS.html.
 		MS: {{
@@ -281,6 +292,63 @@ func validIEAPDigits(doc string) bool {
 	}
 
 	return toInt(rune(doc[8])) == digit
+}
+
+// validIEBADigits verifies the check digits of an IE of BA. The digits are
+// calculated with modulo 10 or 11 depending on the first digit, for IEs with 8
+// digits, or on the second one, for IEs with 9 digits. The second check digit
+// is calculated before the first one.
+func validIEBADigits(doc string) bool {
+	base := doc[:len(doc)-2]
+
+	calcDigit := func(sum int) int {
+		digit := 10 - sum%10
+		if digit == 10 {
+			return 0
+		}
+
+		return digit
+	}
+	switch base[len(base)-6] {
+	case '6', '7', '9':
+		calcDigit = calcIEMod11Digit
+	}
+
+	calc := func(doc string) int {
+		sum := 0
+		for i, r := range doc {
+			sum += toInt(r) * (len(doc) + 1 - i)
+		}
+
+		return calcDigit(sum)
+	}
+
+	second := calc(base)
+	first := calc(base + strconv.Itoa(second))
+
+	return toInt(rune(doc[len(doc)-2])) == first &&
+		toInt(rune(doc[len(doc)-1])) == second
+}
+
+// validIEMGDigits verifies the check digits of an IE of MG.
+func validIEMGDigits(doc string) bool {
+	// The first digit is calculated with a zero inserted after the code of the
+	// municipality, and with the sum of the digits of the products.
+	sum := 0
+	for i, r := range doc[:3] + "0" + doc[3:11] {
+		product := toInt(r) * (i%2 + 1)
+		sum += product/10 + product%10
+	}
+	first := (10 - sum%10) % 10
+
+	sum = 0
+	for i, weight := range []int{3, 2, 11, 10, 9, 8, 7, 6, 5, 4, 3} {
+		sum += toInt(rune(doc[i])) * weight
+	}
+	sum += first * 2
+
+	return toInt(rune(doc[11])) == first &&
+		toInt(rune(doc[12])) == calcIEMod11Digit(sum)
 }
 
 // calcIEMod11Digit returns 11 minus the remainder of `sum` divided by 11, or 0
