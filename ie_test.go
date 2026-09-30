@@ -13,6 +13,24 @@ func TestIsIE(t *testing.T) {
 	}{
 		{"NotImplementedUF", "110.042.490.114", RJ, false},
 
+		{"AC_InvalidData", "", AC, false},
+		{"AC_InvalidData", "AAAAAAAAAAAAA", AC, false},
+
+		{"AC_InvalidFormat", "010048230011", AC, false},
+		{"AC_InvalidFormat", "01004823001123", AC, false},
+		{"AC_InvalidFormat", "02.004.823/001-12", AC, false},
+		{"AC_InvalidFormat", "01-004-823.001/12", AC, false},
+
+		{"AC_InvalidDigit", "01.004.823/001-02", AC, false},
+		{"AC_InvalidDigit", "01.004.823/001-13", AC, false},
+
+		// Example from the official rules.
+		{"AC_Valid", "01.004.823/001-12", AC, true},
+		{"AC_Valid", "0100482300112", AC, true},
+
+		// Public IEs of companies.
+		{"AC_Valid", "01.008.267/001-08", AC, true},
+
 		{"PR_InvalidData", "", PR, false},
 		{"PR_InvalidData", "AAAAAAAAAA", PR, false},
 
