@@ -44,6 +44,7 @@ Funções públicas:
 - `func IsRENAVAM(doc string) bool`
 - `func IsCNS(doc string) bool`
 - `func IsIE(doc string, uf UF) bool`: Inscrição Estadual
+- `func IsCNJ(doc string) bool`: número de processo judicial
 
 Tipos públicos:
 
