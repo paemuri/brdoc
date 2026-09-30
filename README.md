@@ -45,6 +45,8 @@ Funções públicas:
 - `func IsCNS(doc string) bool`
 - `func IsIE(doc string, uf UF) bool`: Inscrição Estadual
 - `func IsCNJ(doc string) bool`: número de processo judicial
+- `func IsCivilCertificate(doc string) bool`: matrícula de certidão de registro
+  civil (nascimento, casamento ou óbito)
 
 Tipos públicos:
 
