@@ -6,6 +6,8 @@ func IsIE(doc string, uf UF) bool {
 	// [1]: http://www.sintegra.gov.br/insc_est.html.
 
 	switch uf {
+	case PR:
+		return isIEPR(doc)
 	case SP:
 		return isIESP(doc)
 	default:
