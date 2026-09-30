@@ -62,6 +62,7 @@ import "github.com/paemuri/brdoc/v4"
 func main() {
 	brdoc.IsCPF("123.456.789-09")                  // true
 	valid, ufs := brdoc.IsPhone("(11) 99999-9999") // true, [SP]
+	brdoc.IsIE("110.042.490.114", brdoc.SP)        // true
 }
 ```
 
