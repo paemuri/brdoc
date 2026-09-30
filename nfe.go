@@ -35,7 +35,8 @@ var (
 //
 // The format and the check digit algorithm are defined by the item 2.2.6 of the
 // [MOC 7.0], and the alphanumeric CNPJ by the [NT 2025.001]. The emitter (CNPJ
-// or CPF) is also validated, as defined by the table 2-4 of the [MOC 7.0].
+// or CPF) is also validated, as defined by the table 2-4 and the item 2.2.7 of
+// the [MOC 7.0].
 //
 // [MOC 7.0]: https://www.nfe.fazenda.gov.br/portal/exibirArquivo.aspx?conteudo=LrBx7WT9PuA=
 // [NT 2025.001]: https://www.nfe.fazenda.gov.br/portal/exibirArquivo.aspx?conteudo=5ZkvIZt10mQ=
@@ -64,20 +65,23 @@ func IsNFE(doc string) bool {
 }
 
 // validNFEEmitter verifies if the emitter is a valid CNPJ or CPF, the latter
-// preceded by zeros. In an NF-e (model 55), the series from 910 to 969 are
-// reserved for CPF, and the others for CNPJ, as stated by the table 2-4 of the
-// MOC 7.0.
+// preceded by zeros. As defined by the MOC 7.0, in an NF-e (model 55), the
+// series from 910 to 969 are reserved for CPF, and the others for CNPJ (table
+// 2-4), and in an NFC-e (model 65), the emitter is always a CNPJ (item 2.2.7).
 func validNFEEmitter(emitter, model, series string) bool {
 	isCPF := emitter[:3] == "000" && IsCPF(emitter[3:])
-	if model != "55" {
+	switch model {
+	case "55":
+		// Works just the same as converting to int.
+		if "910" <= series && series <= "969" {
+			return isCPF
+		}
+		return IsCNPJ(emitter)
+	case "65":
+		return IsCNPJ(emitter)
+	default:
 		return isCPF || IsCNPJ(emitter)
 	}
-
-	if "910" <= series && series <= "969" {
-		return isCPF
-	}
-
-	return IsCNPJ(emitter)
 }
 
 // calcNFEDigit returns 11 minus the remainder of the weighted sum of `doc`

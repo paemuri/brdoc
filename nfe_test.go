@@ -33,6 +33,8 @@ func TestIsNFE(t *testing.T) {
 		{"InvalidEmitter", "35260733009911002507550010000001231123456781", false},
 		{"InvalidEmitter", "35260700012345678909550010000001231123456780", false},
 		{"InvalidEmitter", "35260733009911002506559200000001231123456785", false},
+		{"InvalidEmitter", "35260700012345678909650010000001231123456782", false},
+		{"InvalidEmitter", "35260700012345678909659200000001231123456788", false},
 
 		// Example from the official rules.
 		{"Valid", "52060433009911002506550120000007800267301615", true},
@@ -41,7 +43,9 @@ func TestIsNFE(t *testing.T) {
 		// Calculated by hand, with an alphanumeric CNPJ and with a CT-e.
 		{"Valid", "35260712ABC34501DE35550010000001231123456787", true},
 		{"Valid", "35260733009911002506570010000001231123456787", true},
-		// Calculated by hand, with a CPF in an NF-e and in a CT-e.
+		// Calculated by hand, with a CNPJ in an NFC-e, and a CPF in an NF-e and
+		// in a CT-e.
+		{"Valid", "35260733009911002506650010000001231123456782", true},
 		{"Valid", "35260700012345678909559200000001231123456785", true},
 		{"Valid", "35260700012345678909570010000001231123456787", true},
 	} {
