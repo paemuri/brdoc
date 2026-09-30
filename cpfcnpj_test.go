@@ -63,6 +63,10 @@ func TestIsCNPJ(t *testing.T) {
 		{"InvalidPattern", "88.888.888/8888-88", false},
 		{"InvalidPattern", "99.999.999/9999-99", false},
 
+		{"InvalidBase", "11.111.111/0001-91", false},
+		{"InvalidBase", "99.999.999/0001-91", false},
+		{"InvalidOrder", "26.637.142/0000-77", false},
+
 		{"InvalidDigits", "26.637.142/0001-85", false},
 		{"InvalidDigits", "74.221.325/0001-03", false},
 		{"InvalidDigits", "WE.0PP.M5F/0001-92", false},
@@ -77,6 +81,8 @@ func TestIsCNPJ(t *testing.T) {
 		{"Valid", "4Y.2OP.G99/0001-41", true},
 		{"Valid", "WE.0PP.M4F/0001-91", true},
 		{"Valid", "12.ABC.345/01DE-35", true},
+		{"Valid", "00.000.000/0001-91", true},
+		{"Valid", "AA.AAA.AAA/0001-91", true},
 		{"Valid", "26637142000158", true},
 		{"Valid", "74221325000130", true},
 		{"Valid", "19JA2KO8Z00151", true},

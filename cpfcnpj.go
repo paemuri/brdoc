@@ -15,16 +15,14 @@ var (
 
 // IsCPF verifies if the given string is a valid CPF document.
 func IsCPF(doc string) bool {
-	// Documents with all digits equal are listed as invalid by [1]. No
-	// official source for the check digits algorithm or the mask.
-	// [1]: http://normas.receita.fazenda.gov.br/sijut2consulta/anexoOutros.action?idArquivoBinario=36307.
+	// No official source for the check digits algorithm or the mask.
 
 	const (
 		size = 9
 		pos  = 10
 	)
 
-	return isCadastro(doc, cpfRegexp, size, pos)
+	return isCadastro(doc, cpfRegexp, size, pos, isInvalidCPFBase)
 }
 
 // IsCNPJ verifies if the given string is a valid CNPJ document.
@@ -39,7 +37,25 @@ func IsCNPJ(doc string) bool {
 		pos  = 5
 	)
 
-	return isCadastro(doc, cnpjRegexp, size, pos)
+	return isCadastro(doc, cnpjRegexp, size, pos, isInvalidCNPJBase)
+}
+
+// isInvalidCPFBase rejects CPF documents with all digits equal, as listed by
+// [1].
+// [1]: http://normas.receita.fazenda.gov.br/sijut2consulta/anexoOutros.action?idArquivoBinario=36307.
+func isInvalidCPFBase(doc string) bool {
+	return allEq(doc)
+}
+
+// isInvalidCNPJBase rejects CNPJ documents with base number 11.111.111 to
+// 99.999.999, or with order number 0000, as listed by [1].
+// [1]: http://normas.receita.fazenda.gov.br/sijut2consulta/anexoOutros.action?idArquivoBinario=36307.
+func isInvalidCNPJBase(doc string) bool {
+	base := doc[:8]
+	order := doc[8:12]
+
+	return (base[0] != '0' && isDigit(rune(base[0])) && allEq(base)) ||
+		order == "0000"
 }
 
 // isCadastro generates the digits for a given CPF or CNPJ and compares it with
@@ -49,6 +65,7 @@ func isCadastro(
 	pattern *regexp.Regexp,
 	size int,
 	position int,
+	isInvalidBase func(doc string) bool,
 ) bool {
 	if !pattern.MatchString(doc) {
 		return false
@@ -56,8 +73,7 @@ func isCadastro(
 
 	cleanCadastro(&doc)
 
-	// Official for CPF, but not official logic for CNPJ.
-	if allEq(doc) {
+	if isInvalidBase(doc) {
 		return false
 	}
 
