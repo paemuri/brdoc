@@ -103,6 +103,23 @@ var (
 			weights:   [][]int{ieWeights},
 			calcDigit: calcIEMod11Digit,
 		}},
+		// There are current IEs (e-Fisco) and old IEs (CACEPE).
+		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_PE.html.
+		PE: {
+			{
+				pattern: regexp.MustCompile(`^\d{7}-?\d{2}$`),
+				weights: [][]int{
+					{8, 7, 6, 5, 4, 3, 2},
+					{9, 8, 7, 6, 5, 4, 3, 2},
+				},
+				calcDigit: calcIEMod11Digit,
+			},
+			{
+				pattern:   regexp.MustCompile(`^\d{2}\.?\d\.?\d{3}\.?\d{7}-?\d$`),
+				weights:   [][]int{{5, 4, 3, 2, 1, 9, 8, 7, 6, 5, 4, 3, 2}},
+				calcDigit: calcIEMod11Minus10Digit,
+			},
+		},
 		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_PI.html.
 		PI: {{
 			pattern:   regexp.MustCompile(`^\d{9}$`),
@@ -142,6 +159,14 @@ var (
 				calcDigit: calcIEMod11Digit,
 			},
 		},
+		// Only the rules adopted from 2000 on, as older IEs were converted to
+		// it.
+		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_RO.html.
+		RO: {{
+			pattern:   regexp.MustCompile(`^\d{13}-?\d$`),
+			weights:   [][]int{{6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2}},
+			calcDigit: calcIEMod11Minus10Digit,
+		}},
 		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_RR.html.
 		RR: {{
 			pattern:   regexp.MustCompile(`^24\d{6}-?\d$`),
@@ -222,6 +247,17 @@ func calcIEMod11Digit(sum int) int {
 	digit := 11 - sum%11
 	if digit >= 10 {
 		return 0
+	}
+
+	return digit
+}
+
+// calcIEMod11Minus10Digit returns 11 minus the remainder of `sum` divided by
+// 11, minus 10 if it is 10 or 11.
+func calcIEMod11Minus10Digit(sum int) int {
+	digit := 11 - sum%11
+	if digit >= 10 {
+		return digit - 10
 	}
 
 	return digit

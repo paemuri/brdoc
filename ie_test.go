@@ -71,6 +71,7 @@ func TestIsIE(t *testing.T) {
 		{"DF_Valid", "07300001001-09", DF, true},
 		// Public IEs of companies.
 		{"DF_Valid", "07656443030-76", DF, true},
+		{"DF_Valid", "07679960002-46", DF, true},
 
 		{"ES_InvalidData", "", ES, false},
 		{"ES_InvalidFormat", "99999999", ES, false},
@@ -129,6 +130,23 @@ func TestIsIE(t *testing.T) {
 		// Public IEs of companies.
 		{"PB_Valid", "16999351-5", PB, true},
 
+		{"PE_InvalidData", "", PE, false},
+		{"PE_InvalidFormat", "032141-840", PE, false},
+		{"PE_InvalidFormat", "18.1.001.000004-9", PE, false},
+		{"PE_InvalidDigit", "0321418-41", PE, false},
+		{"PE_InvalidDigit", "0321418-30", PE, false},
+		{"PE_InvalidDigit", "18.1.001.0000004-8", PE, false},
+		// Examples from the official rules.
+		{"PE_Valid", "0321418-40", PE, true},
+		{"PE_Valid", "032141840", PE, true},
+		{"PE_Valid", "18.1.001.0000004-9", PE, true},
+		{"PE_Valid", "18100100000049", PE, true},
+		// Public IEs of companies.
+		{"PE_Valid", "0250099-07", PE, true},
+		{"PE_Valid", "0163235-30", PE, true},
+		{"PE_Valid", "0916078-76", PE, true},
+		{"PE_Valid", "0992431-05", PE, true},
+
 		{"PI_InvalidData", "", PI, false},
 		{"PI_InvalidFormat", "01234567", PI, false},
 		{"PI_InvalidDigit", "012345678", PI, false},
@@ -152,6 +170,16 @@ func TestIsIE(t *testing.T) {
 		{"RN_Valid", "20.0.040.040-0", RN, true},
 		// Public IEs of companies.
 		{"RN_Valid", "20.300.936-3", RN, true},
+
+		{"RO_InvalidData", "", RO, false},
+		{"RO_InvalidFormat", "101.62521-3", RO, false},
+		{"RO_InvalidFormat", "000000062521-3", RO, false},
+		{"RO_InvalidDigit", "0000000062521-4", RO, false},
+		// Example from the official rules.
+		{"RO_Valid", "0000000062521-3", RO, true},
+		{"RO_Valid", "00000000625213", RO, true},
+		// Public IEs of companies.
+		{"RO_Valid", "0000000025563-7", RO, true},
 
 		{"RR_InvalidData", "", RR, false},
 		{"RR_InvalidFormat", "25006628-1", RR, false},
