@@ -30,18 +30,19 @@ Funções públicas:
 
 - `func IsCPF(doc string) bool`
 - `func IsCNPJ(doc string) bool`
+- `func IsPhone(phone string) (valid bool, ufs []UF)`
+- `func IsPhoneFrom(phone string, ufs ...UF) bool`
 - `func IsCEP(doc string) (valid bool, uf UF)`
 - `func IsCEPFrom(doc string, ufs ...UF) bool`
-- `func IsCNH(doc string) bool`
-- `func IsPIS(doc string) bool`
-- `func IsRENAVAM(doc string) bool`
 - `func IsPlate(doc string) bool`
 - `func IsNationalPlate(doc string) bool`
 - `func IsMercosulPlate(doc string) bool`
-- `func IsCNS(doc string) bool`
 - `func IsVoterID(doc string) bool`
-- `func IsPhone(phone string) (valid bool, ufs []UF)`
-- `func IsPhoneFrom(phone string, ufs ...UF) bool`
+- `func IsCNH(doc string) bool`
+- `func IsPIS(doc string) bool`
+- `func IsRENAVAM(doc string) bool`
+- `func IsCNS(doc string) bool`
+- `func IsIE(doc string, uf UF) bool`
 
 Tipo público: `type UF string`, representando cada unidade federativa.
 
