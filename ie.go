@@ -243,6 +243,7 @@ var (
 )
 
 // IsIE verifies if `doc` is a valid IE (Inscrição Estadual) of the given `uf`.
+// "ISENTO", used in place of the IE by those exempt from it, is not a valid IE.
 func IsIE(doc string, uf UF) bool {
 	for _, rule := range ieRules[uf] {
 		if rule.pattern.MatchString(doc) {
