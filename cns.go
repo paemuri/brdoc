@@ -13,7 +13,8 @@ var (
 
 // IsCNS verifies if the given string is a valid CNS document.
 func IsCNS(doc string) bool {
-	// The validation follows the Ministry of Health's algorithm, published at [1].
+	// The validation follows the Ministry of Health's algorithm, published at
+	// [1].
 	// [1]: https://rni-docs.anvisa.gov.br/docs/regras_gerais/validacoes/validacaoCNS/.
 
 	if !cnsRegexp.MatchString(doc) {

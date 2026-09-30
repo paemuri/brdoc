@@ -20,10 +20,10 @@ var (
 	}
 )
 
-// IsPhoneFrom verifies if `phone` is a valid Brazilian phone number.
-// Also, it validates if its related UF is part of the giving options. If none
-// is provided, it validates the document for any state/district.
-// This function is a wrapper on `IsPhone`.
+// IsPhoneFrom verifies if `phone` is a valid Brazilian phone number. Also, it
+// validates if its related UF is part of the giving options. If none is
+// provided, it validates the document for any state/district. This function is
+// a wrapper on `IsPhone`.
 func IsPhoneFrom(phone string, ufs ...UF) bool {
 	ddd, valid := parsePhoneDDD(phone)
 	if !valid {
@@ -43,8 +43,8 @@ func IsPhoneFrom(phone string, ufs ...UF) bool {
 	return shared && isFrom(sharedUF, ufs)
 }
 
-// IsPhone verifies if `phone` is a valid Brazilian phone number and returns
-// its related UF.
+// IsPhone verifies if `phone` is a valid Brazilian phone number and returns its
+// related UF.
 func IsPhone(phone string) (valid bool, uf UF) {
 	// The numbering rules are defined by Articles 11, 12 and 15 of [1], and the
 	// area codes of each UF are listed at [2].
@@ -77,8 +77,8 @@ func parsePhoneDDD(phone string) (ddd int, valid bool) {
 	return ddd, true
 }
 
-// dddUF returns the UF related to the area code `ddd`.
-// For area codes shared by more than one UF, see `phoneSharedDDDs`.
+// dddUF returns the UF related to the area code `ddd`. For area codes shared by
+// more than one UF, see `phoneSharedDDDs`.
 func dddUF(ddd int) (valid bool, uf UF) {
 	if ddd >= 11 && ddd <= 19 {
 		return true, SP

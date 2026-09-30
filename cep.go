@@ -9,10 +9,9 @@ var (
 	cepRegexp = regexp.MustCompile(`^\d{5}-?\d{3}$`)
 )
 
-// IsCEP verifies if `doc` is a valid CEP.
-// Also, it validates if its related UF is part of the giving options. If none
-// is provided, it validates the document for any state/district.
-// This function is a wrapper on `IsCEP`.
+// IsCEP verifies if `doc` is a valid CEP. Also, it validates if its related UF
+// is part of the giving options. If none is provided, it validates the document
+// for any state/district. This function is a wrapper on `IsCEP`.
 func IsCEPFrom(doc string, ufs ...UF) bool {
 	valid, uf := IsCEP(doc)
 	if !valid {
@@ -24,8 +23,8 @@ func IsCEPFrom(doc string, ufs ...UF) bool {
 
 // IsCEP verifies if `doc` is a valid CEP and returns its related UF.
 func IsCEP(doc string) (valid bool, uf UF) {
-	// The CEP format is described at [1], and the ranges for each UF are
-	// listed at [2].
+	// The CEP format is described at [1], and the ranges for each UF are listed
+	// at [2].
 	// [1]: https://www.correios.com.br/enviar/precisa-de-ajuda/tudo-sobre-cep.
 	// [2]: https://buscacepinter.correios.com.br/app/faixa_cep_uf_localidade/index.php.
 

@@ -37,8 +37,8 @@ func IsCNPJ(doc string) bool {
 	return isTaxID(doc, taxIDCNPJ)
 }
 
-// isTaxID generates the digits for a given CPF or CNPJ and compares it with
-// the original digits.
+// isTaxID generates the digits for a given CPF or CNPJ and compares it with the
+// original digits.
 func isTaxID(doc string, idType taxIDType) bool {
 	var (
 		pattern  *regexp.Regexp

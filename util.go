@@ -57,8 +57,8 @@ func isFrom(uf UF, ufs []UF) bool {
 	return false
 }
 
-// isDigit is a simpler version of unicode.IsDigit: verifies whether a rune is
-// a single digit number.
+// isDigit is a simpler version of unicode.IsDigit: verifies whether a rune is a
+// single digit number.
 func isDigit(r rune) bool {
 	return '0' <= r && r <= '9'
 }
