@@ -1,6 +1,7 @@
 package brdoc
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -259,17 +260,21 @@ func TestIsPhone(t *testing.T) {
 			validFrom := IsPhoneFrom(tc.phone, tc.ufs...)
 			assertEq(t, tc.valid && tc.validUFs, validFrom)
 
-			valid, uf := IsPhone(tc.phone)
+			valid, ufs := IsPhone(tc.phone)
 			assertEq(t, tc.valid, valid)
 
 			if tc.validUFs && len(tc.ufs) == 1 {
-				assertEq(t, tc.ufs[0], uf)
+				found := false
+				for _, uf := range ufs {
+					found = found || uf == tc.ufs[0]
+				}
+				assertEq(t, true, found)
 			}
 		})
 	}
 }
 
-func TestIsPhoneFromSharedDDD(t *testing.T) {
+func TestIsPhoneSharedDDD(t *testing.T) {
 	for i, tc := range []struct {
 		name  string
 		phone string
@@ -289,6 +294,22 @@ func TestIsPhoneFromSharedDDD(t *testing.T) {
 		})
 	}
 
-	_, uf := IsPhone("4239999999")
-	assertEq(t, PR, uf)
+	for _, tc := range []struct {
+		phone string
+		ufs   []UF
+	}{
+		{"4239999999", []UF{PR, SC}},
+		{"4739999999", []UF{SC, PR}},
+		{"4939999999", []UF{SC, PR}},
+		{"6139999999", []UF{DF, GO}},
+		{"4839999999", []UF{SC}},
+	} {
+		_, ufs := IsPhone(tc.phone)
+		assertEq(t, fmt.Sprint(tc.ufs), fmt.Sprint(ufs))
+	}
+
+	_, ufs := IsPhone("4239999999")
+	ufs[0] = RS
+	_, ufs = IsPhone("4239999999")
+	assertEq(t, PR, ufs[0])
 }

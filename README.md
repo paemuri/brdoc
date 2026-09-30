@@ -32,7 +32,7 @@ Principais funções:
 - `func IsMercosulPlate(doc string) bool`
 - `func IsCNS(doc string) bool`
 - `func IsVoterID(doc string) bool`
-- `func IsPhone(phone string) (valid bool, uf UF)`
+- `func IsPhone(phone string) (valid bool, ufs []UF)`
 - `func IsPhoneFrom(phone string, ufs ...UF) bool`
 
 ## Coisas a fazer
