@@ -66,17 +66,18 @@ func IsNFE(doc string) bool {
 
 // validNFEEmitter verifies if the emitter is a valid CNPJ or CPF, the latter
 // preceded by zeros. As defined by the MOC 7.0, in an NF-e (model 55), the
-// series from 910 to 969 are reserved for CPF, and the others for CNPJ (table
-// 2-4), and in an NFC-e (model 65), the emitter is always a CNPJ (item 2.2.7).
+// series from 910 to 969 are reserved for CPF (table 2-4), and in an NFC-e
+// (model 65), the emitter is always a CNPJ (item 2.2.7). CPF is also accepted
+// in the other series of an NF-e, as real NF-e of rural producers use them.
 func validNFEEmitter(emitter, model, series string) bool {
 	isCPF := emitter[:3] == "000" && IsCPF(emitter[3:])
 	switch model {
 	case "55":
-		// Works just the same as converting to int.
+		// Same as comparing ints, as both have 3 digits.
 		if "910" <= series && series <= "969" {
 			return isCPF
 		}
-		return IsCNPJ(emitter)
+		return isCPF || IsCNPJ(emitter)
 	case "65":
 		return IsCNPJ(emitter)
 	default:
