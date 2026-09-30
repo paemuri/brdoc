@@ -31,7 +31,7 @@ Principais funções:
 - `func IsNationalPlate(doc string) bool`
 - `func IsMercosulPlate(doc string) bool`
 - `func IsCNS(doc string) bool`
-- `func IsRG(doc string, uf UF) (valid bool, err error)`
+- `func IsRG(doc string, uf UF) (valid bool, err error)` (deprecated)
 - `func IsVoterID(doc string) bool`
 - `func IsPhone(phone string) (valid bool, uf UF)`
 - `func IsPhoneFrom(phone string, ufs ...UF) bool`
@@ -47,10 +47,7 @@ Principais funções:
 - [x] validação de CNS
 - [x] validação de título de eleitor
 - [x] validação de telefone
-- [ ] validação de RG
-  - [x] SP
-  - [x] RJ
-  - [ ] demais estados
+- [x] ~~validação de RG~~ (deprecated: não existe padrão nacional e será substituído pelo CPF)
 
 ## License
 

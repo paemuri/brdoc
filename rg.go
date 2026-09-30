@@ -17,6 +17,9 @@ var (
 //   - RJ
 //
 // All the remaining UFs will return an error.
+//
+// Deprecated: there is no national pattern, and it'll become obsolete in
+// favor of CPF. `IsRG` will be removed in the next major version.
 func IsRG(doc string, uf UF) (valid bool, err error) {
 	// No official source for any of this logic, for either UF.
 
