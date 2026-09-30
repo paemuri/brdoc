@@ -37,7 +37,9 @@ var (
 			calcDigit: calcIEMod11Digit,
 		}},
 		// The digit is described as the remainder of the sum times 10 divided
-		// by 11, which is the same as `calcIEMod11Digit`.
+		// by 11, which is the same as `calcIEMod11Digit`. Unlike the rules
+		// published by the SINTEGRA, the third digit, formerly the type of
+		// company, is not restricted.
 		// [1]: https://www.sefaz.al.gov.br/calculo.
 		AL: {{
 			pattern:   regexp.MustCompile(`^24\d{7}$`),
@@ -179,8 +181,8 @@ var (
 				calcDigit: calcIEMod11Digit,
 			},
 		},
-		// Only the rules adopted from 2000 on, as older IEs were converted to
-		// it.
+		// Only the rules adopted from 2000 on, as older IEs, with 9 digits
+		// including the code of the municipality, were converted to it.
 		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_RO.html.
 		RO: {{
 			pattern:   regexp.MustCompile(`^\d{13}-?\d$`),
@@ -230,8 +232,8 @@ var (
 			},
 		},
 		// The format is defined by Article 3 of [2], which replaced the format
-		// of 11 digits described by [1]. The check digit follows [1], which
-		// already ignored the 2 digits removed by [2].
+		// of 11 digits described by [1], not accepted anymore. The check digit
+		// follows [1], which already ignored the 2 digits removed by [2].
 		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_TO.html.
 		// [2]: https://dtri.sefaz.to.gov.br/legislacao/ntributaria/portarias/sefaz/Portaria676-02.htm.
 		TO: {{
@@ -355,6 +357,8 @@ func validIEMGDigits(doc string) bool {
 		product := toInt(r) * (i%2 + 1)
 		sum += product/10 + product%10
 	}
+	// Not official logic: the rules do not state the digit when the sum is
+	// already a multiple of 10, so it is 0.
 	first := (10 - sum%10) % 10
 
 	sum = 0
