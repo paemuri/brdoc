@@ -11,7 +11,7 @@ func TestIsIE(t *testing.T) {
 		uf    UF
 		valid bool
 	}{
-		{"NotImplementedUF", "030123459", AP, false},
+		{"NotImplementedUF", "290102278-36", TO, false},
 
 		{"AC_InvalidData", "", AC, false},
 		{"AC_InvalidData", "AAAAAAAAAAAAA", AC, false},
@@ -55,6 +55,23 @@ func TestIsIE(t *testing.T) {
 		// Examples from the official rules.
 		{"AM_Valid", "04.900.976-1", AM, true},
 		{"AM_Valid", "04.150.272-8", AM, true},
+
+		{"AP_InvalidData", "", AP, false},
+		{"AP_InvalidFormat", "03012345", AP, false},
+		{"AP_InvalidFormat", "040123459", AP, false},
+		{"AP_InvalidDigit", "030123458", AP, false},
+		// Example from the official rules.
+		{"AP_Valid", "030123459", AP, true},
+		// Public IEs of companies.
+		{"AP_Valid", "030071009", AP, true},
+		// Calculated by hand, one for each range and for results 10 and 11.
+		{"AP_Valid", "030170011", AP, true},
+		{"AP_Valid", "030170020", AP, true},
+		{"AP_Valid", "030170071", AP, true},
+		{"AP_Valid", "030190231", AP, true},
+		{"AP_Valid", "030190240", AP, true},
+		{"AP_Valid", "030190290", AP, true},
+		{"AP_InvalidDigit", "030170070", AP, false},
 
 		{"CE_InvalidData", "", CE, false},
 		{"CE_InvalidFormat", "0600001-5", CE, false},

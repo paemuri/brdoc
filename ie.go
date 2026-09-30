@@ -2,6 +2,7 @@ package brdoc
 
 import (
 	"regexp"
+	"strconv"
 )
 
 // ieRule is one of the formats of IE of an UF.
@@ -14,6 +15,9 @@ type ieRule struct {
 	weights [][]int
 	// calcDigit calculates a check digit from the weighted sum.
 	calcDigit func(sum int) int
+	// validDigits verifies the check digits of the cleaned IE, for the rules
+	// that do not fit in weights and calcDigit.
+	validDigits func(doc string) bool
 }
 
 var (
@@ -45,6 +49,11 @@ var (
 			pattern:   regexp.MustCompile(`^\d{2}\.?\d{3}\.?\d{3}-?\d$`),
 			weights:   [][]int{ieWeights},
 			calcDigit: calcIEMod11Digit,
+		}},
+		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_AP.html.
+		AP: {{
+			pattern:     regexp.MustCompile(`^03\d{7}$`),
+			validDigits: validIEAPDigits,
 		}},
 		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_CE.html.
 		CE: {{
@@ -227,6 +236,10 @@ func IsIE(doc string, uf UF) bool {
 func (rule ieRule) valid(doc string) bool {
 	cleanNonDigits(&doc)
 
+	if rule.validDigits != nil {
+		return rule.validDigits(doc)
+	}
+
 	for _, weights := range rule.weights {
 		sum := 0
 		for i, weight := range weights {
@@ -239,6 +252,35 @@ func (rule ieRule) valid(doc string) bool {
 	}
 
 	return true
+}
+
+// validIEAPDigits verifies the check digit of an IE of AP, whose calculation
+// depends on the range of its number.
+func validIEAPDigits(doc string) bool {
+	base, _ := strconv.Atoi(doc[:8])
+
+	p, d := 0, 0
+	switch {
+	case base <= 3017000:
+		p, d = 5, 0
+	case base <= 3019022:
+		p, d = 9, 1
+	}
+
+	sum := p
+	for i, weight := range ieWeights {
+		sum += toInt(rune(doc[i])) * weight
+	}
+
+	digit := 11 - sum%11
+	switch digit {
+	case 10:
+		digit = 0
+	case 11:
+		digit = d
+	}
+
+	return toInt(rune(doc[8])) == digit
 }
 
 // calcIEMod11Digit returns 11 minus the remainder of `sum` divided by 11, or 0
