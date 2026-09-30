@@ -6,25 +6,25 @@ import (
 	"strconv"
 )
 
-// "Cadastro" will be used internally to define both CPF and CNPJ.
+// "Tax ID" will be used internally to define both CPF and CNPJ.
 
 var (
 	cpfRegexp  = regexp.MustCompile(`^\d{3}\.?\d{3}\.?\d{3}-?\d{2}$`)
 	cnpjRegexp = regexp.MustCompile(`^[0-9A-Z]{2}\.?[0-9A-Z]{3}\.?[0-9A-Z]{3}/?[0-9A-Z]{4}-?[0-9]{2}$`)
 )
 
-type docType int
+type taxIDType int
 
 const (
-	docCPF docType = iota
-	docCNPJ
+	taxIDCPF taxIDType = iota
+	taxIDCNPJ
 )
 
 // IsCPF verifies if the given string is a valid CPF document.
 func IsCPF(doc string) bool {
 	// No official source for the check digits algorithm or the mask.
 
-	return isCadastro(doc, docCPF)
+	return isTaxID(doc, taxIDCPF)
 }
 
 // IsCNPJ verifies if the given string is a valid CNPJ document.
@@ -34,22 +34,22 @@ func IsCNPJ(doc string) bool {
 	// [1]: http://normas.receita.fazenda.gov.br/sijut2consulta/anexoOutros.action?idArquivoBinario=76204.
 	// [2]: https://www.gov.br/receitafederal/pt-br/centrais-de-conteudo/publicacoes/perguntas-e-respostas/cnpj/cnpj-alfanumerico.pdf.
 
-	return isCadastro(doc, docCNPJ)
+	return isTaxID(doc, taxIDCNPJ)
 }
 
-// isCadastro generates the digits for a given CPF or CNPJ and compares it with
+// isTaxID generates the digits for a given CPF or CNPJ and compares it with
 // the original digits.
-func isCadastro(doc string, docType docType) bool {
+func isTaxID(doc string, idType taxIDType) bool {
 	var (
 		pattern  *regexp.Regexp
 		size     int
 		position int
 	)
 
-	switch docType {
-	case docCPF:
+	switch idType {
+	case taxIDCPF:
 		pattern, size, position = cpfRegexp, 9, 10
-	case docCNPJ:
+	case taxIDCNPJ:
 		pattern, size, position = cnpjRegexp, 12, 5
 	default:
 		return false
@@ -59,34 +59,34 @@ func isCadastro(doc string, docType docType) bool {
 		return false
 	}
 
-	cleanCadastro(&doc)
+	cleanTaxID(&doc)
 
 	// The invalid documents are listed by [1]. It also lists CNPJ base numbers
 	// 11.111.111 to 99.999.999 as invalid, but they are not rejected, as some
 	// were issued (e.g. 66.666.666/0001-91).
 	// [1]: http://normas.receita.fazenda.gov.br/sijut2consulta/anexoOutros.action?idArquivoBinario=36307.
-	switch docType {
-	case docCPF:
+	switch idType {
+	case taxIDCPF:
 		if allEq(doc) {
 			return false
 		}
-	case docCNPJ:
+	case taxIDCNPJ:
 		if doc[8:12] == "0000" {
 			return false
 		}
 	}
 
 	d := doc[:size]
-	digit := calcCadastroDigit(d, position)
+	digit := calcTaxIDDigit(d, position)
 
 	d = d + digit
-	digit = calcCadastroDigit(d, position+1)
+	digit = calcTaxIDDigit(d, position+1)
 
 	return doc == d+digit
 }
 
-// calcCadastroDigit calculates the next digit for the given document.
-func calcCadastroDigit(doc string, position int) string {
+// calcTaxIDDigit calculates the next digit for the given document.
+func calcTaxIDDigit(doc string, position int) string {
 	var sum int
 	for _, r := range doc {
 		sum += toInt(r) * position
@@ -105,7 +105,7 @@ func calcCadastroDigit(doc string, position int) string {
 	return strconv.Itoa(11 - sum)
 }
 
-func cleanCadastro(doc *string) {
+func cleanTaxID(doc *string) {
 	buf := bytes.NewBufferString("")
 	for _, r := range *doc {
 		if isDigit(r) || ('A' <= r && r <= 'Z') {
