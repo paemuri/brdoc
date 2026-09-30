@@ -9,6 +9,15 @@ var (
 	phoneRegexp = regexp.MustCompile(
 		`^(?:(?:(?:\+|00)?55\s?)?(\([1-9][0-9]\)|[1-9][0-9])\s?)((9[-.\s]?\d|[2-9]{1})\d{3}[-.\s]?\d{4})$`,
 	)
+
+	// phoneSharedDDDs maps the area codes used by more than one UF to the UF
+	// not returned by `IsPhone`.
+	phoneSharedDDDs = map[int]UF{
+		42: SC,
+		47: PR,
+		49: PR,
+		61: GO,
+	}
 )
 
 // IsPhoneFrom verifies if `phone` is a valid Brazilian phone number.
@@ -16,12 +25,22 @@ var (
 // is provided, it validates the document for any state/district.
 // This function is a wrapper on `IsPhone`.
 func IsPhoneFrom(phone string, ufs ...UF) bool {
-	valid, uf := IsPhone(phone)
+	ddd, valid := parsePhoneDDD(phone)
 	if !valid {
 		return false
 	}
 
-	return isFrom(uf, ufs)
+	valid, uf := dddUF(ddd)
+	if !valid {
+		return false
+	}
+
+	if isFrom(uf, ufs) {
+		return true
+	}
+
+	sharedUF, shared := phoneSharedDDDs[ddd]
+	return shared && isFrom(sharedUF, ufs)
 }
 
 // IsPhone verifies if `phone` is a valid Brazilian phone number and returns
@@ -32,10 +51,19 @@ func IsPhone(phone string) (valid bool, uf UF) {
 	// [1]: https://informacoes.anatel.gov.br/legislacao/resolucoes/2022/1641-resolucao-749.
 	// [2]: https://www.anatel.gov.br/dadosabertos/PDA/Codigo_Nacional/PGCN.csv.
 
+	ddd, valid := parsePhoneDDD(phone)
+	if !valid {
+		return false, ""
+	}
+
+	return dddUF(ddd)
+}
+
+// parsePhoneDDD verifies the format of `phone` and returns its area code.
+func parsePhoneDDD(phone string) (ddd int, valid bool) {
 	matches := phoneRegexp.FindStringSubmatch(phone)
 	if matches == nil {
-		valid = false
-		return
+		return 0, false
 	}
 
 	match := matches[1]
@@ -43,10 +71,15 @@ func IsPhone(phone string) (valid bool, uf UF) {
 
 	ddd, err := strconv.Atoi(match)
 	if err != nil || ddd < 11 || ddd > 99 {
-		valid = false
-		return
+		return 0, false
 	}
 
+	return ddd, true
+}
+
+// dddUF returns the UF related to the area code `ddd`.
+// For area codes shared by more than one UF, see `phoneSharedDDDs`.
+func dddUF(ddd int) (valid bool, uf UF) {
 	if ddd >= 11 && ddd <= 19 {
 		return true, SP
 	}
@@ -59,18 +92,15 @@ func IsPhone(phone string) (valid bool, uf UF) {
 	if (ddd >= 31 && ddd <= 35) || ddd == 37 || ddd == 38 {
 		return true, MG
 	}
-	// Area code 42 is also used by some municipalities of SC.
 	if ddd >= 41 && ddd <= 46 {
 		return true, PR
 	}
-	// Area codes 47 and 49 are also used by some municipalities of PR.
 	if ddd >= 47 && ddd <= 49 {
 		return true, SC
 	}
 	if ddd == 51 || (ddd >= 53 && ddd <= 55) {
 		return true, RS
 	}
-	// Area code 61 is also used by some municipalities of GO.
 	if ddd == 61 {
 		return true, DF
 	}

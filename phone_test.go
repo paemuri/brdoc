@@ -103,7 +103,7 @@ func TestIsPhone(t *testing.T) {
 		{"InvalidUF", "3799999999", true, []UF{PR}, false},
 		{"InvalidUF", "3899999999", true, []UF{PR}, false},
 		{"InvalidUF", "4199999999", true, []UF{SC}, false},
-		{"InvalidUF", "4299999999", true, []UF{SC}, false},
+		{"InvalidUF", "4299999999", true, []UF{RS}, false},
 		{"InvalidUF", "4399999999", true, []UF{SC}, false},
 		{"InvalidUF", "4499999999", true, []UF{SC}, false},
 		{"InvalidUF", "4599999999", true, []UF{SC}, false},
@@ -114,7 +114,7 @@ func TestIsPhone(t *testing.T) {
 		{"InvalidUF", "5199999999", true, []UF{DF}, false},
 		{"InvalidUF", "5499999999", true, []UF{DF}, false},
 		{"InvalidUF", "5599999999", true, []UF{DF}, false},
-		{"InvalidUF", "6199999999", true, []UF{GO}, false},
+		{"InvalidUF", "6199999999", true, []UF{MT}, false},
 		{"InvalidUF", "6299999999", true, []UF{TO}, false},
 		{"InvalidUF", "6399999999", true, []UF{MT}, false},
 		{"InvalidUF", "6499999999", true, []UF{TO}, false},
@@ -264,4 +264,28 @@ func TestIsPhone(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestIsPhoneFromSharedDDD(t *testing.T) {
+	for i, tc := range []struct {
+		name  string
+		phone string
+		ufs   []UF
+		valid bool
+	}{
+		{"MainUF", "4299999999", []UF{PR}, true},
+		{"SharedUF", "4299999999", []UF{SC}, true},
+		{"SharedUF", "4799999999", []UF{PR}, true},
+		{"SharedUF", "4999999999", []UF{PR}, true},
+		{"SharedUF", "6199999999", []UF{GO}, true},
+		{"NotSharedUF", "4899999999", []UF{PR}, false},
+		{"NotSharedUF", "6299999999", []UF{DF}, false},
+	} {
+		t.Run(testName(i, tc.name), func(t *testing.T) {
+			assertEq(t, tc.valid, IsPhoneFrom(tc.phone, tc.ufs...))
+		})
+	}
+
+	_, uf := IsPhone("4299999999")
+	assertEq(t, PR, uf)
 }
