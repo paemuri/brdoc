@@ -11,7 +11,7 @@ func TestIsIE(t *testing.T) {
 		uf    UF
 		valid bool
 	}{
-		{"NotImplementedUF", "290102278-36", TO, false},
+		{"InvalidUF", "290887780", UF("XX"), false},
 
 		{"AC_InvalidData", "", AC, false},
 		{"AC_InvalidData", "AAAAAAAAAAAAA", AC, false},
@@ -272,6 +272,15 @@ func TestIsIE(t *testing.T) {
 		// Public IEs of companies.
 		{"SE_Valid", "27077995-7", SE, true},
 		{"SE_Valid", "27100154-2", SE, true},
+
+		{"TO_InvalidData", "", TO, false},
+		{"TO_InvalidFormat", "29088778", TO, false},
+		{"TO_InvalidFormat", "29010227836", TO, false},
+		{"TO_InvalidDigit", "290887781", TO, false},
+		// Public IEs of companies.
+		{"TO_Valid", "290887780", TO, true},
+		{"TO_Valid", "299990176", TO, true},
+		{"TO_Valid", "290319986", TO, true},
 
 		{"PR_InvalidData", "", PR, false},
 		{"PR_InvalidData", "AAAAAAAAAA", PR, false},

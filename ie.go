@@ -229,6 +229,16 @@ var (
 				calcDigit: calcIERemainderDigit,
 			},
 		},
+		// The format is defined by Article 3 of [2], which replaced the format
+		// of 11 digits described by [1]. The check digit follows [1], which
+		// already ignored the 2 digits removed by [2].
+		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_TO.html.
+		// [2]: https://dtri.sefaz.to.gov.br/legislacao/ntributaria/portarias/sefaz/Portaria676-02.htm.
+		TO: {{
+			pattern:   regexp.MustCompile(`^\d{9}$`),
+			weights:   [][]int{ieWeights},
+			calcDigit: calcIEMod11Digit,
+		}},
 	}
 )
 
