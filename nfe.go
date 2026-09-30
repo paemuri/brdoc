@@ -55,7 +55,28 @@ func IsNFE(doc string) bool {
 		return false
 	}
 
+	if !validNFEEmitter(doc[6:20], doc[20:22], doc[22:25]) {
+		return false
+	}
+
 	return toInt(rune(doc[43])) == calcNFEDigit(doc[:43])
+}
+
+// validNFEEmitter verifies if the emitter is a valid CNPJ or CPF, the latter
+// preceded by zeros. In an NF-e (model 55), the series from 910 to 969 are
+// reserved for CPF, and the others for CNPJ, as stated by the table 2-4 of the
+// MOC 7.0.
+func validNFEEmitter(emitter, model, series string) bool {
+	isCPF := emitter[:3] == "000" && IsCPF(emitter[3:])
+	if model != "55" {
+		return isCPF || IsCNPJ(emitter)
+	}
+
+	if "910" <= series && series <= "969" {
+		return isCPF
+	}
+
+	return IsCNPJ(emitter)
 }
 
 // calcNFEDigit returns 11 minus the remainder of the weighted sum of `doc`
