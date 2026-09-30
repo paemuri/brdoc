@@ -4,11 +4,12 @@ package brdoc
 // something similar.
 
 // IsRENAVAM verifies if the given string is a valid RENAVAM document.
+//
+// The number format and the check digit method are defined by Article 1 of
+// [Portaria DENATRAN 27/2013].
+//
+// [Portaria DENATRAN 27/2013]: https://www.gov.br/transportes/pt-br/assuntos/transito/arquivos-senatran/portarias/2013/portaria0272013.pdf
 func IsRENAVAM(doc string) bool {
-	// The number format and the check digit method are defined by Article 1 of
-	// [1].
-	// [1]: https://www.gov.br/transportes/pt-br/assuntos/transito/arquivos-senatran/portarias/2013/portaria0272013.pdf.
-
 	if len(doc) != 11 {
 		return false
 	}

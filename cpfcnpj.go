@@ -21,19 +21,28 @@ const (
 )
 
 // IsCPF verifies if the given string is a valid CPF document.
+//
+// There is no official source for the check digits algorithm or the mask.
+// Documents with all digits equal are rejected, as listed by the [DJE layout].
+//
+// [DJE layout]: http://normas.receita.fazenda.gov.br/sijut2consulta/anexoOutros.action?idArquivoBinario=36307
 func IsCPF(doc string) bool {
-	// No official source for the check digits algorithm or the mask.
-
 	return isTaxID(doc, taxIDCPF)
 }
 
-// IsCNPJ verifies if the given string is a valid CNPJ document.
+// IsCNPJ verifies if the given string is a valid CNPJ document, either numeric
+// or alphanumeric.
+//
+// The format and the check digits algorithm are defined by Annex XV of
+// [IN RFB 2.119/2022], and the mask by the [Receita Federal FAQ]. Documents
+// with order number 0000 are rejected, as listed by the [DJE layout]. It also
+// lists base numbers 11.111.111 to 99.999.999 as invalid, but they are
+// accepted, as some were issued (e.g. 66.666.666/0001-91).
+//
+// [IN RFB 2.119/2022]: http://normas.receita.fazenda.gov.br/sijut2consulta/anexoOutros.action?idArquivoBinario=76204
+// [Receita Federal FAQ]: https://www.gov.br/receitafederal/pt-br/centrais-de-conteudo/publicacoes/perguntas-e-respostas/cnpj/cnpj-alfanumerico.pdf
+// [DJE layout]: http://normas.receita.fazenda.gov.br/sijut2consulta/anexoOutros.action?idArquivoBinario=36307
 func IsCNPJ(doc string) bool {
-	// The format, including alphanumeric characters, and the check digits
-	// algorithm are defined by Annex XV of [1]. The mask is defined by [2].
-	// [1]: http://normas.receita.fazenda.gov.br/sijut2consulta/anexoOutros.action?idArquivoBinario=76204.
-	// [2]: https://www.gov.br/receitafederal/pt-br/centrais-de-conteudo/publicacoes/perguntas-e-respostas/cnpj/cnpj-alfanumerico.pdf.
-
 	return isTaxID(doc, taxIDCNPJ)
 }
 
@@ -61,10 +70,7 @@ func isTaxID(doc string, idType taxIDType) bool {
 
 	cleanTaxID(&doc)
 
-	// The invalid documents are listed by [1]. It also lists CNPJ base numbers
-	// 11.111.111 to 99.999.999 as invalid, but they are not rejected, as some
-	// were issued (e.g. 66.666.666/0001-91).
-	// [1]: http://normas.receita.fazenda.gov.br/sijut2consulta/anexoOutros.action?idArquivoBinario=36307.
+	// Invalid documents, as documented by `IsCPF` and `IsCNPJ`.
 	switch idType {
 	case taxIDCPF:
 		if allEq(doc) {

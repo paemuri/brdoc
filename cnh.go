@@ -1,10 +1,11 @@
 package brdoc
 
 // IsCNH verifies if the given string is a valid CNH document.
+//
+// The number format is defined by Article 4 of [Res. CONTRAN 886/2021].
+//
+// [Res. CONTRAN 886/2021]: https://www.legisweb.com.br/legislacao/?id=425117
 func IsCNH(doc string) bool {
-	// The number format is defined by Article 4 of [1].
-	// [1]: https://www.legisweb.com.br/legislacao/?id=425117.
-
 	if len(doc) != 11 {
 		return false
 	}

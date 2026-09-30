@@ -11,10 +11,11 @@ var (
 )
 
 // IsVoterID verifies if the given string is a valid voter ID document.
+//
+// The number format is defined by Article 36 of [Res. TSE 23.659/2021].
+//
+// [Res. TSE 23.659/2021]: https://www.tse.jus.br/legislacao/compilada/res/2021/resolucao-no-23-659-de-26-de-outubro-de-2021
 func IsVoterID(doc string) bool {
-	// The number format is defined by Article 36 of [1].
-	// [1]: https://www.tse.jus.br/legislacao/compilada/res/2021/resolucao-no-23-659-de-26-de-outubro-de-2021.
-
 	if !voterIDRegexp.MatchString(doc) {
 		return false
 	}

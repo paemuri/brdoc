@@ -17,18 +17,20 @@ func IsPlate(doc string) bool {
 
 // IsNationalPlate verifies if the given string is a valid license plate in the
 // old national format.
+//
+// The format is defined by Article 2 of [Res. CONTRAN 969/2022].
+//
+// [Res. CONTRAN 969/2022]: https://www.gov.br/transportes/pt-br/assuntos/transito/conteudo-contran/resolucoes/resolucao9692022.pdf
 func IsNationalPlate(doc string) bool {
-	// The format is defined by Article 2 of [1].
-	// [1]: https://www.gov.br/transportes/pt-br/assuntos/transito/conteudo-contran/resolucoes/resolucao9692022.pdf.
-
 	return plateNationalRegexp.MatchString(doc)
 }
 
 // IsMercosulPlate verifies if the given string is a valid license plate in the
 // new Mercosul format.
+//
+// The format is defined by item 1.2 of Annex I of [Res. CONTRAN 969/2022].
+//
+// [Res. CONTRAN 969/2022]: https://www.gov.br/transportes/pt-br/assuntos/transito/conteudo-contran/resolucoes/resolucao9692022anexos.pdf
 func IsMercosulPlate(doc string) bool {
-	// The format is defined by item 1.2 of Annex I of [1].
-	// [1]: https://www.gov.br/transportes/pt-br/assuntos/transito/conteudo-contran/resolucoes/resolucao9692022anexos.pdf.
-
 	return plateMercosulRegexp.MatchString(doc)
 }

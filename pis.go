@@ -9,12 +9,14 @@ var (
 )
 
 // IsPIS verifies if the given string is a valid PIS number. It also works for
-// NIS numbers, as stated by [Caixa], and NIT numbers, with no official source.
+// NIS and NIT numbers.
+//
+// There is no official source for any of this logic. [Caixa] states that NIS
+// and PIS numbers are the same, but there is no official source for NIT
+// numbers.
 //
 // [Caixa]: https://www.caixa.gov.br/servicos/nis/Paginas/default.aspx
 func IsPIS(doc string) bool {
-	// No official source for any of this logic.
-
 	if !pisRegexp.MatchString(doc) {
 		return false
 	}

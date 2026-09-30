@@ -23,9 +23,7 @@ type ieRule struct {
 var (
 	ieWeights = []int{9, 8, 7, 6, 5, 4, 3, 2}
 
-	// ieRules has the rules of each UF, published by [1] unless stated
-	// otherwise.
-	// [1]: http://www.sintegra.gov.br/insc_est.html.
+	// ieRules has the rules of each UF, with the source of each one.
 	ieRules = map[UF][]ieRule{
 		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_AC.html.
 		AC: {{
@@ -246,6 +244,11 @@ var (
 
 // IsIE verifies if `doc` is a valid IE (Inscrição Estadual) of the given `uf`.
 // "ISENTO", used in place of the IE by those exempt from it, is not a valid IE.
+//
+// The rules of each UF are published by the [SINTEGRA], unless stated otherwise
+// in the code.
+//
+// [SINTEGRA]: http://www.sintegra.gov.br/insc_est.html
 func IsIE(doc string, uf UF) bool {
 	for _, rule := range ieRules[uf] {
 		if rule.pattern.MatchString(doc) {

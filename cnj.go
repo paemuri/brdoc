@@ -10,11 +10,12 @@ var (
 
 // IsCNJ verifies if the given string is a valid CNJ document, the unique number
 // of the processes of the Judiciary.
+//
+// The format and the check digits algorithm are defined by Article 1 and Annex
+// VIII of [Res. CNJ 65/2008].
+//
+// [Res. CNJ 65/2008]: https://atos.cnj.jus.br/atos/detalhar/119
 func IsCNJ(doc string) bool {
-	// The format and the check digits algorithm are defined by Article 1 and
-	// Annex VIII of [1].
-	// [1]: https://atos.cnj.jus.br/atos/detalhar/119.
-
 	if !cnjRegexp.MatchString(doc) {
 		return false
 	}

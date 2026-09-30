@@ -103,12 +103,13 @@ func IsPhoneFrom(phone string, ufs ...UF) bool {
 
 // IsPhone verifies if `phone` is a valid Brazilian phone number and returns all
 // the UFs related to its area code.
+//
+// The numbering rules are defined by Articles 11, 12 and 15 of
+// [Res. Anatel 749/2022], and the area codes of each UF are listed by [Anatel].
+//
+// [Res. Anatel 749/2022]: https://informacoes.anatel.gov.br/legislacao/resolucoes/2022/1641-resolucao-749
+// [Anatel]: https://www.anatel.gov.br/dadosabertos/PDA/Codigo_Nacional/PGCN.csv
 func IsPhone(phone string) (valid bool, ufs []UF) {
-	// The numbering rules are defined by Articles 11, 12 and 15 of [1], and the
-	// area codes of each UF are listed at [2].
-	// [1]: https://informacoes.anatel.gov.br/legislacao/resolucoes/2022/1641-resolucao-749.
-	// [2]: https://www.anatel.gov.br/dadosabertos/PDA/Codigo_Nacional/PGCN.csv.
-
 	matches := phoneRegexp.FindStringSubmatch(phone)
 	if matches == nil {
 		return false, nil
