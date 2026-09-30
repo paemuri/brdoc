@@ -62,6 +62,6 @@ additional terms or conditions.
 [badge-1-img]: https://img.shields.io/github/license/paemuri/brdoc?style=flat-square
 [badge-1-link]: https://github.com/paemuri/brdoc/blob/master/LICENSE
 [badge-2-img]: https://img.shields.io/badge/go.dev-reference-007d9c?style=flat-square&logo=go&logoColor=white
-[badge-2-link]: https://pkg.go.dev/github.com/paemuri/brdoc
+[badge-2-link]: https://pkg.go.dev/github.com/paemuri/brdoc/v4
 [badge-3-img]: https://goreportcard.com/badge/github.com/paemuri/brdoc?style=flat-square
 [badge-3-link]: https://goreportcard.com/report/github.com/paemuri/brdoc
