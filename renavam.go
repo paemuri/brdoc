@@ -1,6 +1,6 @@
 package brdoc
 
-// Official name for RENAVAM seem to be all upper case, not "Renavam" or
+// Official name for RENAVAM seems to be all upper case, not "Renavam" or
 // something similar.
 
 // IsRENAVAM verifies if the given string is a valid RENAVAM document.

@@ -84,8 +84,8 @@ var phoneDDDs = map[int][]UF{
 
 // IsPhoneFrom verifies if `phone` is a valid Brazilian phone number. Also, it
 // validates if any of its related UFs is part of the given options. If none is
-// provided, it validates the document for any state/district (similar to
-// IsPhone).
+// provided, it validates the phone for any state/district. This function is a
+// wrapper around [IsPhone].
 func IsPhoneFrom(phone string, ufs ...UF) bool {
 	valid, phoneUFs := IsPhone(phone)
 	if !valid {

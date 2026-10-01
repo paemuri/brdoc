@@ -11,7 +11,7 @@ var (
 
 // IsCEPFrom verifies if `doc` is a valid CEP. Also, it validates if its related
 // UF is part of the given options. If none is provided, it validates the
-// document for any state/district. This function is a wrapper on `IsCEP`.
+// document for any state/district. This function is a wrapper around [IsCEP].
 func IsCEPFrom(doc string, ufs ...UF) bool {
 	valid, uf := IsCEP(doc)
 	if !valid {

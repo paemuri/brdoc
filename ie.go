@@ -5,7 +5,7 @@ import (
 	"strconv"
 )
 
-// ieRule is one of the formats of IE of an UF.
+// ieRule is one of the formats of IE of a UF.
 type ieRule struct {
 	// pattern validates the format of the IE, including its mask.
 	pattern *regexp.Regexp
@@ -25,7 +25,7 @@ var (
 
 	// ieRules has the rules of each UF, with the source of each one.
 	ieRules = map[UF][]ieRule{
-		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_AC.html.
+		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_AC.html
 		AC: {{
 			pattern: regexp.MustCompile(`^01\.?\d{3}\.?\d{3}/?\d{3}-?\d{2}$`),
 			weights: [][]int{
@@ -38,36 +38,36 @@ var (
 		// by 11, which is the same as `calcIEMod11Digit`. Unlike the rules
 		// published by the SINTEGRA, the third digit, formerly the type of
 		// company, is not restricted.
-		// [1]: https://www.sefaz.al.gov.br/calculo.
+		// [1]: https://www.sefaz.al.gov.br/calculo
 		AL: {{
 			pattern:   regexp.MustCompile(`^24\d{7}$`),
 			weights:   [][]int{ieWeights},
 			calcDigit: calcIEMod11Digit,
 		}},
-		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_AM.html.
+		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_AM.html
 		AM: {{
 			pattern:   regexp.MustCompile(`^\d{2}\.?\d{3}\.?\d{3}-?\d$`),
 			weights:   [][]int{ieWeights},
 			calcDigit: calcIEMod11Digit,
 		}},
-		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_AP.html.
+		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_AP.html
 		AP: {{
 			pattern:     regexp.MustCompile(`^03\d{7}$`),
 			validDigits: validIEAPDigits,
 		}},
 		// There are IEs with 8 and 9 digits.
-		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_BA.html.
+		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_BA.html
 		BA: {{
 			pattern:     regexp.MustCompile(`^\d{6,7}-?\d{2}$`),
 			validDigits: validIEBADigits,
 		}},
-		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_CE.html.
+		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_CE.html
 		CE: {{
 			pattern:   regexp.MustCompile(`^\d{8}-?\d$`),
 			weights:   [][]int{ieWeights},
 			calcDigit: calcIEMod11Digit,
 		}},
-		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_DF.html.
+		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_DF.html
 		DF: {{
 			pattern: regexp.MustCompile(`^\d{11}-?\d{2}$`),
 			weights: [][]int{
@@ -76,55 +76,55 @@ var (
 			},
 			calcDigit: calcIEMod11Digit,
 		}},
-		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_ES.html.
+		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_ES.html
 		ES: {{
 			pattern:   regexp.MustCompile(`^\d{9}$`),
 			weights:   [][]int{ieWeights},
 			calcDigit: calcIEMod11Digit,
 		}},
-		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_GO.html.
+		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_GO.html
 		GO: {{
 			pattern:   regexp.MustCompile(`^(1[01]|2\d)\.?\d{3}\.?\d{3}-?\d$`),
 			weights:   [][]int{ieWeights},
 			calcDigit: calcIEMod11Digit,
 		}},
-		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_MA.html.
+		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_MA.html
 		MA: {{
 			pattern:   regexp.MustCompile(`^12\d{7}$`),
 			weights:   [][]int{ieWeights},
 			calcDigit: calcIEMod11Digit,
 		}},
-		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_MG.html.
+		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_MG.html
 		MG: {{
 			pattern:     regexp.MustCompile(`^\d{3}\.?\d{3}\.?\d{3}/?\d{4}$`),
 			validDigits: validIEMGDigits,
 		}},
-		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_MS.html.
+		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_MS.html
 		MS: {{
 			pattern:   regexp.MustCompile(`^(28|50)\d{7}$`),
 			weights:   [][]int{ieWeights},
 			calcDigit: calcIEMod11Digit,
 		}},
-		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_MT.html.
+		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_MT.html
 		MT: {{
 			pattern:   regexp.MustCompile(`^\d{10}-?\d$`),
 			weights:   [][]int{{3, 2, 9, 8, 7, 6, 5, 4, 3, 2}},
 			calcDigit: calcIEMod11Digit,
 		}},
-		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_PA.html.
+		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_PA.html
 		PA: {{
 			pattern:   regexp.MustCompile(`^(15|7[5-9])\d{6}-?\d$`),
 			weights:   [][]int{ieWeights},
 			calcDigit: calcIEMod11Digit,
 		}},
-		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_PB.html.
+		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_PB.html
 		PB: {{
 			pattern:   regexp.MustCompile(`^\d{8}-?\d$`),
 			weights:   [][]int{ieWeights},
 			calcDigit: calcIEMod11Digit,
 		}},
 		// There are current IEs (e-Fisco) and old IEs (CACEPE).
-		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_PE.html.
+		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_PE.html
 		PE: {
 			{
 				pattern: regexp.MustCompile(`^\d{7}-?\d{2}$`),
@@ -140,15 +140,15 @@ var (
 				calcDigit: calcIEMod11Minus10Digit,
 			},
 		},
-		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_PI.html.
+		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_PI.html
 		PI: {{
 			pattern:   regexp.MustCompile(`^\d{9}$`),
 			weights:   [][]int{ieWeights},
 			calcDigit: calcIEMod11Digit,
 		}},
 		// The format is also described by [2].
-		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_PR.html.
-		// [2]: https://www.fazenda.pr.gov.br/servicos/Empresa/Cadastro-de-Contribuintes-do-ICMS/Saber-como-se-calcula-o-digito-verificador-da-inscricao-estadual-kZrX1Bol.
+		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_PR.html
+		// [2]: https://www.fazenda.pr.gov.br/servicos/Empresa/Cadastro-de-Contribuintes-do-ICMS/Saber-como-se-calcula-o-digito-verificador-da-inscricao-estadual-kZrX1Bol
 		PR: {{
 			pattern: regexp.MustCompile(`^\d{3}\.?\d{5}-?\d{2}$`),
 			weights: [][]int{
@@ -157,7 +157,7 @@ var (
 			},
 			calcDigit: calcIEMod11Digit,
 		}},
-		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_RJ.html.
+		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_RJ.html
 		RJ: {{
 			pattern:   regexp.MustCompile(`^\d{2}\.?\d{3}\.?\d{2}-?\d$`),
 			weights:   [][]int{{2, 7, 6, 5, 4, 3, 2}},
@@ -166,7 +166,7 @@ var (
 		// There are IEs with 9 and 10 digits. The digit is described as the
 		// remainder of the sum times 10 divided by 11, which is the same as
 		// `calcIEMod11Digit`.
-		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_RN.html.
+		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_RN.html
 		RN: {
 			{
 				pattern:   regexp.MustCompile(`^20\.?\d{3}\.?\d{3}-?\d$`),
@@ -181,31 +181,31 @@ var (
 		},
 		// Only the rules adopted from 2000 on, as older IEs, with 9 digits
 		// including the code of the municipality, were converted to it.
-		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_RO.html.
+		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_RO.html
 		RO: {{
 			pattern:   regexp.MustCompile(`^\d{13}-?\d$`),
 			weights:   [][]int{{6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2}},
 			calcDigit: calcIEMod11Minus10Digit,
 		}},
-		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_RR.html.
+		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_RR.html
 		RR: {{
 			pattern:   regexp.MustCompile(`^24\d{6}-?\d$`),
 			weights:   [][]int{{1, 2, 3, 4, 5, 6, 7, 8}},
 			calcDigit: calcIEMod9Digit,
 		}},
-		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_RS.html.
+		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_RS.html
 		RS: {{
 			pattern:   regexp.MustCompile(`^\d{3}/?\d{7}$`),
 			weights:   [][]int{{2, 9, 8, 7, 6, 5, 4, 3, 2}},
 			calcDigit: calcIEMod11Digit,
 		}},
-		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_SC.html.
+		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_SC.html
 		SC: {{
 			pattern:   regexp.MustCompile(`^\d{3}\.?\d{3}\.?\d{3}$`),
 			weights:   [][]int{ieWeights},
 			calcDigit: calcIEMod11Digit,
 		}},
-		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_SE.html.
+		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_SE.html
 		SE: {{
 			pattern:   regexp.MustCompile(`^\d{8}-?\d$`),
 			weights:   [][]int{ieWeights},
@@ -213,7 +213,7 @@ var (
 		}},
 		// There are IEs of industrials and merchants, and of rural producers.
 		// The last 3 digits of the rural producers are not verified.
-		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_SP.html.
+		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_SP.html
 		SP: {
 			{
 				pattern: regexp.MustCompile(`^\d{3}\.?\d{3}\.?\d{3}\.?\d{3}$`),
@@ -232,8 +232,8 @@ var (
 		// The format is defined by Article 3 of [2], which replaced the format
 		// of 11 digits described by [1], not accepted anymore. The check digit
 		// follows [1], which already ignored the 2 digits removed by [2].
-		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_TO.html.
-		// [2]: https://dtri.sefaz.to.gov.br/legislacao/ntributaria/portarias/sefaz/Portaria676-02.htm.
+		// [1]: http://www.sintegra.gov.br/Cad_Estados/cad_TO.html
+		// [2]: https://dtri.sefaz.to.gov.br/legislacao/ntributaria/portarias/sefaz/Portaria676-02.htm
 		TO: {{
 			pattern:   regexp.MustCompile(`^\d{9}$`),
 			weights:   [][]int{ieWeights},
