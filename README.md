@@ -49,6 +49,9 @@ Funções públicas:
   civil (nascimento, casamento ou óbito)
 - `func IsNFE(doc string) bool`: chave de acesso de NF-e, NFC-e, CT-e, MDF-e e
   outros documentos fiscais eletrônicos
+- `func IsBankSlip(doc string) bool`: boleto, tanto bancário quanto de
+  arrecadação (contas de consumo e tributos), pelo código de barras ou pela
+  linha digitável
 
 Tipos públicos:
 

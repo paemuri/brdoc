@@ -62,3 +62,48 @@ func isFrom(uf UF, ufs []UF) bool {
 func isDigit(r rune) bool {
 	return '0' <= r && r <= '9'
 }
+
+// calcMod11Digit returns 11 minus the remainder of `calcMod11Sum` of `doc`
+// divided by 11, or 0 if it is 10 or 11.
+func calcMod11Digit(doc string) int {
+	digit := 11 - calcMod11Sum(doc)%11
+	if digit >= 10 {
+		return 0
+	}
+
+	return digit
+}
+
+// calcMod11Sum returns the sum of the digits of `doc` multiplied by the weights
+// from 2 to 9, from right to left, restarting at 2 after 9. Letters are valued
+// as their ASCII code minus 48.
+func calcMod11Sum(doc string) int {
+	sum := 0
+	weight := 2
+	for i := len(doc) - 1; i >= 0; i-- {
+		sum += toInt(rune(doc[i])) * weight
+
+		weight++
+		if weight > 9 {
+			weight = 2
+		}
+	}
+
+	return sum
+}
+
+// calcMod10Digit returns 10 minus the remainder of the sum of the digits of the
+// products of `doc` divided by 10, or 0 if it is 10. The weights alternate
+// between 2 and 1, from right to left.
+func calcMod10Digit(doc string) int {
+	sum := 0
+	weight := 2
+	for i := len(doc) - 1; i >= 0; i-- {
+		product := toInt(rune(doc[i])) * weight
+		sum += product/10 + product%10
+
+		weight = 3 - weight
+	}
+
+	return (10 - sum%10) % 10
+}

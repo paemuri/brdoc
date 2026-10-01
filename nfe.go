@@ -61,7 +61,7 @@ func IsNFE(doc string) bool {
 		return false
 	}
 
-	return toInt(rune(doc[43])) == calcNFEDigit(doc[:43])
+	return toInt(rune(doc[43])) == calcMod11Digit(doc[:43])
 }
 
 // validNFEEmitter verifies if the emitter is a valid CNPJ or CPF, the latter
@@ -83,27 +83,4 @@ func validNFEEmitter(emitter, model, series string) bool {
 	default:
 		return isCPF || IsCNPJ(emitter)
 	}
-}
-
-// calcNFEDigit returns 11 minus the remainder of the weighted sum of `doc`
-// divided by 11, or 0 if it is 10 or 11. The weights go from 2 to 9, from right
-// to left, and letters are valued as their ASCII code minus 48.
-func calcNFEDigit(doc string) int {
-	sum := 0
-	weight := 2
-	for i := len(doc) - 1; i >= 0; i-- {
-		sum += toInt(rune(doc[i])) * weight
-
-		weight++
-		if weight > 9 {
-			weight = 2
-		}
-	}
-
-	digit := 11 - sum%11
-	if digit >= 10 {
-		return 0
-	}
-
-	return digit
 }
