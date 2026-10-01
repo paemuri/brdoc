@@ -361,7 +361,7 @@ func validIEMGDigits(doc string) bool {
 		sum += product/10 + product%10
 	}
 	// Not official logic: the rules do not state the digit when the sum is
-	// already a multiple of 10, so it is 0.
+	// already a multiple of 10, so it is 0, as verified with real IEs.
 	first := (10 - sum%10) % 10
 
 	sum = 0
