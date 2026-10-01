@@ -5,37 +5,48 @@ import (
 )
 
 func TestIsCNH(t *testing.T) {
-	for i, tc := range []struct {
-		name  string
-		doc   string
-		valid bool
-	}{
-		{"InvalidData", "3467875434578764345789654", false},
-		{"InvalidData", "", false},
-		{"InvalidData", "AAAAAAAAAAA", false},
-
-		{"InvalidDigit", "02102234243", false},
-		{"InvalidDigit", "02102234142", false},
-		{"InvalidDigit", "13798941353", false},
-		{"InvalidDigit", "00676003001", false},
-		{"InvalidDigit", "00000000000", false},
-		{"InvalidDigit", "11111111111", false},
-		{"InvalidDigit", "99999999999", false},
-
-		{"InvalidFormat", "8195247601-1", false},
-		{"InvalidFormat", "337989413-53", false},
-		{"InvalidFormat", "872 227 006 00", false},
-		{"InvalidFormat", "459.911.677-05", false},
-
-		{"Valid", "81952476011", true},
-		{"Valid", "33798941353", true},
-		{"Valid", "87222700600", true},
-		{"Valid", "45991167705", true},
-		{"Valid", "19595699996", true},
-		{"Valid", "00067600300", true},
-	} {
-		t.Run(testName(i, tc.name), func(t *testing.T) {
-			assertEq(t, tc.valid, IsCNH(tc.doc))
+	t.Run("rejects invalid data", func(t *testing.T) {
+		assertInvalidCases(t, IsCNH, []docCase{
+			{"too long", "3467875434578764345789654"},
+			{"empty", ""},
+			{"letters", "AAAAAAAAAAA"},
 		})
-	}
+	})
+
+	t.Run("rejects masks", func(t *testing.T) {
+		assertInvalidCases(t, IsCNH, []docCase{
+			{"hyphen before the last digit", "8195247601-1"},
+			{"hyphen before the check digits", "337989413-53"},
+			{"spaces", "872 227 006 00"},
+			{"dots and hyphen", "459.911.677-05"},
+		})
+	})
+
+	t.Run("rejects invalid check digits", func(t *testing.T) {
+		assertInvalid(t, IsCNH,
+			"02102234243",
+			"02102234142",
+			"13798941353",
+			"00676003001",
+		)
+	})
+
+	t.Run("rejects documents with all digits equal", func(t *testing.T) {
+		assertInvalid(t, IsCNH,
+			"00000000000",
+			"11111111111",
+			"99999999999",
+		)
+	})
+
+	t.Run("accepts valid documents", func(t *testing.T) {
+		assertValid(t, IsCNH,
+			"81952476011",
+			"33798941353",
+			"87222700600",
+			"45991167705",
+			"19595699996",
+			"00067600300",
+		)
+	})
 }

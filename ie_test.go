@@ -4,344 +4,978 @@ import (
 	"testing"
 )
 
-func TestIsIE(t *testing.T) {
-	for i, tc := range []struct {
-		name  string
-		doc   string
-		uf    UF
-		valid bool
-	}{
-		{"InvalidUF", "290887780", UF("XX"), false},
-		{"Invalid", "ISENTO", SP, false},
-
-		// Documents with all digits equal.
-		{"AllEqual", "000000000", ES, false},
-		{"AllEqual", "000000000", SC, false},
-		{"AllEqual", "000000000", TO, false},
-		{"AllEqual", "00000000", RJ, false},
-		{"AllEqual", "00000000000-00", DF, false},
-		{"AllEqual", "000000000000", SP, false},
-
-		{"AC_InvalidData", "", AC, false},
-		{"AC_InvalidData", "AAAAAAAAAAAAA", AC, false},
-
-		{"AC_InvalidFormat", "010048230011", AC, false},
-		{"AC_InvalidFormat", "01004823001123", AC, false},
-		{"AC_InvalidFormat", "02.004.823/001-12", AC, false},
-		{"AC_InvalidFormat", "01-004-823.001/12", AC, false},
-
-		{"AC_InvalidDigit", "01.004.823/001-02", AC, false},
-		{"AC_InvalidDigit", "01.004.823/001-13", AC, false},
-
-		// Example from the official rules.
-		{"AC_Valid", "01.004.823/001-12", AC, true},
-		{"AC_Valid", "0100482300112", AC, true},
-
-		// Public IEs of companies.
-		{"AC_Valid", "01.008.267/001-08", AC, true},
-
-		{"AL_InvalidData", "", AL, false},
-		{"AL_InvalidData", "AAAAAAAAA", AL, false},
-
-		{"AL_InvalidFormat", "24000004", AL, false},
-		{"AL_InvalidFormat", "2400000480", AL, false},
-		{"AL_InvalidFormat", "250000048", AL, false},
-
-		{"AL_InvalidDigit", "240000049", AL, false},
-
-		// Example from the official rules.
-		{"AL_Valid", "240000048", AL, true},
-
-		// Public IEs of companies.
-		{"AL_Valid", "245008403", AL, true},
-
-		// Types of company not listed by older rules.
-		{"AL_Valid", "241000009", AL, true},
-
-		{"AM_InvalidData", "", AM, false},
-		{"AM_InvalidFormat", "04.900.976", AM, false},
-		{"AM_InvalidDigit", "04.900.976-2", AM, false},
-		// Examples from the official rules.
-		{"AM_Valid", "04.900.976-1", AM, true},
-		{"AM_Valid", "04.150.272-8", AM, true},
-
-		{"AP_InvalidData", "", AP, false},
-		{"AP_InvalidFormat", "03012345", AP, false},
-		{"AP_InvalidFormat", "040123459", AP, false},
-		{"AP_InvalidDigit", "030123458", AP, false},
-		// Example from the official rules.
-		{"AP_Valid", "030123459", AP, true},
-		// Public IEs of companies.
-		{"AP_Valid", "030071009", AP, true},
-		// Calculated by hand, one for each range and for results 10 and 11.
-		{"AP_Valid", "030170011", AP, true},
-		{"AP_Valid", "030170020", AP, true},
-		{"AP_Valid", "030170071", AP, true},
-		{"AP_Valid", "030190231", AP, true},
-		{"AP_Valid", "030190240", AP, true},
-		{"AP_Valid", "030190290", AP, true},
-		{"AP_InvalidDigit", "030170070", AP, false},
-
-		{"BA_InvalidData", "", BA, false},
-		{"BA_InvalidFormat", "12345-63", BA, false},
-		{"BA_InvalidFormat", "12345678-90", BA, false},
-		{"BA_InvalidDigit", "123456-64", BA, false},
-		{"BA_InvalidDigit", "123456-53", BA, false},
-		{"BA_InvalidDigit", "612345-58", BA, false},
-		{"BA_InvalidDigit", "1000003-07", BA, false},
-		// Examples from the official rules.
-		{"BA_Valid", "123456-63", BA, true},
-		{"BA_Valid", "612345-57", BA, true},
-		{"BA_Valid", "1000003-06", BA, true},
-		// Public IEs of companies.
-		{"BA_Valid", "0004786-96", BA, true},
-		{"BA_Valid", "0010273-89", BA, true},
-		// Calculated by hand, with 9 digits and modulo 11.
-		{"BA_Valid", "1600003-00", BA, true},
-		{"BA_Valid", "1700005-80", BA, true},
-
-		{"CE_InvalidData", "", CE, false},
-		{"CE_InvalidFormat", "0600001-5", CE, false},
-		{"CE_InvalidDigit", "06000001-4", CE, false},
-		// Examples from the official rules.
-		{"CE_Valid", "06000001-5", CE, true},
-		// Public IEs of companies.
-		{"CE_Valid", "06863259-2", CE, true},
-		{"CE_Valid", "06305950-9", CE, true},
-
-		{"DF_InvalidData", "", DF, false},
-		{"DF_InvalidFormat", "0730000100109-", DF, false},
-		{"DF_InvalidDigit", "07300001001-08", DF, false},
-		// Examples from the official rules.
-		{"DF_Valid", "07300001001-09", DF, true},
-		// Public IEs of companies.
-		{"DF_Valid", "07656443030-76", DF, true},
-		{"DF_Valid", "07679960002-46", DF, true},
-
-		{"ES_InvalidData", "", ES, false},
-		{"ES_InvalidFormat", "99999999", ES, false},
-		{"ES_InvalidDigit", "999999991", ES, false},
-		// Examples from the official rules.
-		{"ES_Valid", "999999990", ES, true},
-		// Public IEs of companies.
-		{"ES_Valid", "000002976", ES, true},
-		{"ES_Valid", "000017744", ES, true},
-
-		{"GO_InvalidData", "", GO, false},
-		{"GO_InvalidFormat", "12.987.654-7", GO, false},
-		{"GO_InvalidDigit", "10.987.654-8", GO, false},
-		// Examples from the official rules.
-		{"GO_Valid", "10.987.654-7", GO, true},
-		// Public IEs of companies.
-		{"GO_Valid", "10.277.380-7", GO, true},
-		{"GO_Valid", "10.353.194-7", GO, true},
-
-		{"MA_InvalidData", "", MA, false},
-		{"MA_InvalidFormat", "130000385", MA, false},
-		{"MA_InvalidDigit", "120000386", MA, false},
-		// Examples from the official rules.
-		{"MA_Valid", "120000385", MA, true},
-		// Public IEs of companies.
-		{"MA_Valid", "126001049", MA, true},
-
-		{"MG_InvalidData", "", MG, false},
-		{"MG_InvalidFormat", "062.307.904/008", MG, false},
-		{"MG_InvalidFormat", "062.307.904-0081", MG, false},
-		{"MG_InvalidDigit", "062.307.904/0071", MG, false},
-		{"MG_InvalidDigit", "062.307.904/0082", MG, false},
-		// Example from the official rules.
-		{"MG_Valid", "062.307.904/0081", MG, true},
-		{"MG_Valid", "0623079040081", MG, true},
-		// Public IEs of companies.
-		{"MG_Valid", "503.058.237/0015", MG, true},
-		{"MG_Valid", "062.667.789/0073", MG, true},
-		{"MG_Valid", "062.213.378/0083", MG, true},
-
-		{"MS_InvalidData", "", MS, false},
-		{"MS_InvalidFormat", "292909575", MS, false},
-		{"MS_InvalidDigit", "282909576", MS, false},
-		// Public IEs of companies.
-		{"MS_Valid", "282909575", MS, true},
-		{"MS_Valid", "283242809", MS, true},
-
-		{"MT_InvalidData", "", MT, false},
-		{"MT_InvalidFormat", "013000001-9", MT, false},
-		{"MT_InvalidDigit", "0013000001-8", MT, false},
-		// Examples from the official rules.
-		{"MT_Valid", "0013000001-9", MT, true},
-		// Public IEs of companies.
-		{"MT_Valid", "0013144158-2", MT, true},
-
-		{"PA_InvalidData", "", PA, false},
-		{"PA_InvalidFormat", "16999999-5", PA, false},
-		{"PA_InvalidDigit", "15999999-4", PA, false},
-		// Examples from the official rules.
-		{"PA_Valid", "15999999-5", PA, true},
-		{"PA_Valid", "75000002-3", PA, true},
-		// Public IEs of companies.
-		{"PA_Valid", "15177432-3", PA, true},
-		{"PA_Valid", "15771637-6", PA, true},
-		{"PA_Valid", "15216699-8", PA, true},
-
-		{"PB_InvalidData", "", PB, false},
-		{"PB_InvalidFormat", "0600001-5", PB, false},
-		{"PB_InvalidDigit", "06000001-6", PB, false},
-		// Examples from the official rules.
-		{"PB_Valid", "06000001-5", PB, true},
-		// Public IEs of companies.
-		{"PB_Valid", "16999351-5", PB, true},
-		{"PB_Valid", "16900390-6", PB, true},
-
-		{"PE_InvalidData", "", PE, false},
-		{"PE_InvalidFormat", "032141-840", PE, false},
-		{"PE_InvalidFormat", "18.1.001.000004-9", PE, false},
-		{"PE_InvalidDigit", "0321418-41", PE, false},
-		{"PE_InvalidDigit", "0321418-30", PE, false},
-		{"PE_InvalidDigit", "18.1.001.0000004-8", PE, false},
-		// Examples from the official rules.
-		{"PE_Valid", "0321418-40", PE, true},
-		{"PE_Valid", "032141840", PE, true},
-		{"PE_Valid", "18.1.001.0000004-9", PE, true},
-		{"PE_Valid", "18100100000049", PE, true},
-		// Public IEs of companies.
-		{"PE_Valid", "0250099-07", PE, true},
-		{"PE_Valid", "0163235-30", PE, true},
-		{"PE_Valid", "0916078-76", PE, true},
-		{"PE_Valid", "0992431-05", PE, true},
-		{"PE_Valid", "0267359-20", PE, true},
-
-		{"PI_InvalidData", "", PI, false},
-		{"PI_InvalidFormat", "01234567", PI, false},
-		{"PI_InvalidDigit", "012345678", PI, false},
-		// Examples from the official rules.
-		{"PI_Valid", "012345679", PI, true},
-		// Public IEs of companies.
-		{"PI_Valid", "194155722", PI, true},
-		{"PI_Valid", "195195337", PI, true},
-		{"PI_Valid", "194468976", PI, true},
-
-		{"RJ_InvalidData", "", RJ, false},
-		{"RJ_InvalidFormat", "91.018.0-39", RJ, false},
-		{"RJ_InvalidDigit", "91.018.03-8", RJ, false},
-		// Public IEs of companies.
-		{"RJ_Valid", "91.018.03-9", RJ, true},
-		{"RJ_Valid", "92.001.02-4", RJ, true},
-
-		{"RN_InvalidData", "", RN, false},
-		{"RN_InvalidFormat", "21.040.040-1", RN, false},
-		{"RN_InvalidDigit", "20.040.040-2", RN, false},
-		// Examples from the official rules.
-		{"RN_Valid", "20.040.040-1", RN, true},
-		{"RN_Valid", "20.0.040.040-0", RN, true},
-		// Public IEs of companies.
-		{"RN_Valid", "20.300.936-3", RN, true},
-		{"RN_Valid", "20.301.158-9", RN, true},
-
-		{"RO_InvalidData", "", RO, false},
-		{"RO_InvalidFormat", "101.62521-3", RO, false},
-		{"RO_InvalidFormat", "000000062521-3", RO, false},
-		{"RO_InvalidDigit", "0000000062521-4", RO, false},
-		// Example from the official rules.
-		{"RO_Valid", "0000000062521-3", RO, true},
-		{"RO_Valid", "00000000625213", RO, true},
-		// Public IEs of companies.
-		{"RO_Valid", "0000000025563-7", RO, true},
-
-		{"RR_InvalidData", "", RR, false},
-		{"RR_InvalidFormat", "25006628-1", RR, false},
-		{"RR_InvalidDigit", "24006628-2", RR, false},
-		// Examples from the official rules.
-		{"RR_Valid", "24006628-1", RR, true},
-		{"RR_Valid", "24001755-6", RR, true},
-		{"RR_Valid", "24003429-0", RR, true},
-		// Public IEs of companies.
-		{"RR_Valid", "24002153-4", RR, true},
-
-		{"RS_InvalidData", "", RS, false},
-		{"RS_InvalidFormat", "224/365879", RS, false},
-		{"RS_InvalidDigit", "224/3658793", RS, false},
-		// Examples from the official rules.
-		{"RS_Valid", "224/3658792", RS, true},
-		// Public IEs of companies.
-		{"RS_Valid", "900/0000802", RS, true},
-
-		{"SC_InvalidData", "", SC, false},
-		{"SC_InvalidFormat", "251.040.85", SC, false},
-		{"SC_InvalidDigit", "251.040.853", SC, false},
-		// Examples from the official rules.
-		{"SC_Valid", "251.040.852", SC, true},
-		// Public IEs of companies.
-		{"SC_Valid", "252.085.442", SC, true},
-
-		{"SE_InvalidData", "", SE, false},
-		{"SE_InvalidFormat", "2712345-3", SE, false},
-		{"SE_InvalidDigit", "27123456-4", SE, false},
-		// Examples from the official rules.
-		{"SE_Valid", "27123456-3", SE, true},
-		// Public IEs of companies.
-		{"SE_Valid", "27077995-7", SE, true},
-		{"SE_Valid", "27100154-2", SE, true},
-
-		{"TO_InvalidData", "", TO, false},
-		{"TO_InvalidFormat", "29088778", TO, false},
-		{"TO_InvalidFormat", "29010227836", TO, false},
-		{"TO_InvalidDigit", "290887781", TO, false},
-		// Public IEs of companies.
-		{"TO_Valid", "290887780", TO, true},
-		{"TO_Valid", "299990176", TO, true},
-		{"TO_Valid", "290319986", TO, true},
-
-		{"PR_InvalidData", "", PR, false},
-		{"PR_InvalidData", "AAAAAAAAAA", PR, false},
-
-		{"PR_InvalidFormat", "123456785", PR, false},
-		{"PR_InvalidFormat", "12345678501", PR, false},
-		{"PR_InvalidFormat", "123.456.785-0", PR, false},
-		{"PR_InvalidFormat", "12.345678-50", PR, false},
-
-		{"PR_InvalidDigit", "123.45678-40", PR, false},
-		{"PR_InvalidDigit", "123.45678-51", PR, false},
-
-		// Example from the official rules.
-		{"PR_Valid", "123.45678-50", PR, true},
-		{"PR_Valid", "12345678-50", PR, true},
-		{"PR_Valid", "1234567850", PR, true},
-
-		// Public IEs of companies.
-		{"PR_Valid", "099.02241-88", PR, true},
-		{"PR_Valid", "101.79579-92", PR, true},
-
-		{"SP_InvalidData", "", SP, false},
-		{"SP_InvalidData", "AAAAAAAAAAAA", SP, false},
-
-		{"SP_InvalidFormat", "11004249011", SP, false},
-		{"SP_InvalidFormat", "1100424901145", SP, false},
-		{"SP_InvalidFormat", "110-042-490-114", SP, false},
-		{"SP_InvalidFormat", "p-01100424.3/002", SP, false},
-		{"SP_InvalidFormat", "P-0110042.43/002", SP, false},
-		{"SP_InvalidFormat", "P-01100424.3/0021", SP, false},
-
-		{"SP_InvalidDigit", "110.042.491.114", SP, false},
-		{"SP_InvalidDigit", "110.042.490.115", SP, false},
-		{"SP_InvalidDigit", "P-01100424.4/002", SP, false},
-
-		// Examples from the official rules.
-		{"SP_Valid", "110.042.490.114", SP, true},
-		{"SP_Valid", "110042490114", SP, true},
-		{"SP_Valid", "P-01100424.3/002", SP, true},
-		{"SP_Valid", "P011004243002", SP, true},
-		{"SP_Valid", "P-01100424.3/999", SP, true},
-
-		// Public IEs of companies.
-		{"SP_Valid", "310.035.324.119", SP, true},
-		{"SP_Valid", "108.354.656.114", SP, true},
-		{"SP_Valid", "142.270.790.110", SP, true},
-		{"SP_Valid", "142.484.958.110", SP, true},
-		{"SP_Valid", "102.654.009.110", SP, true},
-		{"SP_Valid", "805.000.292.111", SP, true},
-	} {
-		t.Run(testName(i, tc.name), func(t *testing.T) {
-			assertEq(t, tc.valid, IsIE(tc.doc, tc.uf))
-		})
+// ieOf returns `IsIE` for the given `uf`, to be used with `assertValid` and
+// `assertInvalid`.
+func ieOf(uf UF) func(string) bool {
+	return func(doc string) bool {
+		return IsIE(doc, uf)
 	}
+}
+
+func TestIsIE(t *testing.T) {
+	t.Run("rejects an invalid UF", func(t *testing.T) {
+		assertInvalid(t, ieOf(UF("XX")),
+			"290887780",
+		)
+	})
+
+	t.Run("rejects ISENTO, used by those exempt from IE", func(t *testing.T) {
+		assertInvalid(t, ieOf(SP),
+			"ISENTO",
+		)
+	})
+
+	t.Run("rejects documents with all digits equal", func(t *testing.T) {
+		assertInvalid(t, ieOf(ES), "000000000")
+		assertInvalid(t, ieOf(SC), "000000000")
+		assertInvalid(t, ieOf(TO), "000000000")
+		assertInvalid(t, ieOf(RJ), "00000000")
+		assertInvalid(t, ieOf(DF), "00000000000-00")
+		assertInvalid(t, ieOf(SP), "000000000000")
+	})
+
+	t.Run("AC", func(t *testing.T) {
+		t.Run("rejects invalid data", func(t *testing.T) {
+			assertInvalidCases(t, ieOf(AC), []docCase{
+				{"empty", ""},
+				{"letters", "AAAAAAAAAAAAA"},
+			})
+		})
+
+		t.Run("rejects invalid formats", func(t *testing.T) {
+			assertInvalidCases(t, ieOf(AC), []docCase{
+				{"too short", "010048230011"},
+				{"too long", "01004823001123"},
+				{"prefix 02 instead of 01", "02.004.823/001-12"},
+				{"separators swapped", "01-004-823.001/12"},
+			})
+		})
+
+		t.Run("rejects invalid check digits", func(t *testing.T) {
+			assertInvalid(t, ieOf(AC),
+				"01.004.823/001-02",
+				"01.004.823/001-13",
+			)
+		})
+
+		t.Run("accepts the examples of the official rules", func(t *testing.T) {
+			assertValid(t, ieOf(AC),
+				"01.004.823/001-12",
+				"0100482300112",
+			)
+		})
+
+		t.Run("accepts public IEs of companies", func(t *testing.T) {
+			assertValid(t, ieOf(AC),
+				"01.008.267/001-08",
+			)
+		})
+	})
+
+	t.Run("AL", func(t *testing.T) {
+		t.Run("rejects invalid data", func(t *testing.T) {
+			assertInvalidCases(t, ieOf(AL), []docCase{
+				{"empty", ""},
+				{"letters", "AAAAAAAAA"},
+			})
+		})
+
+		t.Run("rejects invalid formats", func(t *testing.T) {
+			assertInvalidCases(t, ieOf(AL), []docCase{
+				{"too short", "24000004"},
+				{"too long", "2400000480"},
+				{"prefix 25 instead of 24", "250000048"},
+			})
+		})
+
+		t.Run("rejects invalid check digits", func(t *testing.T) {
+			assertInvalid(t, ieOf(AL),
+				"240000049",
+			)
+		})
+
+		t.Run("accepts the examples of the official rules", func(t *testing.T) {
+			assertValid(t, ieOf(AL),
+				"240000048",
+			)
+		})
+
+		t.Run("accepts public IEs of companies", func(t *testing.T) {
+			assertValid(t, ieOf(AL),
+				"245008403",
+			)
+		})
+
+		t.Run("accepts types of company not listed by older rules", func(t *testing.T) {
+			assertValid(t, ieOf(AL),
+				"241000009",
+			)
+		})
+	})
+
+	t.Run("AM", func(t *testing.T) {
+		t.Run("rejects invalid data", func(t *testing.T) {
+			assertInvalid(t, ieOf(AM),
+				"",
+			)
+		})
+
+		t.Run("rejects invalid formats", func(t *testing.T) {
+			assertInvalidCases(t, ieOf(AM), []docCase{
+				{"without the check digit", "04.900.976"},
+			})
+		})
+
+		t.Run("rejects invalid check digits", func(t *testing.T) {
+			assertInvalid(t, ieOf(AM),
+				"04.900.976-2",
+			)
+		})
+
+		t.Run("accepts public IEs of companies", func(t *testing.T) {
+			assertValid(t, ieOf(AM),
+				"04.900.976-1",
+				"04.150.272-8",
+			)
+		})
+	})
+
+	t.Run("AP", func(t *testing.T) {
+		t.Run("rejects invalid data", func(t *testing.T) {
+			assertInvalid(t, ieOf(AP),
+				"",
+			)
+		})
+
+		t.Run("rejects invalid formats", func(t *testing.T) {
+			assertInvalidCases(t, ieOf(AP), []docCase{
+				{"too short", "03012345"},
+				{"prefix 04 instead of 03", "040123459"},
+			})
+		})
+
+		t.Run("rejects invalid check digits", func(t *testing.T) {
+			assertInvalid(t, ieOf(AP),
+				"030123458",
+				"030170070",
+			)
+		})
+
+		t.Run("accepts the examples of the official rules", func(t *testing.T) {
+			assertValid(t, ieOf(AP),
+				"030123459",
+			)
+		})
+
+		t.Run("accepts public IEs of companies", func(t *testing.T) {
+			assertValid(t, ieOf(AP),
+				"030071009",
+			)
+		})
+
+		t.Run("accepts IEs calculated by hand, one for each range and for results 10 and 11", func(t *testing.T) {
+			assertValid(t, ieOf(AP),
+				"030170011",
+				"030170020",
+				"030170071",
+				"030190231",
+				"030190240",
+				"030190290",
+			)
+		})
+	})
+
+	t.Run("BA", func(t *testing.T) {
+		t.Run("rejects invalid data", func(t *testing.T) {
+			assertInvalid(t, ieOf(BA),
+				"",
+			)
+		})
+
+		t.Run("rejects invalid formats", func(t *testing.T) {
+			assertInvalidCases(t, ieOf(BA), []docCase{
+				{"too short", "12345-63"},
+				{"too long", "12345678-90"},
+			})
+		})
+
+		t.Run("rejects invalid check digits", func(t *testing.T) {
+			assertInvalid(t, ieOf(BA),
+				"123456-64",
+				"123456-53",
+				"612345-58",
+				"1000003-07",
+			)
+		})
+
+		t.Run("accepts the examples of the official rules", func(t *testing.T) {
+			assertValid(t, ieOf(BA),
+				"123456-63",
+				"612345-57",
+				"1000003-06",
+			)
+		})
+
+		t.Run("accepts public IEs of companies", func(t *testing.T) {
+			assertValid(t, ieOf(BA),
+				"0004786-96",
+				"0010273-89",
+			)
+		})
+
+		t.Run("accepts IEs calculated by hand, with 9 digits and modulo 11", func(t *testing.T) {
+			assertValid(t, ieOf(BA),
+				"1600003-00",
+				"1700005-80",
+			)
+		})
+	})
+
+	t.Run("CE", func(t *testing.T) {
+		t.Run("rejects invalid data", func(t *testing.T) {
+			assertInvalid(t, ieOf(CE),
+				"",
+			)
+		})
+
+		t.Run("rejects invalid formats", func(t *testing.T) {
+			assertInvalidCases(t, ieOf(CE), []docCase{
+				{"too short", "0600001-5"},
+			})
+		})
+
+		t.Run("rejects invalid check digits", func(t *testing.T) {
+			assertInvalid(t, ieOf(CE),
+				"06000001-4",
+			)
+		})
+
+		t.Run("accepts the examples of the official rules", func(t *testing.T) {
+			assertValid(t, ieOf(CE),
+				"06000001-5",
+			)
+		})
+
+		t.Run("accepts public IEs of companies", func(t *testing.T) {
+			assertValid(t, ieOf(CE),
+				"06863259-2",
+				"06305950-9",
+			)
+		})
+	})
+
+	t.Run("DF", func(t *testing.T) {
+		t.Run("rejects invalid data", func(t *testing.T) {
+			assertInvalid(t, ieOf(DF),
+				"",
+			)
+		})
+
+		t.Run("rejects invalid formats", func(t *testing.T) {
+			assertInvalidCases(t, ieOf(DF), []docCase{
+				{"hyphen at the end", "0730000100109-"},
+			})
+		})
+
+		t.Run("rejects invalid check digits", func(t *testing.T) {
+			assertInvalid(t, ieOf(DF),
+				"07300001001-08",
+			)
+		})
+
+		t.Run("accepts the examples of the official rules", func(t *testing.T) {
+			assertValid(t, ieOf(DF),
+				"07300001001-09",
+			)
+		})
+
+		t.Run("accepts public IEs of companies", func(t *testing.T) {
+			assertValid(t, ieOf(DF),
+				"07656443030-76",
+				"07679960002-46",
+			)
+		})
+	})
+
+	t.Run("ES", func(t *testing.T) {
+		t.Run("rejects invalid data", func(t *testing.T) {
+			assertInvalid(t, ieOf(ES),
+				"",
+			)
+		})
+
+		t.Run("rejects invalid formats", func(t *testing.T) {
+			assertInvalidCases(t, ieOf(ES), []docCase{
+				{"too short", "99999999"},
+			})
+		})
+
+		t.Run("rejects invalid check digits", func(t *testing.T) {
+			assertInvalid(t, ieOf(ES),
+				"999999991",
+			)
+		})
+
+		t.Run("accepts the examples of the official rules", func(t *testing.T) {
+			assertValid(t, ieOf(ES),
+				"999999990",
+			)
+		})
+
+		t.Run("accepts public IEs of companies", func(t *testing.T) {
+			assertValid(t, ieOf(ES),
+				"000002976",
+				"000017744",
+			)
+		})
+	})
+
+	t.Run("GO", func(t *testing.T) {
+		t.Run("rejects invalid data", func(t *testing.T) {
+			assertInvalid(t, ieOf(GO),
+				"",
+			)
+		})
+
+		t.Run("rejects invalid formats", func(t *testing.T) {
+			assertInvalidCases(t, ieOf(GO), []docCase{
+				{"prefix 12, not 10, 11 or from 20 to 29", "12.987.654-7"},
+			})
+		})
+
+		t.Run("rejects invalid check digits", func(t *testing.T) {
+			assertInvalid(t, ieOf(GO),
+				"10.987.654-8",
+			)
+		})
+
+		t.Run("accepts the examples of the official rules", func(t *testing.T) {
+			assertValid(t, ieOf(GO),
+				"10.987.654-7",
+			)
+		})
+
+		t.Run("accepts public IEs of companies", func(t *testing.T) {
+			assertValid(t, ieOf(GO),
+				"10.277.380-7",
+				"10.353.194-7",
+			)
+		})
+	})
+
+	t.Run("MA", func(t *testing.T) {
+		t.Run("rejects invalid data", func(t *testing.T) {
+			assertInvalid(t, ieOf(MA),
+				"",
+			)
+		})
+
+		t.Run("rejects invalid formats", func(t *testing.T) {
+			assertInvalidCases(t, ieOf(MA), []docCase{
+				{"prefix 13 instead of 12", "130000385"},
+			})
+		})
+
+		t.Run("rejects invalid check digits", func(t *testing.T) {
+			assertInvalid(t, ieOf(MA),
+				"120000386",
+			)
+		})
+
+		t.Run("accepts the examples of the official rules", func(t *testing.T) {
+			assertValid(t, ieOf(MA),
+				"120000385",
+			)
+		})
+
+		t.Run("accepts public IEs of companies", func(t *testing.T) {
+			assertValid(t, ieOf(MA),
+				"126001049",
+			)
+		})
+	})
+
+	t.Run("MG", func(t *testing.T) {
+		t.Run("rejects invalid data", func(t *testing.T) {
+			assertInvalid(t, ieOf(MG),
+				"",
+			)
+		})
+
+		t.Run("rejects invalid formats", func(t *testing.T) {
+			assertInvalidCases(t, ieOf(MG), []docCase{
+				{"too short", "062.307.904/008"},
+				{"hyphen instead of slash", "062.307.904-0081"},
+			})
+		})
+
+		t.Run("rejects invalid check digits", func(t *testing.T) {
+			assertInvalid(t, ieOf(MG),
+				"062.307.904/0071",
+				"062.307.904/0082",
+			)
+		})
+
+		t.Run("accepts the examples of the official rules", func(t *testing.T) {
+			assertValid(t, ieOf(MG),
+				"062.307.904/0081",
+				"0623079040081",
+			)
+		})
+
+		t.Run("accepts public IEs of companies", func(t *testing.T) {
+			assertValid(t, ieOf(MG),
+				"503.058.237/0015",
+				"062.667.789/0073",
+				"062.213.378/0083",
+			)
+		})
+	})
+
+	t.Run("MS", func(t *testing.T) {
+		t.Run("rejects invalid data", func(t *testing.T) {
+			assertInvalid(t, ieOf(MS),
+				"",
+			)
+		})
+
+		t.Run("rejects invalid formats", func(t *testing.T) {
+			assertInvalidCases(t, ieOf(MS), []docCase{
+				{"prefix 29, not 28 or 50", "292909575"},
+			})
+		})
+
+		t.Run("rejects invalid check digits", func(t *testing.T) {
+			assertInvalid(t, ieOf(MS),
+				"282909576",
+			)
+		})
+
+		t.Run("accepts public IEs of companies", func(t *testing.T) {
+			assertValid(t, ieOf(MS),
+				"282909575",
+				"283242809",
+			)
+		})
+	})
+
+	t.Run("MT", func(t *testing.T) {
+		t.Run("rejects invalid data", func(t *testing.T) {
+			assertInvalid(t, ieOf(MT),
+				"",
+			)
+		})
+
+		t.Run("rejects invalid formats", func(t *testing.T) {
+			assertInvalidCases(t, ieOf(MT), []docCase{
+				{"too short", "013000001-9"},
+			})
+		})
+
+		t.Run("rejects invalid check digits", func(t *testing.T) {
+			assertInvalid(t, ieOf(MT),
+				"0013000001-8",
+			)
+		})
+
+		t.Run("accepts the examples of the official rules", func(t *testing.T) {
+			assertValid(t, ieOf(MT),
+				"0013000001-9",
+			)
+		})
+
+		t.Run("accepts public IEs of companies", func(t *testing.T) {
+			assertValid(t, ieOf(MT),
+				"0013144158-2",
+			)
+		})
+	})
+
+	t.Run("PA", func(t *testing.T) {
+		t.Run("rejects invalid data", func(t *testing.T) {
+			assertInvalid(t, ieOf(PA),
+				"",
+			)
+		})
+
+		t.Run("rejects invalid formats", func(t *testing.T) {
+			assertInvalidCases(t, ieOf(PA), []docCase{
+				{"prefix 16, not 15 or from 75 to 79", "16999999-5"},
+			})
+		})
+
+		t.Run("rejects invalid check digits", func(t *testing.T) {
+			assertInvalid(t, ieOf(PA),
+				"15999999-4",
+			)
+		})
+
+		t.Run("accepts the examples of the official rules", func(t *testing.T) {
+			assertValid(t, ieOf(PA),
+				"15999999-5",
+				"75000002-3",
+			)
+		})
+
+		t.Run("accepts public IEs of companies", func(t *testing.T) {
+			assertValid(t, ieOf(PA),
+				"15177432-3",
+				"15771637-6",
+				"15216699-8",
+			)
+		})
+	})
+
+	t.Run("PB", func(t *testing.T) {
+		t.Run("rejects invalid data", func(t *testing.T) {
+			assertInvalid(t, ieOf(PB),
+				"",
+			)
+		})
+
+		t.Run("rejects invalid formats", func(t *testing.T) {
+			assertInvalidCases(t, ieOf(PB), []docCase{
+				{"too short", "0600001-5"},
+			})
+		})
+
+		t.Run("rejects invalid check digits", func(t *testing.T) {
+			assertInvalid(t, ieOf(PB),
+				"06000001-6",
+			)
+		})
+
+		t.Run("accepts the examples of the official rules", func(t *testing.T) {
+			assertValid(t, ieOf(PB),
+				"06000001-5",
+			)
+		})
+
+		t.Run("accepts public IEs of companies", func(t *testing.T) {
+			assertValid(t, ieOf(PB),
+				"16999351-5",
+				"16900390-6",
+			)
+		})
+	})
+
+	t.Run("PE", func(t *testing.T) {
+		t.Run("rejects invalid data", func(t *testing.T) {
+			assertInvalid(t, ieOf(PE),
+				"",
+			)
+		})
+
+		t.Run("rejects invalid formats", func(t *testing.T) {
+			assertInvalidCases(t, ieOf(PE), []docCase{
+				{"hyphen in the wrong place", "032141-840"},
+				{"old format, too short", "18.1.001.000004-9"},
+			})
+		})
+
+		t.Run("rejects invalid check digits", func(t *testing.T) {
+			assertInvalid(t, ieOf(PE),
+				"0321418-41",
+				"0321418-30",
+				"18.1.001.0000004-8",
+			)
+		})
+
+		t.Run("accepts the examples of the official rules", func(t *testing.T) {
+			assertValid(t, ieOf(PE),
+				"0321418-40",
+				"032141840",
+				"18.1.001.0000004-9",
+				"18100100000049",
+			)
+		})
+
+		t.Run("accepts public IEs of companies", func(t *testing.T) {
+			assertValid(t, ieOf(PE),
+				"0250099-07",
+				"0163235-30",
+				"0916078-76",
+				"0992431-05",
+				"0267359-20",
+			)
+		})
+	})
+
+	t.Run("PI", func(t *testing.T) {
+		t.Run("rejects invalid data", func(t *testing.T) {
+			assertInvalid(t, ieOf(PI),
+				"",
+			)
+		})
+
+		t.Run("rejects invalid formats", func(t *testing.T) {
+			assertInvalidCases(t, ieOf(PI), []docCase{
+				{"too short", "01234567"},
+			})
+		})
+
+		t.Run("rejects invalid check digits", func(t *testing.T) {
+			assertInvalid(t, ieOf(PI),
+				"012345678",
+			)
+		})
+
+		t.Run("accepts the examples of the official rules", func(t *testing.T) {
+			assertValid(t, ieOf(PI),
+				"012345679",
+			)
+		})
+
+		t.Run("accepts public IEs of companies", func(t *testing.T) {
+			assertValid(t, ieOf(PI),
+				"194155722",
+				"195195337",
+				"194468976",
+			)
+		})
+	})
+
+	t.Run("PR", func(t *testing.T) {
+		t.Run("rejects invalid data", func(t *testing.T) {
+			assertInvalidCases(t, ieOf(PR), []docCase{
+				{"empty", ""},
+				{"letters", "AAAAAAAAAA"},
+			})
+		})
+
+		t.Run("rejects invalid formats", func(t *testing.T) {
+			assertInvalidCases(t, ieOf(PR), []docCase{
+				{"too short", "123456785"},
+				{"too long", "12345678501"},
+				{"dots in the wrong places", "123.456.785-0"},
+				{"dot in the wrong place", "12.345678-50"},
+			})
+		})
+
+		t.Run("rejects invalid check digits", func(t *testing.T) {
+			assertInvalid(t, ieOf(PR),
+				"123.45678-40",
+				"123.45678-51",
+			)
+		})
+
+		t.Run("accepts the examples of the official rules", func(t *testing.T) {
+			assertValid(t, ieOf(PR),
+				"123.45678-50",
+				"12345678-50",
+				"1234567850",
+			)
+		})
+
+		t.Run("accepts public IEs of companies", func(t *testing.T) {
+			assertValid(t, ieOf(PR),
+				"099.02241-88",
+				"101.79579-92",
+			)
+		})
+	})
+
+	t.Run("RJ", func(t *testing.T) {
+		t.Run("rejects invalid data", func(t *testing.T) {
+			assertInvalid(t, ieOf(RJ),
+				"",
+			)
+		})
+
+		t.Run("rejects invalid formats", func(t *testing.T) {
+			assertInvalidCases(t, ieOf(RJ), []docCase{
+				{"hyphen in the wrong place", "91.018.0-39"},
+			})
+		})
+
+		t.Run("rejects invalid check digits", func(t *testing.T) {
+			assertInvalid(t, ieOf(RJ),
+				"91.018.03-8",
+			)
+		})
+
+		t.Run("accepts public IEs of companies", func(t *testing.T) {
+			assertValid(t, ieOf(RJ),
+				"91.018.03-9",
+				"92.001.02-4",
+			)
+		})
+	})
+
+	t.Run("RN", func(t *testing.T) {
+		t.Run("rejects invalid data", func(t *testing.T) {
+			assertInvalid(t, ieOf(RN),
+				"",
+			)
+		})
+
+		t.Run("rejects invalid formats", func(t *testing.T) {
+			assertInvalidCases(t, ieOf(RN), []docCase{
+				{"prefix 21 instead of 20", "21.040.040-1"},
+			})
+		})
+
+		t.Run("rejects invalid check digits", func(t *testing.T) {
+			assertInvalid(t, ieOf(RN),
+				"20.040.040-2",
+			)
+		})
+
+		t.Run("accepts the examples of the official rules", func(t *testing.T) {
+			assertValid(t, ieOf(RN),
+				"20.040.040-1",
+				"20.0.040.040-0",
+			)
+		})
+
+		t.Run("accepts public IEs of companies", func(t *testing.T) {
+			assertValid(t, ieOf(RN),
+				"20.300.936-3",
+				"20.301.158-9",
+			)
+		})
+	})
+
+	t.Run("RO", func(t *testing.T) {
+		t.Run("rejects invalid data", func(t *testing.T) {
+			assertInvalid(t, ieOf(RO),
+				"",
+			)
+		})
+
+		t.Run("rejects invalid formats", func(t *testing.T) {
+			assertInvalidCases(t, ieOf(RO), []docCase{
+				{"format before 2000", "101.62521-3"},
+				{"too short", "000000062521-3"},
+			})
+		})
+
+		t.Run("rejects invalid check digits", func(t *testing.T) {
+			assertInvalid(t, ieOf(RO),
+				"0000000062521-4",
+			)
+		})
+
+		t.Run("accepts the examples of the official rules", func(t *testing.T) {
+			assertValid(t, ieOf(RO),
+				"0000000062521-3",
+				"00000000625213",
+			)
+		})
+
+		t.Run("accepts public IEs of companies", func(t *testing.T) {
+			assertValid(t, ieOf(RO),
+				"0000000025563-7",
+			)
+		})
+	})
+
+	t.Run("RR", func(t *testing.T) {
+		t.Run("rejects invalid data", func(t *testing.T) {
+			assertInvalid(t, ieOf(RR),
+				"",
+			)
+		})
+
+		t.Run("rejects invalid formats", func(t *testing.T) {
+			assertInvalidCases(t, ieOf(RR), []docCase{
+				{"prefix 25 instead of 24", "25006628-1"},
+			})
+		})
+
+		t.Run("rejects invalid check digits", func(t *testing.T) {
+			assertInvalid(t, ieOf(RR),
+				"24006628-2",
+			)
+		})
+
+		t.Run("accepts the examples of the official rules", func(t *testing.T) {
+			assertValid(t, ieOf(RR),
+				"24006628-1",
+				"24001755-6",
+				"24003429-0",
+			)
+		})
+
+		t.Run("accepts public IEs of companies", func(t *testing.T) {
+			assertValid(t, ieOf(RR),
+				"24002153-4",
+			)
+		})
+	})
+
+	t.Run("RS", func(t *testing.T) {
+		t.Run("rejects invalid data", func(t *testing.T) {
+			assertInvalid(t, ieOf(RS),
+				"",
+			)
+		})
+
+		t.Run("rejects invalid formats", func(t *testing.T) {
+			assertInvalidCases(t, ieOf(RS), []docCase{
+				{"too short", "224/365879"},
+			})
+		})
+
+		t.Run("rejects invalid check digits", func(t *testing.T) {
+			assertInvalid(t, ieOf(RS),
+				"224/3658793",
+			)
+		})
+
+		t.Run("accepts the examples of the official rules", func(t *testing.T) {
+			assertValid(t, ieOf(RS),
+				"224/3658792",
+			)
+		})
+
+		t.Run("accepts public IEs of companies", func(t *testing.T) {
+			assertValid(t, ieOf(RS),
+				"900/0000802",
+			)
+		})
+	})
+
+	t.Run("SC", func(t *testing.T) {
+		t.Run("rejects invalid data", func(t *testing.T) {
+			assertInvalid(t, ieOf(SC),
+				"",
+			)
+		})
+
+		t.Run("rejects invalid formats", func(t *testing.T) {
+			assertInvalidCases(t, ieOf(SC), []docCase{
+				{"too short", "251.040.85"},
+			})
+		})
+
+		t.Run("rejects invalid check digits", func(t *testing.T) {
+			assertInvalid(t, ieOf(SC),
+				"251.040.853",
+			)
+		})
+
+		t.Run("accepts the examples of the official rules", func(t *testing.T) {
+			assertValid(t, ieOf(SC),
+				"251.040.852",
+			)
+		})
+
+		t.Run("accepts public IEs of companies", func(t *testing.T) {
+			assertValid(t, ieOf(SC),
+				"252.085.442",
+			)
+		})
+	})
+
+	t.Run("SE", func(t *testing.T) {
+		t.Run("rejects invalid data", func(t *testing.T) {
+			assertInvalid(t, ieOf(SE),
+				"",
+			)
+		})
+
+		t.Run("rejects invalid formats", func(t *testing.T) {
+			assertInvalidCases(t, ieOf(SE), []docCase{
+				{"too short", "2712345-3"},
+			})
+		})
+
+		t.Run("rejects invalid check digits", func(t *testing.T) {
+			assertInvalid(t, ieOf(SE),
+				"27123456-4",
+			)
+		})
+
+		t.Run("accepts the examples of the official rules", func(t *testing.T) {
+			assertValid(t, ieOf(SE),
+				"27123456-3",
+			)
+		})
+
+		t.Run("accepts public IEs of companies", func(t *testing.T) {
+			assertValid(t, ieOf(SE),
+				"27077995-7",
+				"27100154-2",
+			)
+		})
+	})
+
+	t.Run("SP", func(t *testing.T) {
+		t.Run("rejects invalid data", func(t *testing.T) {
+			assertInvalidCases(t, ieOf(SP), []docCase{
+				{"empty", ""},
+				{"letters", "AAAAAAAAAAAA"},
+			})
+		})
+
+		t.Run("rejects invalid formats", func(t *testing.T) {
+			assertInvalidCases(t, ieOf(SP), []docCase{
+				{"too short", "11004249011"},
+				{"too long", "1100424901145"},
+				{"hyphens instead of dots", "110-042-490-114"},
+				{"rural producer, lowercase p", "p-01100424.3/002"},
+				{"rural producer, dot in the wrong place", "P-0110042.43/002"},
+				{"rural producer, too long", "P-01100424.3/0021"},
+			})
+		})
+
+		t.Run("rejects invalid check digits", func(t *testing.T) {
+			assertInvalid(t, ieOf(SP),
+				"110.042.491.114",
+				"110.042.490.115",
+				"P-01100424.4/002",
+			)
+		})
+
+		t.Run("accepts the examples of the official rules", func(t *testing.T) {
+			assertValid(t, ieOf(SP),
+				"110.042.490.114",
+				"110042490114",
+				"P-01100424.3/002",
+				"P011004243002",
+				"P-01100424.3/999",
+			)
+		})
+
+		t.Run("accepts public IEs of companies", func(t *testing.T) {
+			assertValid(t, ieOf(SP),
+				"310.035.324.119",
+				"108.354.656.114",
+				"142.270.790.110",
+				"142.484.958.110",
+				"102.654.009.110",
+				"805.000.292.111",
+			)
+		})
+	})
+
+	t.Run("TO", func(t *testing.T) {
+		t.Run("rejects invalid data", func(t *testing.T) {
+			assertInvalid(t, ieOf(TO),
+				"",
+			)
+		})
+
+		t.Run("rejects invalid formats", func(t *testing.T) {
+			assertInvalidCases(t, ieOf(TO), []docCase{
+				{"too short", "29088778"},
+				{"old format, with 11 digits", "29010227836"},
+			})
+		})
+
+		t.Run("rejects invalid check digits", func(t *testing.T) {
+			assertInvalid(t, ieOf(TO),
+				"290887781",
+			)
+		})
+
+		t.Run("accepts public IEs of companies", func(t *testing.T) {
+			assertValid(t, ieOf(TO),
+				"290887780",
+				"299990176",
+				"290319986",
+			)
+		})
+	})
 }

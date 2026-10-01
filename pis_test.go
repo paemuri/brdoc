@@ -5,35 +5,57 @@ import (
 )
 
 func TestIsPIS(t *testing.T) {
-	for i, tc := range []struct {
-		name  string
-		doc   string
-		valid bool
-	}{
-		{"InvalidData", "3467875434578764345789654", false},
-		{"InvalidData", "", false},
-		{"InvalidData", "AAAAAAAAAAA", false},
-
-		{"InvalidDigit", "103.95199.01-6", false},
-		{"InvalidDigit", "120.16414.14-9", false},
-		{"InvalidDigit", "00000000000", false},
-		{"InvalidDigit", "000.00000.00-0", false},
-
-		{"InvalidFormat", "103.951.990-15", false},
-		{"InvalidFormat", "103 951 990 15", false},
-		{"InvalidFormat", "103951-99015", false},
-		{"InvalidFormat", "103.951.9901-5", false},
-		{"InvalidFormat", "120.6372.482-4", false},
-		{"InvalidFormat", "120.1641.414-8", false},
-
-		{"Valid", "103.95199.01-5", true},
-		{"Valid", "10395199015", true},
-		{"Valid", "120.63724.82-4", true},
-		{"Valid", "120.16414.14-8", true},
-		{"Valid", "12016414148", true},
-	} {
-		t.Run(testName(i, tc.name), func(t *testing.T) {
-			assertEq(t, tc.valid, IsPIS(tc.doc))
+	t.Run("rejects invalid data", func(t *testing.T) {
+		assertInvalidCases(t, IsPIS, []docCase{
+			{"too long", "3467875434578764345789654"},
+			{"empty", ""},
+			{"letters", "AAAAAAAAAAA"},
 		})
-	}
+	})
+
+	t.Run("rejects invalid masks", func(t *testing.T) {
+		assertInvalidCases(t, IsPIS, []docCase{
+			{"CPF mask", "103.951.990-15"},
+			{"spaces", "103 951 990 15"},
+			{"hyphen in the wrong place", "103951-99015"},
+		})
+
+		// Groups other than 3, 5 and 2 digits.
+		assertInvalid(t, IsPIS,
+			"103.951.9901-5",
+			"120.6372.482-4",
+			"120.1641.414-8",
+		)
+	})
+
+	t.Run("rejects invalid check digits", func(t *testing.T) {
+		assertInvalid(t, IsPIS,
+			"103.95199.01-6",
+			"120.16414.14-9",
+		)
+	})
+
+	t.Run("rejects documents with all digits equal", func(t *testing.T) {
+		assertInvalidCases(t, IsPIS, []docCase{
+			{"without mask", "00000000000"},
+			{"with mask", "000.00000.00-0"},
+		})
+	})
+
+	t.Run("accepts valid documents", func(t *testing.T) {
+		t.Run("with mask", func(t *testing.T) {
+			assertValid(t, IsPIS,
+				"103.95199.01-5",
+				"120.63724.82-4",
+				"120.16414.14-8",
+			)
+		})
+
+		t.Run("without mask", func(t *testing.T) {
+			assertValid(t, IsPIS,
+				"10395199015",
+				"12016414148",
+			)
+		})
+	})
 }

@@ -5,60 +5,77 @@ import (
 )
 
 func TestIsVoterID(t *testing.T) {
-	for i, tc := range []struct {
-		name  string
-		doc   string
-		valid bool
-	}{
-		{"InvalidData", "3467875434578764345789654", false},
-		{"InvalidData", "", false},
-		{"InvalidData", "AAAAAAAAAAA", false},
-
-		{"InvalidDigit", "111122223333", false},
-		{"InvalidDigit", "098756718298", false},
-
-		{"InvalidFormat", "915 5017 0193 0306", false},
-		{"InvalidFormat", "174 2241 7133 0004", false},
-		{"InvalidFormat", "259 7557 3388 0001", false},
-		{"InvalidFormat", "808-2536-1743-0486", false},
-		{"InvalidFormat", "9999 0236 0200 834", false},
-		{"InvalidFormat", "3810  2666 2437", false},
-		{"InvalidFormat", "38102 666 2437", false},
-		{"InvalidFormat", " 3810 2666 2437", false},
-		{"InvalidFormat", "3810-2666-2437", false},
-
-		{"Valid", "381026662437", true},
-		{"Valid", "048751641724", true},
-		{"Valid", "285823622500", true},
-		{"Valid", "115180722291", true},
-		{"Valid", "455422250574", true},
-		{"Valid", "122364350701", true},
-		{"Valid", "103464042020", true},
-		{"Valid", "737736771015", true},
-		{"Valid", "222803251481", true},
-		{"Valid", "877174621180", true},
-		{"Valid", "837133461872", true},
-		{"Valid", "686457161910", true},
-		{"Valid", "300020430205", true},
-		{"Valid", "704478161317", true},
-		{"Valid", "875456481201", true},
-		{"Valid", "513443030671", true},
-		{"Valid", "816231560876", true},
-		{"Valid", "211404870302", true},
-		{"Valid", "557212661694", true},
-		{"Valid", "353615220469", true},
-		{"Valid", "350436562380", true},
-		{"Valid", "684185562631", true},
-		{"Valid", "035200670175", true},
-		{"Valid", "468332130981", true},
-		{"Valid", "034315432186", true},
-		{"Valid", "426044362739", true},
-		{"Valid", "3810 2666 2437", true},
-		{"Valid", "0487 5164 1724", true},
-		{"Valid", "28582362 2500", true},
-	} {
-		t.Run(testName(i, tc.name), func(t *testing.T) {
-			assertEq(t, tc.valid, IsVoterID(tc.doc))
+	t.Run("rejects invalid data", func(t *testing.T) {
+		assertInvalidCases(t, IsVoterID, []docCase{
+			{"too long", "3467875434578764345789654"},
+			{"empty", ""},
+			{"letters", "AAAAAAAAAAA"},
 		})
-	}
+	})
+
+	t.Run("rejects invalid formats", func(t *testing.T) {
+		// With 16 digits.
+		assertInvalid(t, IsVoterID,
+			"915 5017 0193 0306",
+			"174 2241 7133 0004",
+			"259 7557 3388 0001",
+		)
+
+		assertInvalidCases(t, IsVoterID, []docCase{
+			{"hyphens", "808-2536-1743-0486"},
+			{"15 digits", "9999 0236 0200 834"},
+			{"two spaces", "3810  2666 2437"},
+			{"spaces in the wrong places", "38102 666 2437"},
+			{"leading space", " 3810 2666 2437"},
+			{"hyphens instead of spaces", "3810-2666-2437"},
+		})
+	})
+
+	t.Run("rejects invalid check digits", func(t *testing.T) {
+		assertInvalid(t, IsVoterID,
+			"111122223333",
+			"098756718298",
+		)
+	})
+
+	t.Run("accepts valid documents", func(t *testing.T) {
+		t.Run("without spaces", func(t *testing.T) {
+			assertValid(t, IsVoterID,
+				"381026662437",
+				"048751641724",
+				"285823622500",
+				"115180722291",
+				"455422250574",
+				"122364350701",
+				"103464042020",
+				"737736771015",
+				"222803251481",
+				"877174621180",
+				"837133461872",
+				"686457161910",
+				"300020430205",
+				"704478161317",
+				"875456481201",
+				"513443030671",
+				"816231560876",
+				"211404870302",
+				"557212661694",
+				"353615220469",
+				"350436562380",
+				"684185562631",
+				"035200670175",
+				"468332130981",
+				"034315432186",
+				"426044362739",
+			)
+		})
+
+		t.Run("with spaces", func(t *testing.T) {
+			assertValidCases(t, IsVoterID, []docCase{
+				{"between all groups", "3810 2666 2437"},
+				{"between all groups, with a leading zero", "0487 5164 1724"},
+				{"between some groups", "28582362 2500"},
+			})
+		})
+	})
 }

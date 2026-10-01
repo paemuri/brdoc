@@ -5,311 +5,357 @@ import (
 	"testing"
 )
 
-func TestIsPhone(t *testing.T) {
-	for i, tc := range []struct {
-		name     string
-		phone    string
-		valid    bool
-		ufs      []UF
-		validUFs bool
-	}{
-		{"InvalidData", "3467875434578764345789654", false, []UF{}, false},
-		{"InvalidData", "", false, []UF{}, false},
-		{"InvalidData", "AAAAAAAA", false, []UF{}, false},
+// isPhone reports if `phone` is valid by both `IsPhone` and `IsPhoneFrom`, to
+// be used with `assertValid` and `assertInvalid`.
+func isPhone(phone string) bool {
+	valid, _ := IsPhone(phone)
+	return valid || IsPhoneFrom(phone)
+}
 
-		{"InvalidDDI", "+0 1199999999", false, []UF{}, false},
-		{"InvalidDDI", "+1 1199999999", false, []UF{}, false},
-		{"InvalidDDI", "+5 1199999999", false, []UF{}, false},
-		{"InvalidDDI", "+9 1199999999", false, []UF{}, false},
-		{"InvalidDDI", "+51 1199999999", false, []UF{}, false},
-		{"InvalidDDI", "+555 1199999999", false, []UF{}, false},
+// assertPhoneUF checks that `phone` is valid and related to `uf`.
+func assertPhoneUF(t *testing.T, phone string, uf UF) {
+	valid, ufs := IsPhone(phone)
+	if !valid {
+		t.Errorf("expected %q to be valid", phone)
+		return
+	}
 
-		{"InvalidDDD", "0039999999", false, []UF{}, false},
-		{"InvalidDDD", "0139999999", false, []UF{}, false},
-		{"InvalidDDD", "0239999999", false, []UF{}, false},
-		{"InvalidDDD", "0339999999", false, []UF{}, false},
-		{"InvalidDDD", "0439999999", false, []UF{}, false},
-		{"InvalidDDD", "0539999999", false, []UF{}, false},
-		{"InvalidDDD", "0639999999", false, []UF{}, false},
-		{"InvalidDDD", "0739999999", false, []UF{}, false},
-		{"InvalidDDD", "0839999999", false, []UF{}, false},
-		{"InvalidDDD", "0939999999", false, []UF{}, false},
-		{"InvalidDDD", "1039999999", false, []UF{}, false},
-		{"InvalidDDD", "2039999999", false, []UF{}, false},
-		{"InvalidDDD", "2339999999", false, []UF{}, false},
-		{"InvalidDDD", "2539999999", false, []UF{}, false},
-		{"InvalidDDD", "2639999999", false, []UF{}, false},
-		{"InvalidDDD", "2939999999", false, []UF{}, false},
-		{"InvalidDDD", "3039999999", false, []UF{}, false},
-		{"InvalidDDD", "3639999999", false, []UF{}, false},
-		{"InvalidDDD", "3939999999", false, []UF{}, false},
-		{"InvalidDDD", "4039999999", false, []UF{}, false},
-		{"InvalidDDD", "5039999999", false, []UF{}, false},
-		{"InvalidDDD", "5239999999", false, []UF{}, false},
-		{"InvalidDDD", "5639999999", false, []UF{}, false},
-		{"InvalidDDD", "5739999999", false, []UF{}, false},
-		{"InvalidDDD", "5839999999", false, []UF{}, false},
-		{"InvalidDDD", "5939999999", false, []UF{}, false},
-		{"InvalidDDD", "6039999999", false, []UF{}, false},
-		{"InvalidDDD", "7039999999", false, []UF{}, false},
-		{"InvalidDDD", "7239999999", false, []UF{}, false},
-		{"InvalidDDD", "7639999999", false, []UF{}, false},
-		{"InvalidDDD", "7839999999", false, []UF{}, false},
-		{"InvalidDDD", "8039999999", false, []UF{}, false},
-		{"InvalidDDD", "9039999999", false, []UF{}, false},
-
-		{"InvalidNumber", "+55 11 999999", false, []UF{}, false},
-		{"InvalidNumber", "+55 11 9999999", false, []UF{}, false},
-		{"InvalidNumber", "+55 11 19999999", false, []UF{}, false},
-		{"InvalidNumber", "+55 11 199999999", false, []UF{}, false},
-		{"InvalidNumber", "+55 11 299999999", false, []UF{}, false},
-		{"InvalidNumber", "+55 11 399999999", false, []UF{}, false},
-		{"InvalidNumber", "+55 11 499999999", false, []UF{}, false},
-		{"InvalidNumber", "+55 11 599999999", false, []UF{}, false},
-		{"InvalidNumber", "+55 11 699999999", false, []UF{}, false},
-		{"InvalidNumber", "+55 11 9999999999", false, []UF{}, false},
-		{"InvalidNumber", "+55 11 99999999999", false, []UF{}, false},
-		{"InvalidNumber", "1179999999", false, []UF{}, false},
-		{"InvalidNumber", "1189999999", false, []UF{}, false},
-		{"InvalidNumber", "1199999999", false, []UF{}, false},
-		{"InvalidNumber", "(11) 9999-9999", false, []UF{}, false},
-
-		{"InvalidFormat", "+55 11 999 999 999", false, []UF{}, false},
-		{"InvalidFormat", "+ 55 11 999999999", false, []UF{}, false},
-		{"InvalidFormat", "+55 11 9999-99999", false, []UF{}, false},
-		{"InvalidFormat", "+55 11 9999.99999", false, []UF{}, false},
-		{"InvalidFormat", "+55 11 9999 99999", false, []UF{}, false},
-		{"InvalidFormat", "+55 11 99999/9999", false, []UF{}, false},
-		{"InvalidFormat", "+55 11 99999\\9999", false, []UF{}, false},
-		{"InvalidFormat", "+55 (11 999999999", false, []UF{}, false},
-		{"InvalidFormat", "+55 11) 999999999", false, []UF{}, false},
-
-		{"InvalidUF", "1139999999", true, []UF{RJ}, false},
-		{"InvalidUF", "1239999999", true, []UF{RJ}, false},
-		{"InvalidUF", "1339999999", true, []UF{RJ}, false},
-		{"InvalidUF", "1439999999", true, []UF{RJ}, false},
-		{"InvalidUF", "1539999999", true, []UF{RJ}, false},
-		{"InvalidUF", "1639999999", true, []UF{RJ}, false},
-		{"InvalidUF", "1739999999", true, []UF{RJ}, false},
-		{"InvalidUF", "1839999999", true, []UF{RJ}, false},
-		{"InvalidUF", "1939999999", true, []UF{RJ}, false},
-		{"InvalidUF", "2139999999", true, []UF{ES}, false},
-		{"InvalidUF", "2239999999", true, []UF{ES}, false},
-		{"InvalidUF", "2439999999", true, []UF{ES}, false},
-		{"InvalidUF", "2739999999", true, []UF{MG}, false},
-		{"InvalidUF", "2839999999", true, []UF{MG}, false},
-		{"InvalidUF", "3139999999", true, []UF{PR}, false},
-		{"InvalidUF", "3239999999", true, []UF{PR}, false},
-		{"InvalidUF", "3339999999", true, []UF{PR}, false},
-		{"InvalidUF", "3439999999", true, []UF{PR}, false},
-		{"InvalidUF", "3539999999", true, []UF{PR}, false},
-		{"InvalidUF", "3739999999", true, []UF{PR}, false},
-		{"InvalidUF", "3839999999", true, []UF{PR}, false},
-		{"InvalidUF", "4139999999", true, []UF{SC}, false},
-		{"InvalidUF", "4239999999", true, []UF{RS}, false},
-		{"InvalidUF", "4339999999", true, []UF{SC}, false},
-		{"InvalidUF", "4439999999", true, []UF{SC}, false},
-		{"InvalidUF", "4539999999", true, []UF{SC}, false},
-		{"InvalidUF", "4639999999", true, []UF{SC}, false},
-		{"InvalidUF", "4739999999", true, []UF{RS}, false},
-		{"InvalidUF", "4839999999", true, []UF{RS}, false},
-		{"InvalidUF", "4939999999", true, []UF{RS}, false},
-		{"InvalidUF", "5139999999", true, []UF{DF}, false},
-		{"InvalidUF", "5439999999", true, []UF{DF}, false},
-		{"InvalidUF", "5539999999", true, []UF{DF}, false},
-		{"InvalidUF", "6139999999", true, []UF{MT}, false},
-		{"InvalidUF", "6239999999", true, []UF{TO}, false},
-		{"InvalidUF", "6339999999", true, []UF{MT}, false},
-		{"InvalidUF", "6439999999", true, []UF{TO}, false},
-		{"InvalidUF", "6539999999", true, []UF{MS}, false},
-		{"InvalidUF", "6639999999", true, []UF{MS}, false},
-		{"InvalidUF", "6739999999", true, []UF{AC}, false},
-		{"InvalidUF", "6839999999", true, []UF{RO}, false},
-		{"InvalidUF", "6939999999", true, []UF{BA}, false},
-		{"InvalidUF", "7139999999", true, []UF{SE}, false},
-		{"InvalidUF", "7339999999", true, []UF{SE}, false},
-		{"InvalidUF", "7439999999", true, []UF{SE}, false},
-		{"InvalidUF", "7539999999", true, []UF{SE}, false},
-		{"InvalidUF", "7739999999", true, []UF{SE}, false},
-		{"InvalidUF", "7939999999", true, []UF{PE}, false},
-		{"InvalidUF", "8139999999", true, []UF{AL}, false},
-		{"InvalidUF", "8239999999", true, []UF{PB}, false},
-		{"InvalidUF", "8339999999", true, []UF{RN}, false},
-		{"InvalidUF", "8439999999", true, []UF{CE}, false},
-		{"InvalidUF", "8539999999", true, []UF{PI}, false},
-		{"InvalidUF", "8639999999", true, []UF{PA}, false},
-		{"InvalidUF", "8739999999", true, []UF{AL}, false},
-		{"InvalidUF", "8839999999", true, []UF{PI}, false},
-		{"InvalidUF", "8939999999", true, []UF{PA}, false},
-		{"InvalidUF", "9139999999", true, []UF{AM}, false},
-		{"InvalidUF", "9239999999", true, []UF{PA}, false},
-		{"InvalidUF", "9339999999", true, []UF{RR}, false},
-		{"InvalidUF", "9439999999", true, []UF{RR}, false},
-		{"InvalidUF", "9539999999", true, []UF{AP}, false},
-		{"InvalidUF", "9639999999", true, []UF{AM}, false},
-		{"InvalidUF", "9739999999", true, []UF{MA}, false},
-		{"InvalidUF", "9839999999", true, []UF{SP}, false},
-		{"InvalidUF", "9939999999", true, []UF{SP}, false},
-
-		// All possible formats.
-		{"Valid", "+55 (11) 99999-9999", true, []UF{SP}, true},
-		{"Valid", "+55(11)99999-9999", true, []UF{SP}, true},
-		{"Valid", "+55(11)3999-9999", true, []UF{SP}, true},
-		{"Valid", "55 (11) 99999-9999", true, []UF{SP}, true},
-		{"Valid", "0055 11 999999999", true, []UF{SP}, true},
-		{"Valid", "005511999999999", true, []UF{SP}, true},
-		{"Valid", "00551139999999", true, []UF{SP}, true},
-		{"Valid", "(11) 99999-9999", true, []UF{SP}, true},
-		{"Valid", "(11) 99999.9999", true, []UF{SP}, true},
-		{"Valid", "(11) 99999 9999", true, []UF{SP}, true},
-		{"Valid", "(11) 9-9999-9999", true, []UF{SP}, true},
-		{"Valid", "(11) 9-9999.9999", true, []UF{SP}, true},
-		{"Valid", "(11) 9-9999 9999", true, []UF{SP}, true},
-		{"Valid", "(11) 9.9999-9999", true, []UF{SP}, true},
-		{"Valid", "(11) 9.9999.9999", true, []UF{SP}, true},
-		{"Valid", "(11) 9.9999 9999", true, []UF{SP}, true},
-		{"Valid", "(11) 9 9999-9999", true, []UF{SP}, true},
-		{"Valid", "(11) 9 9999.9999", true, []UF{SP}, true},
-		{"Valid", "(11) 9 9999 9999", true, []UF{SP}, true},
-		{"Valid", "(11) 3999-9999", true, []UF{SP}, true},
-		{"Valid", "(11) 3999.9999", true, []UF{SP}, true},
-		{"Valid", "(11) 3999 9999", true, []UF{SP}, true},
-		{"Valid", "11999999999", true, []UF{SP}, true},
-		{"Valid", "11899999999", true, []UF{SP}, true},
-		{"Valid", "11799999999", true, []UF{SP}, true},
-		{"Valid", "+55 11 8-9999-9999", true, []UF{SP}, true},
-		{"Valid", "1139999999", true, []UF{SP}, true},
-		{"Valid", "1129999999", true, []UF{SP}, true},
-		{"Valid", "1139999999", true, []UF{SP}, true},
-		{"Valid", "1149999999", true, []UF{SP}, true},
-		{"Valid", "1159999999", true, []UF{SP}, true},
-		{"Valid", "1169999999", true, []UF{SP}, true},
-		// All possible DDD digits.
-		{"Valid", "1139999999", true, []UF{SP}, true},
-		{"Valid", "1239999999", true, []UF{SP}, true},
-		{"Valid", "1339999999", true, []UF{SP}, true},
-		{"Valid", "1439999999", true, []UF{SP}, true},
-		{"Valid", "1539999999", true, []UF{SP}, true},
-		{"Valid", "1639999999", true, []UF{SP}, true},
-		{"Valid", "1739999999", true, []UF{SP}, true},
-		{"Valid", "1839999999", true, []UF{SP}, true},
-		{"Valid", "1939999999", true, []UF{SP}, true},
-		{"Valid", "2139999999", true, []UF{RJ}, true},
-		{"Valid", "2239999999", true, []UF{RJ}, true},
-		{"Valid", "2439999999", true, []UF{RJ}, true},
-		{"Valid", "2739999999", true, []UF{ES}, true},
-		{"Valid", "2839999999", true, []UF{ES}, true},
-		{"Valid", "3139999999", true, []UF{MG}, true},
-		{"Valid", "3239999999", true, []UF{MG}, true},
-		{"Valid", "3339999999", true, []UF{MG}, true},
-		{"Valid", "3439999999", true, []UF{MG}, true},
-		{"Valid", "3539999999", true, []UF{MG}, true},
-		{"Valid", "3739999999", true, []UF{MG}, true},
-		{"Valid", "3839999999", true, []UF{MG}, true},
-		{"Valid", "4139999999", true, []UF{PR}, true},
-		{"Valid", "4239999999", true, []UF{PR}, true},
-		{"Valid", "4339999999", true, []UF{PR}, true},
-		{"Valid", "4439999999", true, []UF{PR}, true},
-		{"Valid", "4539999999", true, []UF{PR}, true},
-		{"Valid", "4639999999", true, []UF{PR}, true},
-		{"Valid", "4739999999", true, []UF{SC}, true},
-		{"Valid", "4839999999", true, []UF{SC}, true},
-		{"Valid", "4939999999", true, []UF{SC}, true},
-		{"Valid", "5139999999", true, []UF{RS}, true},
-		{"Valid", "5439999999", true, []UF{RS}, true},
-		{"Valid", "5539999999", true, []UF{RS}, true},
-		{"Valid", "6139999999", true, []UF{DF}, true},
-		{"Valid", "6239999999", true, []UF{GO}, true},
-		{"Valid", "6339999999", true, []UF{TO}, true},
-		{"Valid", "6439999999", true, []UF{GO}, true},
-		{"Valid", "6539999999", true, []UF{MT}, true},
-		{"Valid", "6639999999", true, []UF{MT}, true},
-		{"Valid", "6739999999", true, []UF{MS}, true},
-		{"Valid", "6839999999", true, []UF{AC}, true},
-		{"Valid", "6939999999", true, []UF{RO}, true},
-		{"Valid", "7139999999", true, []UF{BA}, true},
-		{"Valid", "7339999999", true, []UF{BA}, true},
-		{"Valid", "7439999999", true, []UF{BA}, true},
-		{"Valid", "7539999999", true, []UF{BA}, true},
-		{"Valid", "7739999999", true, []UF{BA}, true},
-		{"Valid", "7939999999", true, []UF{SE}, true},
-		{"Valid", "8139999999", true, []UF{PE}, true},
-		{"Valid", "8239999999", true, []UF{AL}, true},
-		{"Valid", "8339999999", true, []UF{PB}, true},
-		{"Valid", "8439999999", true, []UF{RN}, true},
-		{"Valid", "8539999999", true, []UF{CE}, true},
-		{"Valid", "8639999999", true, []UF{PI}, true},
-		{"Valid", "8739999999", true, []UF{PE}, true},
-		{"Valid", "8839999999", true, []UF{CE}, true},
-		{"Valid", "8939999999", true, []UF{PI}, true},
-		{"Valid", "9139999999", true, []UF{PA}, true},
-		{"Valid", "9239999999", true, []UF{AM}, true},
-		{"Valid", "9339999999", true, []UF{PA}, true},
-		{"Valid", "9439999999", true, []UF{PA}, true},
-		{"Valid", "9539999999", true, []UF{RR}, true},
-		{"Valid", "9639999999", true, []UF{AP}, true},
-		{"Valid", "9739999999", true, []UF{AM}, true},
-		{"Valid", "9839999999", true, []UF{MA}, true},
-		{"Valid", "9939999999", true, []UF{MA}, true},
-		// Validating multiple or no UFs.
-		{"Valid", "1139999999", true, []UF{BA, SP, MG}, true},
-		{"Valid", "1239999999", true, []UF{SP, SP, SP}, true},
-		{"Valid", "1339999999", true, []UF{}, true},
-	} {
-		t.Run(testName(i, tc.name), func(t *testing.T) {
-			validFrom := IsPhoneFrom(tc.phone, tc.ufs...)
-			assertEq(t, tc.valid && tc.validUFs, validFrom)
-
-			valid, ufs := IsPhone(tc.phone)
-			assertEq(t, tc.valid, valid)
-
-			if tc.validUFs && len(tc.ufs) == 1 {
-				found := false
-				for _, uf := range ufs {
-					found = found || uf == tc.ufs[0]
-				}
-				assertEq(t, true, found)
-			}
-		})
+	found := false
+	for _, u := range ufs {
+		found = found || u == uf
+	}
+	if !found || !IsPhoneFrom(phone, uf) {
+		t.Errorf("expected %q to be from %s, got %v", phone, uf, ufs)
 	}
 }
 
+// assertPhoneNotUF checks that `phone` is valid, but not related to `uf`.
+func assertPhoneNotUF(t *testing.T, phone string, uf UF) {
+	if valid, _ := IsPhone(phone); !valid {
+		t.Errorf("expected %q to be valid", phone)
+	}
+	if IsPhoneFrom(phone, uf) {
+		t.Errorf("expected %q not to be from %s", phone, uf)
+	}
+}
+
+func TestIsPhone(t *testing.T) {
+	t.Run("rejects invalid data", func(t *testing.T) {
+		assertInvalid(t, isPhone,
+			"3467875434578764345789654",
+			"",
+			"AAAAAAAA",
+		)
+	})
+
+	t.Run("rejects invalid country codes", func(t *testing.T) {
+		assertInvalid(t, isPhone,
+			"+0 1199999999",
+			"+1 1199999999",
+			"+5 1199999999",
+			"+9 1199999999",
+			"+51 1199999999",
+			"+555 1199999999",
+		)
+	})
+
+	t.Run("rejects invalid area codes", func(t *testing.T) {
+		assertInvalid(t, isPhone,
+			"0039999999",
+			"0139999999",
+			"0239999999",
+			"0339999999",
+			"0439999999",
+			"0539999999",
+			"0639999999",
+			"0739999999",
+			"0839999999",
+			"0939999999",
+			"1039999999",
+			"2039999999",
+			"2339999999",
+			"2539999999",
+			"2639999999",
+			"2939999999",
+			"3039999999",
+			"3639999999",
+			"3939999999",
+			"4039999999",
+			"5039999999",
+			"5239999999",
+			"5639999999",
+			"5739999999",
+			"5839999999",
+			"5939999999",
+			"6039999999",
+			"7039999999",
+			"7239999999",
+			"7639999999",
+			"7839999999",
+			"8039999999",
+			"9039999999",
+		)
+	})
+
+	t.Run("rejects invalid numbers", func(t *testing.T) {
+		assertInvalid(t, isPhone,
+			"+55 11 999999",
+			"+55 11 9999999",
+			"+55 11 19999999",
+			"+55 11 199999999",
+			"+55 11 299999999",
+			"+55 11 399999999",
+			"+55 11 499999999",
+			"+55 11 599999999",
+			"+55 11 699999999",
+			"+55 11 9999999999",
+			"+55 11 99999999999",
+			"1179999999",
+			"1189999999",
+			"1199999999",
+			"(11) 9999-9999",
+		)
+	})
+
+	t.Run("rejects invalid formats", func(t *testing.T) {
+		assertInvalid(t, isPhone,
+			"+55 11 999 999 999",
+			"+ 55 11 999999999",
+			"+55 11 9999-99999",
+			"+55 11 9999.99999",
+			"+55 11 9999 99999",
+			"+55 11 99999/9999",
+			"+55 11 99999\\9999",
+			"+55 (11 999999999",
+			"+55 11) 999999999",
+		)
+	})
+
+	t.Run("accepts all formats", func(t *testing.T) {
+		assertPhoneUF(t, "+55 (11) 99999-9999", SP)
+		assertPhoneUF(t, "+55(11)99999-9999", SP)
+		assertPhoneUF(t, "+55(11)3999-9999", SP)
+		assertPhoneUF(t, "55 (11) 99999-9999", SP)
+		assertPhoneUF(t, "0055 11 999999999", SP)
+		assertPhoneUF(t, "005511999999999", SP)
+		assertPhoneUF(t, "00551139999999", SP)
+		assertPhoneUF(t, "(11) 99999-9999", SP)
+		assertPhoneUF(t, "(11) 99999.9999", SP)
+		assertPhoneUF(t, "(11) 99999 9999", SP)
+		assertPhoneUF(t, "(11) 9-9999-9999", SP)
+		assertPhoneUF(t, "(11) 9-9999.9999", SP)
+		assertPhoneUF(t, "(11) 9-9999 9999", SP)
+		assertPhoneUF(t, "(11) 9.9999-9999", SP)
+		assertPhoneUF(t, "(11) 9.9999.9999", SP)
+		assertPhoneUF(t, "(11) 9.9999 9999", SP)
+		assertPhoneUF(t, "(11) 9 9999-9999", SP)
+		assertPhoneUF(t, "(11) 9 9999.9999", SP)
+		assertPhoneUF(t, "(11) 9 9999 9999", SP)
+		assertPhoneUF(t, "(11) 3999-9999", SP)
+		assertPhoneUF(t, "(11) 3999.9999", SP)
+		assertPhoneUF(t, "(11) 3999 9999", SP)
+		assertPhoneUF(t, "11999999999", SP)
+		assertPhoneUF(t, "11899999999", SP)
+		assertPhoneUF(t, "11799999999", SP)
+		assertPhoneUF(t, "+55 11 8-9999-9999", SP)
+		assertPhoneUF(t, "1139999999", SP)
+		assertPhoneUF(t, "1129999999", SP)
+		assertPhoneUF(t, "1139999999", SP)
+		assertPhoneUF(t, "1149999999", SP)
+		assertPhoneUF(t, "1159999999", SP)
+		assertPhoneUF(t, "1169999999", SP)
+	})
+
+	t.Run("returns the UFs of each area code", func(t *testing.T) {
+		assertPhoneUF(t, "1139999999", SP)
+		assertPhoneUF(t, "1239999999", SP)
+		assertPhoneUF(t, "1339999999", SP)
+		assertPhoneUF(t, "1439999999", SP)
+		assertPhoneUF(t, "1539999999", SP)
+		assertPhoneUF(t, "1639999999", SP)
+		assertPhoneUF(t, "1739999999", SP)
+		assertPhoneUF(t, "1839999999", SP)
+		assertPhoneUF(t, "1939999999", SP)
+		assertPhoneUF(t, "2139999999", RJ)
+		assertPhoneUF(t, "2239999999", RJ)
+		assertPhoneUF(t, "2439999999", RJ)
+		assertPhoneUF(t, "2739999999", ES)
+		assertPhoneUF(t, "2839999999", ES)
+		assertPhoneUF(t, "3139999999", MG)
+		assertPhoneUF(t, "3239999999", MG)
+		assertPhoneUF(t, "3339999999", MG)
+		assertPhoneUF(t, "3439999999", MG)
+		assertPhoneUF(t, "3539999999", MG)
+		assertPhoneUF(t, "3739999999", MG)
+		assertPhoneUF(t, "3839999999", MG)
+		assertPhoneUF(t, "4139999999", PR)
+		assertPhoneUF(t, "4239999999", PR)
+		assertPhoneUF(t, "4339999999", PR)
+		assertPhoneUF(t, "4439999999", PR)
+		assertPhoneUF(t, "4539999999", PR)
+		assertPhoneUF(t, "4639999999", PR)
+		assertPhoneUF(t, "4739999999", SC)
+		assertPhoneUF(t, "4839999999", SC)
+		assertPhoneUF(t, "4939999999", SC)
+		assertPhoneUF(t, "5139999999", RS)
+		assertPhoneUF(t, "5439999999", RS)
+		assertPhoneUF(t, "5539999999", RS)
+		assertPhoneUF(t, "6139999999", DF)
+		assertPhoneUF(t, "6239999999", GO)
+		assertPhoneUF(t, "6339999999", TO)
+		assertPhoneUF(t, "6439999999", GO)
+		assertPhoneUF(t, "6539999999", MT)
+		assertPhoneUF(t, "6639999999", MT)
+		assertPhoneUF(t, "6739999999", MS)
+		assertPhoneUF(t, "6839999999", AC)
+		assertPhoneUF(t, "6939999999", RO)
+		assertPhoneUF(t, "7139999999", BA)
+		assertPhoneUF(t, "7339999999", BA)
+		assertPhoneUF(t, "7439999999", BA)
+		assertPhoneUF(t, "7539999999", BA)
+		assertPhoneUF(t, "7739999999", BA)
+		assertPhoneUF(t, "7939999999", SE)
+		assertPhoneUF(t, "8139999999", PE)
+		assertPhoneUF(t, "8239999999", AL)
+		assertPhoneUF(t, "8339999999", PB)
+		assertPhoneUF(t, "8439999999", RN)
+		assertPhoneUF(t, "8539999999", CE)
+		assertPhoneUF(t, "8639999999", PI)
+		assertPhoneUF(t, "8739999999", PE)
+		assertPhoneUF(t, "8839999999", CE)
+		assertPhoneUF(t, "8939999999", PI)
+		assertPhoneUF(t, "9139999999", PA)
+		assertPhoneUF(t, "9239999999", AM)
+		assertPhoneUF(t, "9339999999", PA)
+		assertPhoneUF(t, "9439999999", PA)
+		assertPhoneUF(t, "9539999999", RR)
+		assertPhoneUF(t, "9639999999", AP)
+		assertPhoneUF(t, "9739999999", AM)
+		assertPhoneUF(t, "9839999999", MA)
+		assertPhoneUF(t, "9939999999", MA)
+	})
+
+	t.Run("rejects UFs that are not of the area code", func(t *testing.T) {
+		assertPhoneNotUF(t, "1139999999", RJ)
+		assertPhoneNotUF(t, "1239999999", RJ)
+		assertPhoneNotUF(t, "1339999999", RJ)
+		assertPhoneNotUF(t, "1439999999", RJ)
+		assertPhoneNotUF(t, "1539999999", RJ)
+		assertPhoneNotUF(t, "1639999999", RJ)
+		assertPhoneNotUF(t, "1739999999", RJ)
+		assertPhoneNotUF(t, "1839999999", RJ)
+		assertPhoneNotUF(t, "1939999999", RJ)
+		assertPhoneNotUF(t, "2139999999", ES)
+		assertPhoneNotUF(t, "2239999999", ES)
+		assertPhoneNotUF(t, "2439999999", ES)
+		assertPhoneNotUF(t, "2739999999", MG)
+		assertPhoneNotUF(t, "2839999999", MG)
+		assertPhoneNotUF(t, "3139999999", PR)
+		assertPhoneNotUF(t, "3239999999", PR)
+		assertPhoneNotUF(t, "3339999999", PR)
+		assertPhoneNotUF(t, "3439999999", PR)
+		assertPhoneNotUF(t, "3539999999", PR)
+		assertPhoneNotUF(t, "3739999999", PR)
+		assertPhoneNotUF(t, "3839999999", PR)
+		assertPhoneNotUF(t, "4139999999", SC)
+		assertPhoneNotUF(t, "4239999999", RS)
+		assertPhoneNotUF(t, "4339999999", SC)
+		assertPhoneNotUF(t, "4439999999", SC)
+		assertPhoneNotUF(t, "4539999999", SC)
+		assertPhoneNotUF(t, "4639999999", SC)
+		assertPhoneNotUF(t, "4739999999", RS)
+		assertPhoneNotUF(t, "4839999999", RS)
+		assertPhoneNotUF(t, "4939999999", RS)
+		assertPhoneNotUF(t, "5139999999", DF)
+		assertPhoneNotUF(t, "5439999999", DF)
+		assertPhoneNotUF(t, "5539999999", DF)
+		assertPhoneNotUF(t, "6139999999", MT)
+		assertPhoneNotUF(t, "6239999999", TO)
+		assertPhoneNotUF(t, "6339999999", MT)
+		assertPhoneNotUF(t, "6439999999", TO)
+		assertPhoneNotUF(t, "6539999999", MS)
+		assertPhoneNotUF(t, "6639999999", MS)
+		assertPhoneNotUF(t, "6739999999", AC)
+		assertPhoneNotUF(t, "6839999999", RO)
+		assertPhoneNotUF(t, "6939999999", BA)
+		assertPhoneNotUF(t, "7139999999", SE)
+		assertPhoneNotUF(t, "7339999999", SE)
+		assertPhoneNotUF(t, "7439999999", SE)
+		assertPhoneNotUF(t, "7539999999", SE)
+		assertPhoneNotUF(t, "7739999999", SE)
+		assertPhoneNotUF(t, "7939999999", PE)
+		assertPhoneNotUF(t, "8139999999", AL)
+		assertPhoneNotUF(t, "8239999999", PB)
+		assertPhoneNotUF(t, "8339999999", RN)
+		assertPhoneNotUF(t, "8439999999", CE)
+		assertPhoneNotUF(t, "8539999999", PI)
+		assertPhoneNotUF(t, "8639999999", PA)
+		assertPhoneNotUF(t, "8739999999", AL)
+		assertPhoneNotUF(t, "8839999999", PI)
+		assertPhoneNotUF(t, "8939999999", PA)
+		assertPhoneNotUF(t, "9139999999", AM)
+		assertPhoneNotUF(t, "9239999999", PA)
+		assertPhoneNotUF(t, "9339999999", RR)
+		assertPhoneNotUF(t, "9439999999", RR)
+		assertPhoneNotUF(t, "9539999999", AP)
+		assertPhoneNotUF(t, "9639999999", AM)
+		assertPhoneNotUF(t, "9739999999", MA)
+		assertPhoneNotUF(t, "9839999999", SP)
+		assertPhoneNotUF(t, "9939999999", SP)
+	})
+
+	t.Run("accepts a list of UFs", func(t *testing.T) {
+		if !IsPhoneFrom("1139999999", BA, SP, MG) {
+			t.Errorf("expected %q to be from %v", "1139999999", []UF{BA, SP, MG})
+		}
+		if !IsPhoneFrom("1239999999", SP, SP, SP) {
+			t.Errorf("expected %q to be from %v", "1239999999", []UF{SP, SP, SP})
+		}
+		if !IsPhoneFrom("1339999999") {
+			t.Errorf("expected %q to be from %v", "1339999999", []UF{})
+		}
+	})
+}
+
 func TestIsPhoneSharedDDD(t *testing.T) {
-	for i, tc := range []struct {
-		name  string
-		phone string
-		ufs   []UF
-		valid bool
-	}{
-		{"MainUF", "4239999999", []UF{PR}, true},
-		{"SharedUF", "4239999999", []UF{SC}, true},
-		{"SharedUF", "4739999999", []UF{PR}, true},
-		{"SharedUF", "4939999999", []UF{PR}, true},
-		{"SharedUF", "6139999999", []UF{GO}, true},
-		{"NotSharedUF", "4839999999", []UF{PR}, false},
-		{"NotSharedUF", "6239999999", []UF{DF}, false},
-	} {
-		t.Run(testName(i, tc.name), func(t *testing.T) {
-			assertEq(t, tc.valid, IsPhoneFrom(tc.phone, tc.ufs...))
-		})
-	}
+	t.Run("accepts all the UFs of the area code", func(t *testing.T) {
+		assertPhoneUF(t, "4239999999", PR)
+		assertPhoneUF(t, "4239999999", SC)
+		assertPhoneUF(t, "4739999999", PR)
+		assertPhoneUF(t, "4939999999", PR)
+		assertPhoneUF(t, "6139999999", GO)
+	})
 
-	for _, tc := range []struct {
-		phone string
-		ufs   []UF
-	}{
-		{"4239999999", []UF{PR, SC}},
-		{"4739999999", []UF{SC, PR}},
-		{"4939999999", []UF{SC, PR}},
-		{"6139999999", []UF{DF, GO}},
-		{"4839999999", []UF{SC}},
-	} {
-		_, ufs := IsPhone(tc.phone)
-		assertEq(t, fmt.Sprint(tc.ufs), fmt.Sprint(ufs))
-	}
+	t.Run("rejects UFs that do not share the area code", func(t *testing.T) {
+		assertPhoneNotUF(t, "4839999999", PR)
+		assertPhoneNotUF(t, "6239999999", DF)
+	})
 
-	_, ufs := IsPhone("4239999999")
-	ufs[0] = RS
-	_, ufs = IsPhone("4239999999")
-	assertEq(t, PR, ufs[0])
+	t.Run("returns all the UFs of the area code, in order", func(t *testing.T) {
+		for _, tc := range []struct {
+			phone string
+			ufs   []UF
+		}{
+			{"4239999999", []UF{PR, SC}},
+			{"4739999999", []UF{SC, PR}},
+			{"4939999999", []UF{SC, PR}},
+			{"6139999999", []UF{DF, GO}},
+			{"4839999999", []UF{SC}},
+		} {
+			_, ufs := IsPhone(tc.phone)
+			if fmt.Sprint(ufs) != fmt.Sprint(tc.ufs) {
+				t.Errorf("expected %q to be from %v, got %v", tc.phone, tc.ufs, ufs)
+			}
+		}
+	})
+
+	t.Run("does not change the internal table", func(t *testing.T) {
+		_, ufs := IsPhone("4239999999")
+		ufs[0] = RS
+
+		_, ufs = IsPhone("4239999999")
+		if ufs[0] != PR {
+			t.Errorf("expected the first UF to be %s, got %s", PR, ufs[0])
+		}
+	})
 }
