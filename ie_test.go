@@ -111,6 +111,12 @@ func TestIsIE(t *testing.T) {
 				"241000009",
 			)
 		})
+
+		t.Run("accepts public IEs, from the Portal da Transparência", func(t *testing.T) {
+			assertValidCases(t, ieOf(AL), []docCase{
+				{"third digit not listed by older rules", "241045207"},
+			})
+		})
 	})
 
 	t.Run("AM", func(t *testing.T) {
@@ -183,6 +189,12 @@ func TestIsIE(t *testing.T) {
 				"030190290",
 			)
 		})
+
+		t.Run("accepts public IEs, from the Portal da Transparência", func(t *testing.T) {
+			assertValidCases(t, ieOf(AP), []docCase{
+				{"second range", "030180912"},
+			})
+		})
 	})
 
 	t.Run("BA", func(t *testing.T) {
@@ -228,6 +240,12 @@ func TestIsIE(t *testing.T) {
 				"1600003-00",
 				"1700005-80",
 			)
+		})
+
+		t.Run("accepts public IEs, from the Portal da Transparência", func(t *testing.T) {
+			assertValidCases(t, ieOf(BA), []docCase{
+				{"9 digits and modulo 11", "199776220"},
+			})
 		})
 	})
 
@@ -429,6 +447,12 @@ func TestIsIE(t *testing.T) {
 				"062.667.789/0073",
 				"062.213.378/0083",
 			)
+		})
+
+		t.Run("accepts public IEs, from the Portal da Transparência", func(t *testing.T) {
+			assertValidCases(t, ieOf(MG), []docCase{
+				{"first sum already a multiple of 10", "0050819040002"},
+			})
 		})
 	})
 
