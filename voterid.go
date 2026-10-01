@@ -1,9 +1,7 @@
 package brdoc
 
 import (
-	"fmt"
 	"regexp"
-	"strconv"
 )
 
 var (
@@ -23,9 +21,8 @@ func IsVoterID(doc string) bool {
 	cleanNonDigits(&doc)
 
 	docRune := []rune(doc)
-	docUF := fmt.Sprintf("%d%d", toInt(docRune[8]), toInt(docRune[9]))
-	docUFInt, _ := strconv.Atoi(docUF)
-	if docUFInt < 1 || docUFInt > 28 {
+	docUF := toInt(docRune[8])*10 + toInt(docRune[9])
+	if docUF < 1 || docUF > 28 {
 		return false
 	}
 
