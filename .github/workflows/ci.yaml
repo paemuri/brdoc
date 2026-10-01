@@ -1,5 +1,10 @@
 name: CI
 on: [push, pull_request]
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   gofmt:
     name: Validate gofmt
@@ -10,7 +15,7 @@ jobs:
         with:
           go-version: "1.27"
           cache: false
-      - run: if [ $(gofmt -s -l . | wc -l) -gt 0 ]; then exit 1; fi
+      - run: test -z "$(gofmt -s -l . | tee /dev/stderr)"
   staticcheck:
     name: Validate staticcheck
     runs-on: ubuntu-latest
@@ -20,6 +25,7 @@ jobs:
         with:
           go-version: "1.27"
           cache: false
+      - run: "go vet ./..."
       - run: "go install honnef.co/go/tools/cmd/staticcheck@v0.8.1"
       - run: "staticcheck ./..."
   test:
