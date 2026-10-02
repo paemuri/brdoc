@@ -45,8 +45,11 @@ func IsPixBRCode(doc string) bool {
 	// The payload format indicator is the first object, and the CRC the last
 	// one, calculated over everything before its value.
 	first, last := objects[0], objects[len(objects)-1]
-	if first.id != 0 || first.value != "01" || last.id != 63 ||
-		len(last.value) != 4 || !strings.EqualFold(last.value, calcEMVCRC(doc[:len(doc)-4])) {
+	if first.id != 0 ||
+		first.value != "01" ||
+		last.id != 63 ||
+		len(last.value) != 4 ||
+		!strings.EqualFold(last.value, calcEMVCRC(doc[:len(doc)-4])) {
 		return false
 	}
 
