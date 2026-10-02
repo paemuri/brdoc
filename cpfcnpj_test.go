@@ -15,15 +15,15 @@ func TestIsCPF(t *testing.T) {
 
 	t.Run("rejects invalid masks", func(t *testing.T) {
 		assertInvalidCases(t, IsCPF, []docCase{
-			{"spaces", "248 438 034 80"},
-			{"hyphens and dot swapped", "099-075-865.60"},
+			{"spaces", "123 456 789 09"},
+			{"hyphens and dot swapped", "987-654-321.00"},
 		})
 	})
 
 	t.Run("rejects invalid check digits", func(t *testing.T) {
 		assertInvalid(t, IsCPF,
-			"248.438.034-08",
-			"099.075.865-06",
+			"123.456.789-90",
+			"987.654.321-01",
 		)
 	})
 
@@ -42,19 +42,21 @@ func TestIsCPF(t *testing.T) {
 		)
 	})
 
+	// Calculated by hand, as real ones are personal data.
 	t.Run("accepts valid documents", func(t *testing.T) {
 		t.Run("with mask", func(t *testing.T) {
 			assertValid(t, IsCPF,
-				"248.438.034-80",
-				"099.075.865-60",
+				"123.456.789-09",
+				"987.654.321-00",
 			)
 		})
 
 		t.Run("without mask", func(t *testing.T) {
-			assertValid(t, IsCPF,
-				"24843803480",
-				"09907586560",
-			)
+			assertValidCases(t, IsCPF, []docCase{
+				{"check digits 09", "12345678909"},
+				{"check digits 00", "98765432100"},
+				{"leading zeros", "00000019100"},
+			})
 		})
 	})
 }

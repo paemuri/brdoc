@@ -15,23 +15,23 @@ func TestIsPIS(t *testing.T) {
 
 	t.Run("rejects invalid masks", func(t *testing.T) {
 		assertInvalidCases(t, IsPIS, []docCase{
-			{"CPF mask", "103.951.990-15"},
-			{"spaces", "103 951 990 15"},
-			{"hyphen in the wrong place", "103951-99015"},
+			{"CPF mask", "123.456.789-19"},
+			{"spaces", "123 456 789 19"},
+			{"hyphen in the wrong place", "123456-78919"},
 		})
 
 		// Groups other than 3, 5 and 2 digits.
 		assertInvalid(t, IsPIS,
-			"103.951.9901-5",
-			"120.6372.482-4",
-			"120.1641.414-8",
+			"123.456.7891-9",
+			"246.9135.782-7",
+			"370.3703.673-3",
 		)
 	})
 
 	t.Run("rejects invalid check digits", func(t *testing.T) {
 		assertInvalid(t, IsPIS,
-			"103.95199.01-6",
-			"120.16414.14-9",
+			"123.45678.91-0",
+			"246.91357.82-8",
 		)
 	})
 
@@ -42,20 +42,22 @@ func TestIsPIS(t *testing.T) {
 		})
 	})
 
+	// Calculated by hand, as real ones are personal data.
 	t.Run("accepts valid documents", func(t *testing.T) {
 		t.Run("with mask", func(t *testing.T) {
 			assertValid(t, IsPIS,
-				"103.95199.01-5",
-				"120.63724.82-4",
-				"120.16414.14-8",
+				"123.45678.91-9",
+				"246.91357.82-7",
+				"370.37036.73-3",
 			)
 		})
 
 		t.Run("without mask", func(t *testing.T) {
-			assertValid(t, IsPIS,
-				"10395199015",
-				"12016414148",
-			)
+			assertValidCases(t, IsPIS, []docCase{
+				{"check digit 9", "12345678919"},
+				{"check digit 7", "24691357827"},
+				{"check digit 0", "98765431280"},
+			})
 		})
 	})
 }
