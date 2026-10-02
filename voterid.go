@@ -20,22 +20,21 @@ func IsVoterID(doc string) bool {
 
 	cleanNonDigits(&doc)
 
-	docRune := []rune(doc)
-	docUF := toInt(docRune[8])*10 + toInt(docRune[9])
-	if docUF < 1 || docUF > 28 {
+	uf := toInt(rune(doc[8]))*10 + toInt(rune(doc[9]))
+	if uf < 1 || uf > 28 {
 		return false
 	}
 
-	sumA := 0
-	for i, digit := range doc[:len(doc)-4] {
-		sumA += toInt(digit) * (i + 2)
+	sum := 0
+	for i, r := range doc[:8] {
+		sum += toInt(r) * (i + 2)
 	}
-	dv1 := voterIDMod11(sumA)
+	digit1 := voterIDMod11(sum)
 
-	sumB := toInt(docRune[8])*7 + toInt(docRune[9])*8 + dv1*9
-	dv2 := voterIDMod11(sumB)
+	sum = toInt(rune(doc[8]))*7 + toInt(rune(doc[9]))*8 + digit1*9
+	digit2 := voterIDMod11(sum)
 
-	return dv1 == toInt(docRune[10]) && dv2 == toInt(docRune[11])
+	return toInt(rune(doc[10])) == digit1 && toInt(rune(doc[11])) == digit2
 }
 
 // voterIDMod11 returns the remainder of `num` divided by 11, or 0 if it is 10.
