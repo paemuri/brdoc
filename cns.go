@@ -33,6 +33,8 @@ func IsCNS(doc string) bool {
 	return calcCNSSum(doc)%11 == 0
 }
 
+// genCNSFromPIS returns the CNS generated from the 11 digits of `pis`, with the
+// suffix 000 and the check digit, or the suffix 001 if the digit would be 10.
 func genCNSFromPIS(pis string) string {
 	sum := calcCNSSum(pis)
 
@@ -49,6 +51,8 @@ func genCNSFromPIS(pis string) string {
 	return pis + "000" + strconv.Itoa(digit)
 }
 
+// calcCNSSum returns the sum of the digits of `doc` multiplied by the weights
+// from 15 to 1, from left to right.
 func calcCNSSum(doc string) int {
 	sum := 0
 	for i, r := range doc {

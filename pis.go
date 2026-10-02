@@ -30,6 +30,8 @@ func IsPIS(doc string) bool {
 	return toInt(rune(doc[len(doc)-1])) == calcPISDigit(doc)
 }
 
+// calcPISDigit returns 11 minus the remainder of the weighted sum of the first
+// 10 digits of `doc` divided by 11, or 0 if the remainder is 0 or 1.
 func calcPISDigit(doc string) int {
 	var (
 		weights = []int{3, 2, 9, 8, 7, 6, 5, 4, 3, 2}

@@ -38,6 +38,7 @@ func IsVoterID(doc string) bool {
 	return dv1 == toInt(docRune[10]) && dv2 == toInt(docRune[11])
 }
 
+// voterIDMod11 returns the remainder of `num` divided by 11, or 0 if it is 10.
 func voterIDMod11(num int) int {
 	mod := num % 11
 	if mod == 10 {

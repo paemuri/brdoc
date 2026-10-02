@@ -111,6 +111,7 @@ func calcTaxIDDigit(doc string, position int) string {
 	return strconv.Itoa(11 - sum)
 }
 
+// cleanTaxID removes every rune that is not a digit or an uppercase letter.
 func cleanTaxID(doc *string) {
 	buf := bytes.NewBufferString("")
 	for _, r := range *doc {

@@ -33,10 +33,10 @@ var (
 // works for NFC-e, CT-e, MDF-e and the other electronic fiscal documents that
 // use the same access key.
 //
-// The format and the check digit algorithm are defined by the item 2.2.6 of the
+// The format and the check digit algorithm are defined by item 2.2.6 of the
 // [MOC 7.0], and the alphanumeric CNPJ by the [NT 2025.001]. The emitter (CNPJ
-// or CPF) is also validated, as defined by the table 2-4 and the item 2.2.7 of
-// the [MOC 7.0].
+// or CPF) is also validated, as defined by table 2-4 and item 2.2.7 of the
+// [MOC 7.0].
 //
 // [MOC 7.0]: https://www.nfe.fazenda.gov.br/portal/exibirArquivo.aspx?conteudo=LrBx7WT9PuA=
 // [NT 2025.001]: https://www.nfe.fazenda.gov.br/portal/exibirArquivo.aspx?conteudo=5ZkvIZt10mQ=

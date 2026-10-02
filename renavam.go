@@ -1,8 +1,5 @@
 package brdoc
 
-// Official name for RENAVAM seems to be all upper case, not "Renavam" or
-// something similar.
-
 // IsRENAVAM verifies if the given string is a valid RENAVAM document.
 //
 // The number format and the check digit method are defined by Article 1 of
@@ -20,6 +17,8 @@ func IsRENAVAM(doc string) bool {
 	return toInt(rune(doc[len(doc)-1])) == calcRENAVAMDigit(doc)
 }
 
+// calcRENAVAMDigit returns the remainder of the weighted sum of the first 10
+// digits of `doc` times 10 divided by 11, or 0 if it is 10.
 func calcRENAVAMDigit(doc string) int {
 	// Not official logic: exact weights and remainder 10 rule.
 	var (
