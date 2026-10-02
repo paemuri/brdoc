@@ -9,6 +9,43 @@ var (
 	cepRegexp = regexp.MustCompile(`^\d{5}-?\d{3}$`)
 )
 
+// cepRanges maps the ranges of the first 3 digits of the CEP to their UFs.
+var cepRanges = []struct {
+	first, last int
+	uf          UF
+}{
+	{10, 199, SP},
+	{200, 289, RJ},
+	{290, 299, ES},
+	{300, 399, MG},
+	{400, 489, BA},
+	{490, 499, SE},
+	{500, 569, PE},
+	{570, 579, AL},
+	{580, 589, PB},
+	{590, 599, RN},
+	{600, 639, CE},
+	{640, 649, PI},
+	{650, 659, MA},
+	{660, 688, PA},
+	{689, 689, AP},
+	{690, 692, AM},
+	{693, 693, RR},
+	{694, 698, AM},
+	{699, 699, AC},
+	{700, 727, DF},
+	{728, 729, GO},
+	{730, 736, DF},
+	{737, 767, GO},
+	{768, 769, RO},
+	{770, 779, TO},
+	{780, 788, MT},
+	{790, 799, MS},
+	{800, 879, PR},
+	{880, 899, SC},
+	{900, 999, RS},
+}
+
 // IsCEPFrom verifies if `doc` is a valid CEP. Also, it validates if its related
 // UF is part of the given options. If none is provided, it validates the
 // document for any state/district. This function is a wrapper around [IsCEP].
@@ -30,103 +67,15 @@ func IsCEPFrom(doc string, ufs ...UF) bool {
 // [Busca CEP]: https://buscacepinter.correios.com.br/app/faixa_cep_uf_localidade/index.php
 func IsCEP(doc string) (valid bool, uf UF) {
 	if !cepRegexp.MatchString(doc) {
-		valid = false
-		return
+		return false, ""
 	}
 
-	h, _ := strconv.Atoi(doc[0:3])
-
-	if h >= 10 && h <= 199 {
-		return true, SP
-	}
-	if h >= 200 && h <= 289 {
-		return true, RJ
-	}
-	if h >= 290 && h <= 299 {
-		return true, ES
-	}
-	if h >= 300 && h <= 399 {
-		return true, MG
-	}
-	if h >= 400 && h <= 489 {
-		return true, BA
-	}
-	if h >= 490 && h <= 499 {
-		return true, SE
-	}
-	if h >= 500 && h <= 569 {
-		return true, PE
-	}
-	if h >= 570 && h <= 579 {
-		return true, AL
-	}
-	if h >= 580 && h <= 589 {
-		return true, PB
-	}
-	if h >= 590 && h <= 599 {
-		return true, RN
-	}
-	if h >= 600 && h <= 639 {
-		return true, CE
-	}
-	if h >= 640 && h <= 649 {
-		return true, PI
-	}
-	if h >= 650 && h <= 659 {
-		return true, MA
-	}
-	if h >= 660 && h <= 688 {
-		return true, PA
-	}
-	if h == 689 {
-		return true, AP
-	}
-	if h >= 690 && h <= 692 {
-		return true, AM
-	}
-	if h == 693 {
-		return true, RR
-	}
-	if h >= 694 && h <= 698 {
-		return true, AM
-	}
-	if h == 699 {
-		return true, AC
-	}
-	if h >= 700 && h <= 727 {
-		return true, DF
-	}
-	if h >= 728 && h <= 729 {
-		return true, GO
-	}
-	if h >= 730 && h <= 736 {
-		return true, DF
-	}
-	if h >= 737 && h <= 767 {
-		return true, GO
-	}
-	if h >= 768 && h <= 769 {
-		return true, RO
-	}
-	if h >= 770 && h <= 779 {
-		return true, TO
-	}
-	if h >= 780 && h <= 788 {
-		return true, MT
-	}
-	if h >= 790 && h <= 799 {
-		return true, MS
-	}
-	if h >= 800 && h <= 879 {
-		return true, PR
-	}
-	if h >= 880 && h <= 899 {
-		return true, SC
-	}
-	if h >= 900 && h <= 999 {
-		return true, RS
+	prefix, _ := strconv.Atoi(doc[:3])
+	for _, r := range cepRanges {
+		if r.first <= prefix && prefix <= r.last {
+			return true, r.uf
+		}
 	}
 
-	valid = false
-	return
+	return false, ""
 }
