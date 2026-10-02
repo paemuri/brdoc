@@ -41,13 +41,7 @@ func IsCNH(doc string) bool {
 		acc++
 	}
 
-	var digit2 int
-	if (sum%11)+base < 0 {
-		digit2 = 11 + (sum % 11) + base
-	}
-	if (sum%11)+base >= 0 {
-		digit2 = (sum % 11) + base
-	}
+	digit2 := (sum%11 + base + 11) % 11
 	if digit2 > 9 {
 		digit2 = 0
 	}
