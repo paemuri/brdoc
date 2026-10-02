@@ -23,9 +23,6 @@ func IsPIS(doc string) bool {
 
 	cleanNonDigits(&doc)
 
-	if len(doc) != 11 {
-		return false
-	}
 	if allEq(doc) {
 		return false
 	}

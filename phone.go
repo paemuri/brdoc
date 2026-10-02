@@ -118,11 +118,7 @@ func IsPhone(phone string) (valid bool, ufs []UF) {
 	match := matches[1]
 	cleanNonDigits(&match)
 
-	ddd, err := strconv.Atoi(match)
-	if err != nil {
-		return false, nil
-	}
-
+	ddd, _ := strconv.Atoi(match)
 	ufs, valid = phoneDDDs[ddd]
 	if !valid {
 		return false, nil
