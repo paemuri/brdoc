@@ -52,6 +52,8 @@ Funções públicas:
 - `func IsBankSlip(doc string) bool`: boleto, tanto bancário quanto de
   arrecadação (contas de consumo e tributos), pelo código de barras ou pela
   linha digitável
+- `func IsCNO(doc string) bool`: Cadastro Nacional de Obras, também funciona
+  para a matrícula CEI de obras
 - `func IsPixKey(key string) bool`: chave Pix (CPF, CNPJ, telefone, e-mail ou
   chave aleatória), no formato do DICT, sem máscara
 - `func IsPixBRCode(doc string) bool`: BR Code do Pix (conteúdo do QR Code, ou
