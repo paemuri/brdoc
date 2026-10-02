@@ -28,21 +28,23 @@ go get github.com/paemuri/brdoc/v4
 Funções públicas:
 
 - `func IsCPF(doc string) bool`
-- `func IsCNPJ(doc string) bool`
-- `func IsPhone(phone string) (valid bool, ufs []UF)`
-- `func IsPhoneFrom(phone string, ufs ...UF) bool`
-- `func IsCEP(doc string) (valid bool, uf UF)`
-- `func IsCEPFrom(doc string, ufs ...UF) bool`
+- `func IsCNPJ(doc string) bool`: CNPJ numérico ou alfanumérico
+- `func IsPhone(phone string) (valid bool, ufs []UF)`: telefone fixo ou
+  celular, retornando as UFs do DDD
+- `func IsPhoneFrom(phone string, ufs ...UF) bool`: telefone de uma das UFs
+  dadas
+- `func IsCEP(doc string) (valid bool, uf UF)`: CEP, retornando sua UF
+- `func IsCEPFrom(doc string, ufs ...UF) bool`: CEP de uma das UFs dadas
 - `func IsPlate(doc string) bool`: placa veicular, nacional ou Mercosul
 - `func IsNationalPlate(doc string) bool`: placa no padrão nacional antigo
   (`AAA-1111`)
 - `func IsMercosulPlate(doc string) bool`: placa no padrão Mercosul
   (`AAA1A11`)
 - `func IsVoterID(doc string) bool`: título de eleitor
-- `func IsCNH(doc string) bool`
+- `func IsCNH(doc string) bool`: Carteira Nacional de Habilitação
 - `func IsPIS(doc string) bool`: PIS/PASEP, também funciona para NIS e NIT
-- `func IsRENAVAM(doc string) bool`
-- `func IsCNS(doc string) bool`
+- `func IsRENAVAM(doc string) bool`: Registro Nacional de Veículos Automotores
+- `func IsCNS(doc string) bool`: Cartão Nacional de Saúde
 - `func IsIE(doc string, uf UF) bool`: Inscrição Estadual
 - `func IsCNJ(doc string) bool`: número de processo judicial
 - `func IsCivilCertificate(doc string) bool`: matrícula de certidão de registro
