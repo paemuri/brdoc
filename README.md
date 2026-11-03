@@ -23,7 +23,7 @@ Aceito PRs de todas as formas. Está permitido escrever em português, também. 
 Instalação:
 
 ```sh
-go get github.com/paemuri/brdoc/v4
+go get github.com/paemuri/brdoc/v5
 ```
 
 Funções públicas:
@@ -69,7 +69,7 @@ Tipos públicos:
 Exemplo:
 
 ```go
-import "github.com/paemuri/brdoc/v4"
+import "github.com/paemuri/brdoc/v5"
 
 func main() {
 	brdoc.IsCPF("123.456.789-09")                  // true
