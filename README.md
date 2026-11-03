@@ -2,8 +2,6 @@
 
 [![License][badge-1-img]][badge-1-link]
 [![go.dev][badge-2-img]][badge-2-link]
-[![CI][badge-3-img]][badge-3-link]
-[![Version][badge-4-img]][badge-4-link]
 
 Brazilian documents validator for Go.
 
@@ -16,14 +14,14 @@ Portuguese.
 BR Doc é um pacote para validação, tanto do formato quanto dos dígitos, de
 documentos brasileiros.
 
-Aceito PRs de todas as formas. Está permitido escrever em português, também. :)
+Aceito patches de todas as formas. Está permitido escrever em português, também. :)
 
 ## Uso
 
 Instalação:
 
 ```sh
-go get github.com/paemuri/brdoc/v5
+go get git.sr.ht/~paemuri/brdoc/v5
 ```
 
 Funções públicas:
@@ -69,7 +67,7 @@ Tipos públicos:
 Exemplo:
 
 ```go
-import "github.com/paemuri/brdoc/v5"
+import "git.sr.ht/~paemuri/brdoc/v5"
 
 func main() {
 	brdoc.IsCPF("123.456.789-09")                  // true
@@ -101,11 +99,7 @@ Starting with v5.0.0, this project is licensed under MPL-2.0.
 [badge-1-img]: https://img.shields.io/badge/license-MPL--2.0-green?style=flat-square
 [badge-1-link]: ./LICENSE
 [badge-2-img]: https://img.shields.io/badge/go.dev-reference-007d9c?style=flat-square&logo=go&logoColor=white
-[badge-2-link]: https://pkg.go.dev/github.com/paemuri/brdoc/v5
-[badge-3-img]: https://img.shields.io/github/actions/workflow/status/paemuri/brdoc/ci.yaml?branch=main&style=flat-square
-[badge-3-link]: https://github.com/paemuri/brdoc/actions/workflows/ci.yaml
-[badge-4-img]: https://img.shields.io/github/v/tag/paemuri/brdoc?sort=semver&style=flat-square
-[badge-4-link]: https://github.com/paemuri/brdoc/tags
+[badge-2-link]: https://pkg.go.dev/git.sr.ht/~paemuri/brdoc/v5
 
 [source-srht]: https://git.sr.ht/~paemuri/brdoc
 [source-codeberg]: https://codeberg.org/paemuri/brdoc
