@@ -7,8 +7,9 @@
 
 Brazilian documents validator for Go.
 
-Everything in this file, except this section and the [License](#license)
-one, is in Portuguese.
+Everything in this file, except this section, the [Source code](#source-code)
+one, and the [License and contribution](#license-and-contribution) one, is in
+Portuguese.
 
 ## Descrição
 
@@ -77,23 +78,37 @@ func main() {
 }
 ```
 
-## License
+## Source code
 
-This project code is in the public domain. See the [LICENSE file][1].
+The main repository is on [SourceHut][source-srht]. Mirrors exist on
+[Codeberg][source-codeberg] and [GitHub][source-github] for convenience, but
+they might occasionally be outdated.
 
-### Contribution
+## License and contribution
+
+All original code is licensed under the
+[Mozilla Public License 2.0][license-code].
 
 Unless you explicitly state otherwise, any contribution intentionally submitted
-for inclusion in the work by you shall be in the public domain, without any
-additional terms or conditions.
+for inclusion in the work by you shall be licensed under the same license as
+the material to which it is contributed, without any additional terms or
+conditions.
 
-[1]: ./LICENSE
+### License history
 
-[badge-1-img]: https://img.shields.io/github/license/paemuri/brdoc?style=flat-square
-[badge-1-link]: https://github.com/paemuri/brdoc/blob/main/LICENSE
+Starting with v5.0.0, this project is licensed under MPL-2.0.
+
+[badge-1-img]: https://img.shields.io/badge/license-MPL--2.0-green?style=flat-square
+[badge-1-link]: ./LICENSE
 [badge-2-img]: https://img.shields.io/badge/go.dev-reference-007d9c?style=flat-square&logo=go&logoColor=white
-[badge-2-link]: https://pkg.go.dev/github.com/paemuri/brdoc/v4
+[badge-2-link]: https://pkg.go.dev/github.com/paemuri/brdoc/v5
 [badge-3-img]: https://img.shields.io/github/actions/workflow/status/paemuri/brdoc/ci.yaml?branch=main&style=flat-square
 [badge-3-link]: https://github.com/paemuri/brdoc/actions/workflows/ci.yaml
 [badge-4-img]: https://img.shields.io/github/v/tag/paemuri/brdoc?sort=semver&style=flat-square
 [badge-4-link]: https://github.com/paemuri/brdoc/tags
+
+[source-srht]: https://git.sr.ht/~paemuri/brdoc
+[source-codeberg]: https://codeberg.org/paemuri/brdoc
+[source-github]: https://github.com/paemuri/brdoc
+
+[license-code]: ./LICENSES/MPL-2.0.txt
