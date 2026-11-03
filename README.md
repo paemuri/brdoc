@@ -2,6 +2,7 @@
 
 [![License][badge-1-img]][badge-1-link]
 [![go.dev][badge-2-img]][badge-2-link]
+[![CI][badge-3-img]][badge-3-link]
 
 Brazilian documents validator for Go.
 
@@ -100,6 +101,8 @@ Starting with v5.0.0, this project is licensed under MPL-2.0.
 [badge-1-link]: ./LICENSE
 [badge-2-img]: https://img.shields.io/badge/go.dev-reference-007d9c?style=flat-square&logo=go&logoColor=white
 [badge-2-link]: https://pkg.go.dev/git.sr.ht/~paemuri/brdoc/v5
+[badge-3-img]: https://img.shields.io/github/actions/workflow/status/paemuri/brdoc/ci.yaml?branch=main&style=flat-square
+[badge-3-link]: https://github.com/paemuri/brdoc/actions/workflows/ci.yaml
 
 [source-srht]: https://git.sr.ht/~paemuri/brdoc
 [source-codeberg]: https://codeberg.org/paemuri/brdoc
